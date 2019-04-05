@@ -8,6 +8,30 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+import { Form, HasError, AlertError } from 'vform';
+window.Form = Form;
+Vue.component(HasError.name, HasError);
+Vue.component(AlertError.name, AlertError);
+
+import VueRouter from 'vue-router';
+
+Vue.use(VueRouter);
+
+const routes = [
+    { path: '/dashboard', component: require('./components/backoffice/Dashboard').default },
+    { path: '/skpi', component: require('./components/backoffice/Skpi').default },
+    { path: '/mahasiswa-achievement', component: require('./components/backoffice/MahasiswaAchievement').default },
+    { path: '/mahasiswa', component: require('./components/backoffice/Mahasiswa').default },
+    { path: '/Jurusan', component: require('./components/backoffice/Jurusan').default },
+    { path: '/bidang-kompetensi', component: require('./components/backoffice/BidangKompetensi').default },
+    { path: '/account', component: require('./components/backoffice/Account').default },
+    { path: '/backup', component: require('./components/backoffice/Backup').default }
+  ];
+
+  const router = new VueRouter({
+      mode: 'history',
+      routes
+  });
 
 /**
  * The following block of code may be used to automatically register your
@@ -29,5 +53,6 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
  */
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+    router
 });

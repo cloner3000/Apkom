@@ -1,30 +1,23 @@
 <!DOCTYPE html>
-<!--
-This is a starter template page. Use this page to start your new project from
-scratch. This page gets rid of all links and provides the needed markup only.
--->
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
-
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>Aplikasi Kompetensi Mahasiswa</title>
-
-<link rel="stylesheet" href="{{asset('css/app.css')}}">
+  <link rel="stylesheet" href="{{asset('css/app.css')}}">
 </head>
 <body class="hold-transition sidebar-mini">
-<div class="wrapper">
-
+<div class="wrapper" id="app">
   <!-- Navbar -->
-  <nav class="main-header navbar navbar-expand bg-white navbar-light border-bottom">
+  <nav class="main-header navbar navbar-expand bg-primary navbar-light border-bottom">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
       <li class="nav-item">
         <a class="nav-link" data-widget="pushmenu" href="#"><i class="fa fa-bars"></i></a>
       </li>
     </ul>
-
     <!-- SEARCH FORM -->
     <form class="form-inline ml-3">
       <div class="input-group input-group-sm">
@@ -40,12 +33,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- /.navbar -->
 
   <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+  <aside class="main-sidebar sidebar-light-primary elevation-4">
     <!-- Brand Logo -->
     <a href="index3.html" class="brand-link">
-      <img src="{{asset('img/logo.png')}}" alt="Logo UKDC" class="brand-image img-circle elevation-3"
+      <img src="{{asset('img/logo.png')}}" alt="Logo UKDC" class="brand-image img-circle"
            style="opacity: .8">
-      <span class="brand-text font-weight-light">Aplikasi Kompetensi</span>
+      <span class="brand-text font-weight-light text-primary">Aplikasi SKPI</span>
     </a>
 
     <!-- Sidebar -->
@@ -53,10 +46,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-        <img src="{{asset('img/user.png')}}" class="img-circle elevation-2" alt="User Image">
+        <img src="{{asset('img/user.jpg')}}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Rifardi Taufiq</a>
+          <a href="#" class="d-block text-bold">{{ Auth::user()->name }} </a>
+          <a href="#" class="d-block">Wakil Rektor </a>
         </div>
       </div>
 
@@ -65,37 +59,78 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-          <li class="nav-item has-treeview menu-open">
-            <a href="#" class="nav-link active">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
+          <li class="nav-item">
+            <router-link to="/dashboard" active-class="active" class="nav-link" exact>
+              <i class="nav-icon fas fa-tachometer-alt text-belizehole"></i>
               <p>
-                Starter Pages
-                <i class="right fa fa-angle-left"></i>
+                Dashboard
               </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="#" class="nav-link active">
-                  <i class="fa fa-circle-o nav-icon"></i>
-                  <p>Active Page</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="fa fa-circle-o nav-icon"></i>
-                  <p>Inactive Page</p>
-                </a>
-              </li>
-            </ul>
+            </router-link>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fa fa-th"></i>
+            <router-link to="/skpi" active-class="active" class="nav-link" exact>
+              <i class="nav-icon fas fa-id-card text-darkblue"></i>
               <p>
-                Simple Link
-                <span class="right badge badge-danger">New</span>
+                SKPI
               </p>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/mahasiswa-achievement" active-class="active" class="nav-link" exact>
+              <i class="nav-icon fas fa-award text-orange"></i>
+              <p>
+                Mahasiswa Achievement
+              </p>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/mahasiswa" active-class="active" class="nav-link" exact>
+              <i class="nav-icon fas fa-user-graduate text-black"></i>
+              <p>
+                Mahasiswa
+              </p>
+            </router-link>
+          </li>        
+          <li class="nav-item">
+            <router-link to="/jurusan" active-class="active" class="nav-link" exact>
+              <i class="nav-icon fas fa-graduation-cap text-teal"></i>
+              <p>
+                Jurusan
+              </p>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/bidang-kompetensi" active-class="active" class="nav-link" exact>
+              <i class="nav-icon fas fa-atom text-blue"></i>
+              <p>
+                Bidang Kompetensi
+              </p>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/account" active-class="active" class="nav-link" exact>
+              <i class="nav-icon fas fa-user text-guava"></i>
+              <p>
+                Account
+              </p>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/backup" active-class="active" class="nav-link" exact>
+              <i class="nav-icon fas fa-database text-grey"></i>
+              <p>
+                Backup Database
+              </p>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+              <i class="nav-icon fas fa-power-off text-red"></i>
+              <p>{{ __('Logout') }}</p>
             </a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
           </li>
         </ul>
       </nav>
@@ -128,61 +163,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <div class="content">
       <div class="container-fluid">
         <div class="row">
-          <div class="col-lg-6">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-
-                <p class="card-text">
-                  Some quick example text to build on the card title and make up the bulk of the card's
-                  content.
-                </p>
-
-                <a href="#" class="card-link">Card link</a>
-                <a href="#" class="card-link">Another link</a>
-              </div>
-            </div>
-
-            <div class="card card-primary card-outline">
-              <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-
-                <p class="card-text">
-                  Some quick example text to build on the card title and make up the bulk of the card's
-                  content.
-                </p>
-                <a href="#" class="card-link">Card link</a>
-                <a href="#" class="card-link">Another link</a>
-              </div>
-            </div><!-- /.card -->
-          </div>
-          <!-- /.col-md-6 -->
-          <div class="col-lg-6">
-            <div class="card">
-              <div class="card-header">
-                <h5 class="m-0">Featured</h5>
-              </div>
-              <div class="card-body">
-                <h6 class="card-title">Special title treatment</h6>
-
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-              </div>
-            </div>
-
-            <div class="card card-primary card-outline">
-              <div class="card-header">
-                <h5 class="m-0">Featured</h5>
-              </div>
-              <div class="card-body">
-                <h6 class="card-title">Special title treatment</h6>
-
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-              </div>
-            </div>
-          </div>
-          <!-- /.col-md-6 -->
+          <router-view></router-view>
         </div>
         <!-- /.row -->
       </div><!-- /.container-fluid -->
@@ -193,12 +174,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
   <!-- Main Footer -->
   <footer class="main-footer">
-    <!-- To the right -->
-    <div class="float-right d-none d-sm-inline">
-      Anything you want
-    </div>
     <!-- Default to the left -->
-    <strong>Copyright &copy; 2014-2018 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
+    Copyright &copy; 2019 <a href="http://ukdc.ac.id/">Universitas Katolik Darma Cendika</a>. All rights reserved.
   </footer>
 </div>
 <!-- ./wrapper -->
