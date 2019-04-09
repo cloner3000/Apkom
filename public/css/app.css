@@ -29536,6 +29536,10 @@ a.text-dark:focus {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
 
+.line-top {
+  border-top: 4px solid #3490DC;
+}
+
 .text-red {
   color: #e3342f;
 }
