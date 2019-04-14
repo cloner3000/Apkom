@@ -6,6 +6,10 @@ use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
+use App\Exports\UsersExport;
+use Maatwebsite\Excel\Facades\Excel;
+use PDF;
+
 
 
 class UserController extends Controller
@@ -13,6 +17,7 @@ class UserController extends Controller
     public function __construct(User $user){
         $this->middleware('auth:api');
         $this->user = $user;
+
     }
     /**
      * Display a listing of the resource.
@@ -21,8 +26,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        $user =  $this->user->getData();
-        return $user;
+        $this->authorize('isWarek');
+        $users =  $this->user->getData();
+        return $users;
+
     }
 
     /**
@@ -33,8 +40,23 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
+        $this->authorize('isWarek');
         $user = $this->user->saveData($request);
         return $user;
+
+    }
+
+    public function profile(){
+        $user = $this->user->profile();
+        return $user;
+
+    }
+
+    public function updateProfile(UserRequest $request){
+        $userTemp = auth('api')->user();
+        $user = $this->user->saveData($request, $userTemp->id);
+        return $user;
+
     }
 
     /**
@@ -57,6 +79,7 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, $id)
     {
+        $this->authorize('isWarek');
         $user = $this->user->saveData($request,$id);
         return $user;
         
@@ -70,17 +93,32 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
+        $this->authorize('isWarek');
         $user = $this->user->deleteData($id);
         return $user;
         
     }
 
     public function search(Request $request){
+        $this->authorize('isWarek');
         if ($search = $request->q) {
             $users = $this->user->searchData($request->q);
         }else{
             $users = $this->user->getData();
         }
         return $users;
+    }
+
+    public function export(Request $request) 
+    {
+        $this->authorize('isWarek');
+        if($request->type == 'Users.xlsx'){
+            return Excel::download(new UsersExport, 'Users.xlsx');
+        }else{
+            $users =  $this->user->getData();
+            $pdf = PDF::loadView('print.users', ['users' => $users]);
+            return $pdf->output();
+        }
+        
     }
 }

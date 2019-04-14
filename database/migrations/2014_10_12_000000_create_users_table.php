@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('role')->default('Mahasiswa');
-            $table->string('photo')->default('user.jpg');
+            $table->string('photo')->default('user.png');
             $table->rememberToken();
             $table->timestamps();
         });

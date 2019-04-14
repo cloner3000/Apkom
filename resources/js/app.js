@@ -9,6 +9,9 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+import Gate from './gate';
+Vue.prototype.$gate = new Gate(window.user);
+
 import { Form, HasError, AlertError } from 'vform';
 window.Form = Form;
 Vue.component(HasError.name, HasError);
@@ -36,6 +39,26 @@ const toast = Swal.mixin({
 window.swal = Swal;  
 window.toast = toast;
 
+Vue.component(
+    'passport-clients',
+    require('./components/passport/Clients.vue').default
+);
+
+Vue.component(
+    'passport-authorized-clients',
+    require('./components/passport/AuthorizedClients.vue').default
+);
+
+Vue.component(
+    'passport-personal-access-tokens',
+    require('./components/passport/PersonalAccessTokens.vue').default
+);
+
+Vue.component(
+    'not-found',
+    require('./components/NotFound.vue').default
+);
+
 import VueRouter from 'vue-router';
 
 Vue.use(VueRouter);
@@ -48,7 +71,9 @@ const routes = [
     { path: '/Jurusan', component: require('./components/backoffice/Jurusan/Jurusan').default },
     { path: '/bidang-kompetensi', component: require('./components/backoffice/BidangKompetensi/BidangKompetensi').default },
     { path: '/account', component: require('./components/backoffice/Account/Account').default },
-    { path: '/backup', component: require('./components/backoffice/Backup/Backup').default }
+    { path: '/profile', component: require('./components/Profile').default },
+    { path: '/backup', component: require('./components/backoffice/Backup/Backup').default },
+    { path: '*', component: require('./components/NotFound.vue').default }
   ];
 
   const router = new VueRouter({
@@ -76,20 +101,6 @@ const routes = [
 
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
-Vue.component(
-    'passport-clients',
-    require('./components/passport/Clients.vue').default
-);
-
-Vue.component(
-    'passport-authorized-clients',
-    require('./components/passport/AuthorizedClients.vue').default
-);
-
-Vue.component(
-    'passport-personal-access-tokens',
-    require('./components/passport/PersonalAccessTokens.vue').default
-);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

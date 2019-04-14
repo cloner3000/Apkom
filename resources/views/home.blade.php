@@ -29,28 +29,50 @@
         </div>
       </div>
     </form>
+
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link" data-toggle="dropdown" href="#">
+              <img src="{{asset('img/profile/'.Auth::user()->photo) }}" class="img-circle elevation-2 user-profile-photo" alt="User Image">
+          </a>
+          <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+            <router-link  to="/profile" href="#" class="dropdown-item">
+                <i class="fas fa-user-alt mr-2"></i> Profile
+            </router-link>
+            <div class="dropdown-divider"></div>
+            <a  onclick="event.preventDefault();document.getElementById('logout-form').submit();" href="#" class="dropdown-item">
+              <i class="fas fa-power-off mr-2"></i> Logout
+              <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                  @csrf
+              </form>
+            </a>
+            <div class="dropdown-divider"></div>
+          </div>
+        </li>
+      </ul>
+    </nav>
   </nav>
   <!-- /.navbar -->
 
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-light-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
+    <router-link to="/dashboard" class="brand-link">
       <img src="{{asset('img/logo.png')}}" alt="Logo UKDC" class="brand-image img-circle"
            style="opacity: .8">
       <span class="brand-text font-weight-light text-primary">Aplikasi SKPI</span>
-    </a>
+    </router-link>
 
     <!-- Sidebar -->
     <div class="sidebar">
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-        <img src="{{asset('img/user.jpg')}}" class="img-circle elevation-2" alt="User Image">
+        <img src="{{asset('img/profile/'.Auth::user()->photo) }}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block text-bold">{{  Str::words(Auth::user()->name , 2,'') }}</a>
-          <a href="#" class="d-block">{{ Auth::user()->role }} </a>
+          <router-link to="/profile" class="d-block text-bold">{{  Str::words(Auth::user()->name , 2,'') }}</router-link>
+          <router-link to="/profile" class="d-block">{{ Auth::user()->role }} </router-link>
         </div>
       </div>
 
@@ -83,6 +105,7 @@
               </p>
             </router-link>
           </li>
+          @can('isWarek')
           <li class="nav-item">
             <router-link to="/mahasiswa" active-class="active" class="nav-link" exact>
               <i class="nav-icon fas fa-user-graduate text-black"></i>
@@ -123,15 +146,7 @@
               </p>
             </router-link>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
-              <i class="nav-icon fas fa-power-off text-red"></i>
-              <p>{{ __('Logout') }}</p>
-            </a>
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                @csrf
-            </form>
-          </li>
+          @endcan
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
@@ -141,24 +156,6 @@
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Manage Account</h1>
-          </div><!-- /.col -->
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Manage Account</li>
-            </ol>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content-header -->
-
     <!-- Main content -->
     <div class="content">
       <div class="container-fluid">
@@ -180,7 +177,11 @@
   </footer>
 </div>
 <!-- ./wrapper -->
-
+@auth
+ <script>
+   window.user = @json(auth()->user());
+ </script>   
+@endauth
 <script src="{{asset('js/app.js')}}"></script>
 </body>
 </html>

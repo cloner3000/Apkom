@@ -1,12 +1,15 @@
 <template>
     <div class="container">
-        <div class="row">
+      <div v-if="this.$gate.isWarek()">
+        <div class="row mt-5">
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">User Table</h3>
+                <h3 class="card-title">Manage Account</h3>
                 <div class="card-tools">
-                  <button class="btn btn-success" @click="newModal"><i class="fas fa-user-plus"></i> Add New</button>
+                  <button class="btn btn-primary" @click="newModal"><i class="fas fa-user-plus"></i> Add New</button>
+                  <button @click="exportUsers('Users.pdf')" class="btn btn-danger"><i class="fas fa-file-pdf"></i></button>
+                  <button @click="exportUsers('Users.xlsx')" class="btn btn-success"><i class="fas fa-file-excel"></i></button>
                 </div>
               </div>
               <!-- /.card-header -->
@@ -36,7 +39,7 @@
               </div>
               <!-- /.card-body -->
               <div class="card-footer">
-                  <pagination :data="users" @pagination-change-page="getUsers"></pagination>
+                  <pagination :data="users" align="center" @pagination-change-page="getUsers"></pagination>
               </div>
             </div>
             <!-- /.card -->
@@ -55,26 +58,26 @@
                     <form @submit.prevent="editMode ? updateUser() : createUser()">
                     <div class="modal-body">
                         <div class="form-group">
-                          <label>Name</label>
+                          <label for="inputName">Name</label>
                           <input v-model="form.name" type="text" name="name"
-                            class="form-control" placeholder="Full Name" :class="{ 'is-invalid': form.errors.has('name') }">
+                            class="form-control" placeholder="Full Name" :class="{ 'is-invalid': form.errors.has('name') }" id="inputName">
                           <has-error :form="form" field="name"></has-error>
                         </div>
                         <div class="form-group">
-                          <label>Email</label>
+                          <label for="inputEmail">Email</label>
                           <input v-model="form.email" type="text" name="email"
-                            class="form-control" placeholder="Email Address" :class="{ 'is-invalid': form.errors.has('email') }">
+                            class="form-control" placeholder="Email Address" :class="{ 'is-invalid': form.errors.has('email') }" id="inputEmail">
                           <has-error :form="form" field="email"></has-error>
                         </div>
                         <div class="form-group">
-                          <label>Password</label>
+                          <label for="inputPassword">Password</label>
                           <input v-model="form.password" type="password" name="password"
-                            class="form-control" placeholder="Password" :class="{ 'is-invalid': form.errors.has('password') }">
+                            class="form-control" placeholder="Password" :class="{ 'is-invalid': form.errors.has('password') }" id="inputPassword">
                           <has-error :form="form" field="password"></has-error>
                         </div>
                         <div class="form-group">
-                          <label>Role</label>
-                          <select name="role" v-model="form.role" id="type" class="form-control" :class="{
+                          <label for="inputRole">Role</label>
+                          <select name="role" v-model="form.role" id="inputRole" class="form-control" :class="{
                             'is-invalid': form.errors.has('role')}">
                             <option value="" selected>Choose Role</option>
                             <option value="Kaprodi">Kepala Program Studi</option>
@@ -94,7 +97,11 @@
                 </div>
             </div>
         </div>
-    </div>
+      </div>
+      <div v-else class="row">
+        <not-found></not-found>
+      </div> 
+    </div>  
 </template>
 
 <script>
@@ -127,10 +134,12 @@
             this.form.fill(user);
           },
           getUsers(page = 1) {
-            axios.get('api/user?page=' + page)
+            if(this.$gate.isWarek()){
+              axios.get('api/user?page=' + page)
               .then(response => {
                 this.users = response.data;
               });
+            }
           },
           createUser(){
             this.$Progress.start();
@@ -190,11 +199,27 @@
                     type: 'error',
                     title: 'Oops...',
                     text: 'Something went wrong!'
-                  })
+                  });
                 });
               }
             });
-          }
+          },
+          exportUsers(fileType){
+            axios({
+              url: 'api/export/user/',
+              method: 'GET',
+              params: {type: fileType},
+              responseType: 'blob', 
+            }).then((response) => {
+              const url = window.URL.createObjectURL(new Blob([response.data]));
+              const link = document.createElement('a');
+              link.href = url;
+              link.setAttribute('download', fileType);
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+            });
+          }  
         },
         created() {
           cusEvent.$on('Searching',() => {
@@ -210,9 +235,6 @@
           this.getUsers();
           cusEvent.$on('ReloadData', () => {
             this.getUsers();
-          });
-          cusEvent.$on('Searching', () => {
-            
           });
         }
     }

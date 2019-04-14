@@ -31,7 +31,7 @@ class UserRequest extends FormRequest
                     'name' => 'required|string|max:191',
                     'email' => 'required|string|email|max:191|unique:users',
                     'password' => 'required|string|min:8|max:191',
-                    'role' => 'required|string|max:191',
+                    'role' => 'required|string|max:191'
          
                  ];
             }
@@ -43,6 +43,7 @@ class UserRequest extends FormRequest
                     'email' => 'required|string|email|max:191|unique:users,email,'.$user['id'],
                     'password' => 'sometimes|string|min:8|max:191',
                     'role' => 'required|max:191',
+                    'photo' => 'sometimes|image'
          
                  ];
             }

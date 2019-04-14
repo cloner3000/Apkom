@@ -4,12 +4,7 @@
 
 // Variables
 @import 'variables';
-
-// Font awesome
 $fa-font-path: "../webfonts";
-@import "@fortawesome/fontawesome-free/scss/fontawesome.scss";
-@import "@fortawesome/fontawesome-free/scss/solid.scss";
-@import "@fortawesome/fontawesome-free/scss/brands.scss";
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
@@ -17,13 +12,38 @@ $fa-font-path: "../webfonts";
 //Admin-lte
 @import '~admin-lte/dist/css/adminlte.css';
 
-.navbar-laravel {
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-}
+// Font awesome
+@import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
+@import "~@fortawesome/fontawesome-free/scss/solid.scss";
+@import "~@fortawesome/fontawesome-free/scss/brands.scss";
 
+
+//Login
 .line-top{
   border-top: 4px solid #3490DC;
+}
+
+// Navbar
+.user-profile-photo{
+  width: 2rem;
+  height: 2rem;
+}
+
+.dropdown-menu-right a{
+  color: $grey!important;
+}
+
+.dropdown-menu a:active{
+  color: #fff!important;
+}
+
+//Aside
+.user-panel img{
+  height: 2.5rem;
+}
+
+.sidebar-light-primary .nav-sidebar > .nav-item > .nav-link.active i{
+  color: #fff;
 }
 
 .text-red{
@@ -52,4 +72,10 @@ $fa-font-path: "../webfonts";
 }
 .text-belizehole{
   color: $belizehole;
+}
+
+//Profile Page
+.profile-user-img {
+  width: 100px;
+  height: 100px;
 }

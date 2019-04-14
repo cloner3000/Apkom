@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Laravel\Passport\Passport;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -25,6 +26,23 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::define('isWarek', function($user){
+            return $user->role === 'Wakil Rektor';
+        });
+
+        Gate::define('isKaprodi', function($user){
+            return $user->role === 'Kaprodi';
+        });
+
+        Gate::define('isAkademik', function($user){
+            return $user->role === 'Bagian Akademik';
+        });
+
+        Gate::define('isMahasiswa', function($user){
+            return $user->role === 'Mahasiswa';
+        });
+
+        Passport::routes();
+        
     }
 }
