@@ -74,8 +74,15 @@ $fa-font-path: "../webfonts";
   color: $belizehole;
 }
 
+//Dashboard
+.bg-orange{
+  background-color: $orange;
+}
+
 //Profile Page
 .profile-user-img {
+  min-width: 100px;
+  min-height: 100px;
   width: 100px;
   height: 100px;
 }

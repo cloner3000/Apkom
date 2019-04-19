@@ -2,29 +2,27 @@
 
 namespace Apkom\Exports;
 
-use Apkom\User;
+use Apkom\BidangKompetensi;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class UsersExport implements FromCollection, WithMapping, WithHeadings
+class BidangKompetensiExport implements FromCollection, WithMapping, WithHeadings
 {
-    private $i = 1;
+    private $i =1;
     /**
     * @return \Illuminate\Support\Collection
     */
     public function collection()
     {
-        return User::all();
+        return BidangKompetensi::all();
     }
 
-    public function map($user): array
+    public function map($bidangKompetensi): array
     {
         return [
             $this->i++,
-            $user->name,
-            $user->email,
-            $user->role
+            $bidangKompetensi->nama_bidang
         ];
     }
 
@@ -32,9 +30,7 @@ class UsersExport implements FromCollection, WithMapping, WithHeadings
     {
         return [
             'NO',
-            'NAME',
-            'EMAIL',
-            'ROLE',
+            'NAMA BIDANG'
         ];
     }
 }

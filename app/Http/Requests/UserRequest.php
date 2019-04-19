@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Requests;
+namespace Apkom\Http\Requests;
+
+use Apkom\User;
 use Illuminate\Foundation\Http\FormRequest;
-use App\User;
 
 class UserRequest extends FormRequest
 {
@@ -24,7 +25,7 @@ class UserRequest extends FormRequest
     public function rules()
     {
         switch($this->method()){
-            
+
             case 'POST':
             {
                 return [
@@ -32,7 +33,7 @@ class UserRequest extends FormRequest
                     'email' => 'required|string|email|max:191|unique:users',
                     'password' => 'required|string|min:8|max:191',
                     'role' => 'required|string|max:191'
-         
+
                  ];
             }
             case 'PUT':
@@ -43,11 +44,11 @@ class UserRequest extends FormRequest
                     'email' => 'required|string|email|max:191|unique:users,email,'.$user['id'],
                     'password' => 'sometimes|string|min:8|max:191',
                     'role' => 'required|max:191',
-                    'photo' => 'sometimes|image'
-         
+                    'photo' => 'sometimes'
+
                  ];
             }
-            default:break; 
+            default:break;
         }
     }
 }

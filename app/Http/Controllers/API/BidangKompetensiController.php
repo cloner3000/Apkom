@@ -2,21 +2,19 @@
 
 namespace Apkom\Http\Controllers\API;
 
-use Apkom\User;
+use Apkom\BidangKompetensi;
 use Illuminate\Http\Request;
 use Apkom\Http\Controllers\Controller;
-use Apkom\Http\Requests\UserRequest;
-use Apkom\Exports\UsersExport;
+use Apkom\Http\Requests\BidangKompetensiRequest;
+use Apkom\Exports\BidangKompetensiExport;
 use Maatwebsite\Excel\Facades\Excel;
 use PDF;
 
-
-
-class UserController extends Controller
+class BidangKompetensiController extends Controller
 {
-    public function __construct(User $user){
+    public function __construct(BidangKompetensi $bidangKompetensi){
         $this->middleware('auth:api');
-        $this->user = $user;
+        $this->bidangKompetensi = $bidangKompetensi;
 
     }
     /**
@@ -27,9 +25,8 @@ class UserController extends Controller
     public function index()
     {
         $this->authorize('isWarek');
-        $users =  $this->user->getData();
-        return $users;
-
+        $bidangKompetensi = $this->bidangKompetensi->getData();
+        return $bidangKompetensi;
     }
 
     /**
@@ -38,25 +35,11 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(UserRequest $request)
+    public function store(BidangKompetensiRequest $request)
     {
         $this->authorize('isWarek');
-        $user = $this->user->saveData($request);
-        return $user;
-
-    }
-
-    public function profile(){
-        $user = $this->user->profile();
-        return $user;
-
-    }
-
-    public function updateProfile(UserRequest $request){
-        $userTemp = auth('api')->user();
-        $user = $this->user->saveData($request, $userTemp->id);
-        return $user;
-
+        $bidangKompetensi = $this->bidangKompetensi->saveData($request);
+        return $bidangKompetensi;
     }
 
     /**
@@ -77,12 +60,11 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UserRequest $request, $id)
+    public function update(BidangKompetensiRequest $request, $id)
     {
         $this->authorize('isWarek');
-        $user = $this->user->saveData($request,$id);
-        return $user;
-
+        $bidangKompetensi = $this->bidangKompetensi->saveData($request,$id);
+        return $bidangKompetensi;
     }
 
     /**
@@ -94,40 +76,31 @@ class UserController extends Controller
     public function destroy($id)
     {
         $this->authorize('isWarek');
-        $user = $this->user->deleteData($id);
-        return $user;
-
+        $bidangKompetensi = $this->bidangKompetensi->deleteData($id);
+        return $bidangKompetensi;
     }
 
     public function search(Request $request){
         $this->authorize('isWarek');
         if ($search = $request->q) {
-            $users = $this->user->searchData($request->q);
+            $bidangKompetensi = $this->bidangKompetensi->searchData($request->q);
         }else{
-            $users = $this->user->getData();
+            $bidangKompetensi = $this->bidangKompetensi->getData();
         }
-        return $users;
+        return $bidangKompetensi;
 
     }
 
     public function export(Request $request)
     {
         $this->authorize('isWarek');
-        if($request->type == 'Accounts.xlsx'){
-            return Excel::download(new UsersExport, 'Accounts.xlsx');
+        if($request->type == 'BidangKompetensi.xlsx'){
+            return Excel::download(new BidangKompetensiExport, 'BidangKompetensi.xlsx');
         }else{
-            $users =  $this->user->getDataReport();
-            $pdf = PDF::loadView('print.users', ['users' => $users]);
+            $bidangKompetensi =  $this->bidangKompetensi->getDataReport();
+            $pdf = PDF::loadView('print.bidangKompetensi', ['bidangKompetensi' => $bidangKompetensi]);
             return $pdf->output();
         }
-
-    }
-
-    public function getKaprodi()
-    {
-        $this->authorize('isWarek');
-        $users =  $this->user->getKaprodiData();
-        return $users;
 
     }
 }

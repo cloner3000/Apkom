@@ -1,12 +1,12 @@
 <?php
 
-namespace App;
+namespace Apkom;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Resources\UserResource;
+use Apkom\Http\Resources\UserResource;
 use Intervention\Image\Facades\Image;
 
 class User extends Authenticatable
@@ -19,7 +19,11 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'role', 'photo'
+        'name',
+        'email',
+        'password',
+        'role',
+        'photo'
     ];
 
 
@@ -34,16 +38,21 @@ class User extends Authenticatable
 
 
     public function getData(){
-        $user = self::first()->paginate(5);
-        return UserResource::collection($user);
+        $users = self::latest()->paginate(8);
+        return UserResource::collection($users);
+    }
+
+    public function getDataReport(){
+        $users = self::all();
+        return UserResource::collection($users);
     }
 
     public function searchData($search){
         $user = self::where(function($query) use ($search){
             $query->where('name','LIKE',"%$search%")
                     ->orWhere('email','LIKE',"%$search%");
-        })->paginate(5);
-        return $user;
+        })->paginate(8);
+        return UserResource::collection($user);
     }
 
     public function saveData($request, $id=false){
@@ -67,8 +76,8 @@ class User extends Authenticatable
                     $imageTemp = public_path('img/profile/').$userTemp->photo;
                     if(file_exists($imageTemp)){
                         @unlink($imageTemp);
-                    }   
-                } 
+                    }
+                }
             }
         }
         if($user->save()){
@@ -88,7 +97,16 @@ class User extends Authenticatable
     }
 
     public function profile(){
-        $user = auth('api')->user(); 
+        $user = auth('api')->user();
         return $user;
+    }
+
+    public function getKaprodiData(){
+        $users = self::where('role', 'Kaprodi')->get();
+        return UserResource::collection($users);
+    }
+
+    public function jurusan(){
+      return $this->hasOne('Apkom\Jurusan','id');
     }
 }

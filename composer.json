@@ -37,7 +37,7 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "app/"
+            "Apkom\\": "app/"
         },
         "classmap": [
             "database/seeds",

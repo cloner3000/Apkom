@@ -2,21 +2,19 @@
 
 namespace Apkom\Http\Controllers\API;
 
-use Apkom\User;
+use Apkom\Jurusan;
 use Illuminate\Http\Request;
 use Apkom\Http\Controllers\Controller;
-use Apkom\Http\Requests\UserRequest;
-use Apkom\Exports\UsersExport;
+use Apkom\Http\Requests\JurusanRequest;
+use Apkom\Exports\JurusanExport;
 use Maatwebsite\Excel\Facades\Excel;
 use PDF;
 
-
-
-class UserController extends Controller
+class JurusanController extends Controller
 {
-    public function __construct(User $user){
+    public function __construct(Jurusan $jurusan){
         $this->middleware('auth:api');
-        $this->user = $user;
+        $this->jurusan = $jurusan;
 
     }
     /**
@@ -27,9 +25,8 @@ class UserController extends Controller
     public function index()
     {
         $this->authorize('isWarek');
-        $users =  $this->user->getData();
-        return $users;
-
+        $jurusan = $this->jurusan->getData();
+        return $jurusan;
     }
 
     /**
@@ -38,25 +35,11 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(UserRequest $request)
+    public function store(JurusanRequest $request)
     {
         $this->authorize('isWarek');
-        $user = $this->user->saveData($request);
-        return $user;
-
-    }
-
-    public function profile(){
-        $user = $this->user->profile();
-        return $user;
-
-    }
-
-    public function updateProfile(UserRequest $request){
-        $userTemp = auth('api')->user();
-        $user = $this->user->saveData($request, $userTemp->id);
-        return $user;
-
+        $jurusan = $this->jurusan->saveData($request);
+        return $jurusan;
     }
 
     /**
@@ -77,12 +60,11 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UserRequest $request, $id)
+    public function update(JurusanRequest $request, $id)
     {
         $this->authorize('isWarek');
-        $user = $this->user->saveData($request,$id);
-        return $user;
-
+        $jurusan = $this->jurusan->saveData($request,$id);
+        return $jurusan;
     }
 
     /**
@@ -94,40 +76,31 @@ class UserController extends Controller
     public function destroy($id)
     {
         $this->authorize('isWarek');
-        $user = $this->user->deleteData($id);
-        return $user;
-
+        $jurusan = $this->jurusan->deleteData($id);
+        return $jurusan;
     }
 
     public function search(Request $request){
         $this->authorize('isWarek');
         if ($search = $request->q) {
-            $users = $this->user->searchData($request->q);
+            $jurusan = $this->jurusan->searchData($request->q);
         }else{
-            $users = $this->user->getData();
+            $jurusan = $this->jurusan->getData();
         }
-        return $users;
+        return $jurusan;
 
     }
 
     public function export(Request $request)
     {
         $this->authorize('isWarek');
-        if($request->type == 'Accounts.xlsx'){
-            return Excel::download(new UsersExport, 'Accounts.xlsx');
+        if($request->type == 'Jurusan.xlsx'){
+            return Excel::download(new JurusanExport, 'Jurusan.xlsx');
         }else{
-            $users =  $this->user->getDataReport();
-            $pdf = PDF::loadView('print.users', ['users' => $users]);
+            $jurusan =  $this->jurusan->getDataReport();
+            $pdf = PDF::loadView('print.jurusan', ['jurusan' => $jurusan]);
             return $pdf->output();
         }
-
-    }
-
-    public function getKaprodi()
-    {
-        $this->authorize('isWarek');
-        $users =  $this->user->getKaprodiData();
-        return $users;
 
     }
 }

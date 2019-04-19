@@ -13139,7 +13139,7 @@ a.text-muted:hover {
   --purple: #9561e2;
   --pink: #f66D9b;
   --red: #e3342f;
-  --orange: #f6993f;
+  --orange: #FF5F1A;
   --yellow: #ffed4a;
   --green: #38c172;
   --teal: #4dc0b5;
@@ -29581,7 +29581,7 @@ readers do not read off random characters that represent icons */
 }
 
 .text-orange {
-  color: #f6993f;
+  color: #FF5F1A;
 }
 
 .text-darkblue {
@@ -29592,7 +29592,13 @@ readers do not read off random characters that represent icons */
   color: #2980b9;
 }
 
+.bg-orange {
+  background-color: #FF5F1A;
+}
+
 .profile-user-img {
+  min-width: 100px;
+  min-height: 100px;
   width: 100px;
   height: 100px;
 }

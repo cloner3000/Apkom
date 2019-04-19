@@ -86,10 +86,19 @@
         },
         methods: {
             getUser(){
+                this.$Progress.start();
                 axios.get('api/profile')
                 .then(response => {
                     this.user = response.data;
                     this.form.fill(this.user);
+                    this.$Progress.finish();
+                })
+                .catch(() => {
+                    this.$Progress.fail();
+                    toast.fire({
+                        type: 'error',
+                        title: 'Account load failed'
+                    });
                 });
             },
             updateProfile(e){
@@ -99,12 +108,16 @@
                     cusEvent.$emit('ReloadData');
                     toast.fire({
                         type: 'success',
-                        title: 'User Updated successfully'
+                        title: 'Account updated successfully'
                     });
                     this.$Progress.finish();
                 })
                 .catch(() => {
                     this.$Progress.fail();
+                    toast.fire({
+                        type: 'error',
+                        title: 'Account update failed'
+                    });
                 });
             },
             getUpdatePhoto(){
@@ -135,7 +148,6 @@
             this.getUser();
             cusEvent.$on('ReloadData', () => {
                 this.getUser();
-                
             });
         }
     }

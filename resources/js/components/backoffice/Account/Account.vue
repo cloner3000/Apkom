@@ -1,37 +1,37 @@
 <template>
     <div class="container">
       <div v-if="this.$gate.isWarek()">
-        <div class="row mt-5">
+        <div class="row mt-4">
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Manage Account</h3>
                 <div class="card-tools">
                   <button class="btn btn-primary" @click="newModal"><i class="fas fa-user-plus"></i> Add New</button>
-                  <button @click="exportUsers('Users.pdf')" class="btn btn-danger"><i class="fas fa-file-pdf"></i></button>
-                  <button @click="exportUsers('Users.xlsx')" class="btn btn-success"><i class="fas fa-file-excel"></i></button>
+                  <button @click="exportUsers('Accounts.pdf')" class="btn btn-danger"><i class="fas fa-file-pdf"></i></button>
+                  <button @click="exportUsers('Accounts.xlsx')" class="btn btn-success"><i class="fas fa-file-excel"></i></button>
                 </div>
               </div>
               <!-- /.card-header -->
               <div class="card-body table-responsive p-0">
                 <table class="table table-hover">
                   <tbody><tr>
-                    <th>ID</th>
+                    <th>No</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Role</th>
                     <th>Created</th>
                     <th>Action</th>
                   </tr>
-                  <tr v-for="user in users.data" :key="user.id">
-                    <td>{{user.id}}</td>
-                    <td>{{user.name}}</td>
-                    <td>{{user.email}}</td>
-                    <td>{{user.role}}</td>
-                    <td>{{user.created_at | date }}</td>
+                  <tr v-for="(data, index) in users.data" :key="index">
+                    <td>{{users.meta.from+index}}</td>
+                    <td>{{data.name}}</td>
+                    <td>{{data.email}}</td>
+                    <td>{{data.role}}</td>
+                    <td>{{data.created_at | date }}</td>
                     <td>
-                        <a href="#" @click="editModal(user)"><i  class="fas fa-edit"></i></a>
-                        <a href="#" @click="deleteUser(user.id)"><i  class="fas fa-trash text-red"></i></a>
+                        <a href="#" @click="editModal(data)"><i  class="fas fa-edit"></i></a>
+                        <a href="#" @click="deleteUser(data.id)"><i  class="fas fa-trash text-red"></i></a>
                     </td>
                   </tr>
 
@@ -100,8 +100,8 @@
       </div>
       <div v-else class="row">
         <not-found></not-found>
-      </div> 
-    </div>  
+      </div>
+    </div>
 </template>
 
 <script>
@@ -116,7 +116,7 @@
               password:'',
               role:''
             }),
-            editMode:false 
+            editMode:false
           }
         },
         methods:{
@@ -135,9 +135,18 @@
           },
           getUsers(page = 1) {
             if(this.$gate.isWarek()){
+              this.$Progress.start();
               axios.get('api/user?page=' + page)
               .then(response => {
                 this.users = response.data;
+                this.$Progress.finish();
+              })
+              .catch(() => {
+              this.$Progress.fail();
+              toast.fire({
+                type: 'error',
+                title: 'Load data account failed'
+              });
               });
             }
           },
@@ -149,11 +158,16 @@
               $('#modalForm').modal('hide');
               toast.fire({
                 type: 'success',
-                title: 'User Created successfully'
+                title: 'Account created successfully'
               });
               this.$Progress.finish();
-            }).catch(() => {
+            })
+            .catch(() => {
               this.$Progress.fail();
+              toast.fire({
+                type: 'error',
+                title: 'Account create failed'
+              });
             });
           },
           updateUser(){
@@ -164,11 +178,15 @@
               $('#modalForm').modal('hide');
               toast.fire({
                 type: 'success',
-                title: 'User Updated successfully'
+                title: 'Account updated successfully'
               });
               this.$Progress.finish();
             }).catch(() => {
               this.$Progress.fail();
+              toast.fire({
+                type: 'error',
+                title: 'Account update failed'
+              });
             });
           },
           deleteUser(id){
@@ -181,13 +199,13 @@
               cancelButtonColor: '#d33',
               confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
-              if (result.value){ 
+              if (result.value){
                 this.form.delete('api/user/'+id)
                 .then(() => {
                   this.$Progress.start();
                   swal.fire(
                     'Deleted!',
-                    'Your file has been deleted.',
+                    'Account has been deleted.',
                     'success'
                   );
                   cusEvent.$emit('ReloadData');
@@ -198,18 +216,19 @@
                   swal.fire({
                     type: 'error',
                     title: 'Oops...',
-                    text: 'Something went wrong!'
+                    text: 'Account delete failed'
                   });
                 });
               }
             });
           },
           exportUsers(fileType){
+            this.$Progress.start();
             axios({
-              url: 'api/export/user/',
+              url: 'api/user/export',
               method: 'GET',
               params: {type: fileType},
-              responseType: 'blob', 
+              responseType: 'blob',
             }).then((response) => {
               const url = window.URL.createObjectURL(new Blob([response.data]));
               const link = document.createElement('a');
@@ -218,24 +237,38 @@
               document.body.appendChild(link);
               link.click();
               document.body.removeChild(link);
+              this.$Progress.finish();
+            })
+            .catch(() => {
+              this.$Progress.fail();
+              toast.fire({
+              type: 'error',
+              title: 'Account export failed'
+              });
+            })
+          },
+          searchUser(){
+            let query = this.$parent.search;
+            this.$Progress.start();
+            axios.get('api/user/find?q=' + query)
+            .then((response) => {
+                this.users = response.data
+                this.$Progress.finish();
+            })
+            .catch(() => {
+                this.$Progress.fail();
             });
-          }  
+          }
         },
         created() {
-          cusEvent.$on('Searching',() => {
-              let query = this.$parent.search;
-              axios.get('api/findUser?q=' + query)
-              .then((response) => {
-                  this.users = response.data
-              })
-              .catch(() => {
-                
-              })
-          });
+          this.$parent.search = '';
           this.getUsers();
-          cusEvent.$on('ReloadData', () => {
-            this.getUsers();
-          });
+          cusEvent.$on('Searching', this.searchUser);
+          cusEvent.$on('ReloadData', this.getUsers);
+        },
+        beforeDestroy(){
+          cusEvent.$off('Searching', this.searchUser);
+          cusEvent.$off('ReloadData', this.getUsers);
         }
     }
 </script>
