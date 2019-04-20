@@ -64,4 +64,8 @@ class Jurusan extends Model
     public function user(){
         return $this->belongsTo('Apkom\User','id_account')->select('id','name');
     }
+
+    public function kompetensiWajib(){
+        return $this->hasMany('Apkom\KompetensiWajib');
+    }
 }

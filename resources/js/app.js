@@ -67,6 +67,7 @@ const routes = [
     { path: '/dashboard', component: require('./components/backoffice/Dashboard').default },
     { path: '/skpi', component: require('./components/backoffice/Skpi/Skpi').default },
     { path: '/mahasiswa-achievement', component: require('./components/backoffice/Mahasiswa/MahasiswaAchievement').default },
+    { path: '/kompetensi-wajib', component: require('./components/backoffice/KompetensiWajib/KompetensiWajib').default },
     { path: '/mahasiswa', component: require('./components/backoffice/Mahasiswa/Mahasiswa').default },
     { path: '/Jurusan', component: require('./components/backoffice/Jurusan/Jurusan').default },
     { path: '/bidang-kompetensi', component: require('./components/backoffice/BidangKompetensi/BidangKompetensi').default },

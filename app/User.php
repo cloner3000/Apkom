@@ -107,6 +107,6 @@ class User extends Authenticatable
     }
 
     public function jurusan(){
-      return $this->hasOne('Apkom\Jurusan','id');
+      return $this->hasOne('Apkom\Jurusan','id_account')->select('id','nama_jurusan')->first();
     }
 }

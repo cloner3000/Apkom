@@ -105,6 +105,16 @@
               </p>
             </router-link>
           </li>
+          @can('isKaprodi')
+          <li class="nav-item">
+            <router-link to="/kompetensi-wajib" active-class="active" class="nav-link" exact>
+              <i class="nav-icon fas fa-clipboard-list text-blue"></i>
+              <p>
+                Kompetensi Wajib
+              </p>
+            </router-link>
+          </li>
+          @endcan
           @can('isWarek')
           <li class="nav-item">
             <router-link to="/mahasiswa" active-class="active" class="nav-link" exact>

@@ -30,6 +30,11 @@ Route::get('jurusan/find', 'API\JurusanController@search');
 Route::get('bidang-kompetensi/export', 'API\BidangKompetensiController@export');
 Route::get('bidang-kompetensi/find', 'API\BidangKompetensiController@search');
 
+//Kompetensi Wajib Route Custom
+Route::get('kompetensi-wajib/export', 'API\KompetensiWajibController@export');
+Route::get('kompetensi-wajib/find', 'API\KompetensiWajibController@search');
+
+
 //Profile Route
 Route::get('profile', 'API\UserController@profile');
 Route::put('profile', 'API\UserController@updateProfile');
@@ -37,5 +42,6 @@ Route::put('profile', 'API\UserController@updateProfile');
 Route::apiResources([
     'user' => 'API\UserController',
     'jurusan' => 'API\JurusanController',
-    'bidang-kompetensi' => 'API\BidangKompetensiController'
+    'bidang-kompetensi' => 'API\BidangKompetensiController',
+    'kompetensi-wajib' => 'API\KompetensiWajibController',
     ]);
