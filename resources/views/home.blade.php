@@ -33,7 +33,7 @@
     <ul class="navbar-nav ml-auto">
         <li class="nav-item dropdown">
           <a class="nav-link" data-toggle="dropdown" href="#">
-              <img src="{{asset('img/profile/'.Auth::user()->photo) }}" class="img-circle elevation-2 user-profile-photo" alt="User Image">
+              <img src="{{asset('storage/data/profile/'.Auth::user()->photo) }}" class="img-circle elevation-2 user-profile-photo" alt="User Image">
           </a>
           <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
             <router-link  to="/profile" href="#" class="dropdown-item">
@@ -68,7 +68,7 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-        <img src="{{asset('img/profile/'.Auth::user()->photo) }}" class="img-circle elevation-2" alt="User Image">
+        <img src="{{asset('storage/data/profile/'.Auth::user()->photo) }}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
           <router-link to="/profile" class="d-block text-bold">{{  Str::words(Auth::user()->name , 2,'') }}</router-link>
@@ -89,6 +89,24 @@
               </p>
             </router-link>
           </li>
+          @can('isMahasiswa')
+          <li class="nav-item">
+            <router-link to="/mahasiswa-profile" active-class="active" class="nav-link" exact>
+              <i class="nav-icon fas fa-id-card  text-teal"></i>
+              <p>
+                Mahasiswa
+              </p>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/kompetensi" active-class="active" class="nav-link" exact>
+              <i class="nav-icon fas fa-medal  text-guava"></i>
+              <p>
+                Kompetensi
+              </p>
+            </router-link>
+          </li>
+          @endcan
           <li class="nav-item">
             <router-link to="/skpi" active-class="active" class="nav-link" exact>
               <i class="nav-icon fas fa-id-card text-darkblue"></i>
@@ -97,6 +115,17 @@
               </p>
             </router-link>
           </li>
+          @can('isKaprodi')
+          <li class="nav-item">
+            <router-link to="/kompetensi-wajib" active-class="active" class="nav-link" exact>
+              <i class="nav-icon fas fa-clipboard-list text-teal"></i>
+              <p>
+                Kompetensi Wajib
+              </p>
+            </router-link>
+          </li>
+          @endcan
+          @if(Gate::check('isWarek') || Gate::check('isKaprodi') || Gate::check('isAkademik') )
           <li class="nav-item">
             <router-link to="/mahasiswa-achievement" active-class="active" class="nav-link" exact>
               <i class="nav-icon fas fa-award text-orange"></i>
@@ -105,16 +134,7 @@
               </p>
             </router-link>
           </li>
-          @can('isKaprodi')
-          <li class="nav-item">
-            <router-link to="/kompetensi-wajib" active-class="active" class="nav-link" exact>
-              <i class="nav-icon fas fa-clipboard-list text-blue"></i>
-              <p>
-                Kompetensi Wajib
-              </p>
-            </router-link>
-          </li>
-          @endcan
+          @endif
           @can('isWarek')
           <li class="nav-item">
             <router-link to="/mahasiswa" active-class="active" class="nav-link" exact>

@@ -24,9 +24,8 @@ class BidangKompetensi extends Model
     }
 
     public function searchData($search){
-        $bidangKompetensi = self::where(function($query) use ($search){
-            $query->where('nama_bidang','LIKE',"%$search%");
-        })->paginate(8);
+        $bidangKompetensi = self::where('nama_bidang','LIKE',"%$search%")
+        ->paginate(8);
         return BidangKompetensiResource::collection($bidangKompetensi);
     }
 
@@ -50,7 +49,12 @@ class BidangKompetensi extends Model
         }
     }
 
+    public function getBidangKompetensiData(){
+        $bidangKompetensi = self::select('id','nama_bidang')->get();
+        return BidangKompetensiResource::collection($bidangKompetensi);
+    }
+
     public function kompetensi(){
-        return $this->hasMany('Apkom\Kompetensi');
+        return $this->hasMany('Apkom\Kompetensi', 'id_bidang');
     }
 }

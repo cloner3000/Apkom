@@ -32,7 +32,8 @@
               </div>
               <!-- /.card-body -->
               <div class="card-footer">
-                  <pagination :data="kompetensiWajib" align="center" @pagination-change-page="getKompetensiWajib"></pagination>
+                  <pagination v-if="!searching" :data="kompetensiWajib" align="center" @pagination-change-page="getKompetensiWajib"></pagination>
+                  <pagination v-else :data="kompetensiWajib" align="center" @pagination-change-page="searchKompetensiWajib"></pagination>
               </div>
             </div>
             <!-- /.card -->
@@ -78,12 +79,13 @@
         data(){
           return{
             kompetensiWajib : {},
+            searching:false,
+            editMode:false,
             form : new Form({
               id:'',  
               id_jurusan:'',  
               nama_kompetensi_wajib:''
-            }),
-            editMode:false
+            })
           }
         },
         methods:{
@@ -214,17 +216,23 @@
               });
             })
           },
-          searchKompetensiWajib(){
+          searchKompetensiWajib(page = 1){
             let query = this.$parent.search;
-            this.$Progress.start();
-            axios.get('api/kompetensi-wajib/find?q=' + query)
-            .then((response) => {
-                this.kompetensiWajib = response.data
-                this.$Progress.finish();
-            })
-            .catch(() => {
-                this.$Progress.fail();
-            });
+            if(this.$parent.search != ''){
+              this.$Progress.start();
+              this.searching= true;
+              axios.get('api/kompetensi-wajib/find?q=' + query + '&page='+ page)
+              .then((response) => {
+                  this.kompetensiWajib = response.data
+                  this.$Progress.finish();
+              })
+              .catch(() => {
+                  this.$Progress.fail();
+              });
+            }else{
+              this.searching= false;
+              cusEvent.$emit('ReloadData');
+            }
           }
         },
         created() {

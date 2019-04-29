@@ -39,7 +39,8 @@
               </div>
               <!-- /.card-body -->
               <div class="card-footer">
-                  <pagination :data="users" align="center" @pagination-change-page="getUsers"></pagination>
+                  <pagination v-if="!searching" :data="users" align="center" @pagination-change-page="getUsers"></pagination>
+                  <pagination v-else :data="users" align="center" @pagination-change-page="searchUser"></pagination>
               </div>
             </div>
             <!-- /.card -->
@@ -109,14 +110,15 @@
         data(){
           return{
             users : {},
+            searching: false,
+            editMode:false,
             form : new Form({
               id:'',
               name:'',
               email:'',
               password:'',
               role:''
-            }),
-            editMode:false
+            })
           }
         },
         methods:{
@@ -247,17 +249,23 @@
               });
             })
           },
-          searchUser(){
+          searchUser(page = 1){
             let query = this.$parent.search;
-            this.$Progress.start();
-            axios.get('api/user/find?q=' + query)
-            .then((response) => {
-                this.users = response.data
-                this.$Progress.finish();
-            })
-            .catch(() => {
-                this.$Progress.fail();
-            });
+            if(this.$parent.search != ''){
+              this.$Progress.start();
+              this.searching= true;
+              axios.get('api/user/find?q=' + query + '&page='+ page)
+              .then((response) => {
+                  this.users = response.data
+                  this.$Progress.finish();
+              })
+              .catch(() => {
+                  this.$Progress.fail();
+              });
+            }else{
+              this.searching= false;
+              cusEvent.$emit('ReloadData');
+            } 
           }
         },
         created() {

@@ -30,16 +30,20 @@ class KompetensiWajib extends Model
     }
 
     public function searchData($search){
-        $kompetensiWajib = self::where(function($query) use ($search){
-            $query->where('id_jurusan', $this->getJurusan()->id)
-            ->where('nama_kompetensi_wajib','LIKE',"%$search%");
-        })->paginate(8);
+        $kompetensiWajib = self::where('id_jurusan', $this->getJurusan()->id)
+            ->where('nama_kompetensi_wajib','LIKE',"%$search%")
+            ->paginate(8);
         return KompetensiWajibResource::collection($kompetensiWajib);
     }
 
     public function saveData($request, $id=false){
         $kompetensiWajib = new KompetensiWajib;
-        if($id) $kompetensiWajib = self::find($id);
+        if($id){
+            $kompetensiWajib = self::find($id);
+            if($kompetensiWajib->id_jurusan != $this->getJurusan()->id){
+                return ['message' => 'Kompetensi Wajib Not Found'];
+            }
+        }
         $kompetensiWajib->id_jurusan = $this->getJurusan()->id;
         $kompetensiWajib->nama_kompetensi_wajib = $request->nama_kompetensi_wajib;
         if($kompetensiWajib->save()){
@@ -51,18 +55,23 @@ class KompetensiWajib extends Model
 
     public function deleteData($id){
         $kompetensiWajib = self::find($id);
-        if($kompetensiWajib->delete()){
-            return ['message' => 'Delete Kompetensi Wajib Successfull'];
+        if($kompetensiWajib->id_jurusan == $this->getJurusan()->id){    
+            if($kompetensiWajib->delete()){
+                return ['message' => 'Delete Kompetensi Wajib Successfull'];
+            }else{
+                return ['message' => 'Delete Kompetensi Wajib Failed'];
+            }
         }else{
             return ['message' => 'Delete Kompetensi Wajib Failed'];
         }
     }
 
-    public function jurusan(){
-        return $this->belongsTo('Apkom\Jurusan');
-    }
-
     public function getJurusan(){
         return auth('api')->user()->jurusan();
     }
+
+    public function jurusan(){
+        return $this->belongsTo('Apkom\Jurusan', 'id_jurusan');
+    }
+
 }

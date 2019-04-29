@@ -43,7 +43,8 @@
               </div>
               <!-- /.card-body -->
               <div class="card-footer">
-                  <pagination :data="jurusan" align="center" @pagination-change-page="getJurusan"></pagination>
+                  <pagination v-if="!searching" :data="jurusan" align="center" @pagination-change-page="getJurusan"></pagination>
+                  <pagination v-else :data="jurusan" align="center" @pagination-change-page="searchJurusan"></pagination>
               </div>
             </div>
             <!-- /.card -->
@@ -141,6 +142,8 @@
           return{
             jurusan : {},
             kaprodi : {},
+            searching: false,
+            editMode:false,
             form : new Form({
               id:'',
               id_account:'',
@@ -149,8 +152,7 @@
               program:'',
               fakultas:'',
               gelar:''
-            }),
-            editMode:false
+            })
           }
         },
         methods:{
@@ -170,7 +172,7 @@
           getKaprodi(){
             if(this.$gate.isWarek()){
               this.$Progress.start();
-              axios.get('api/user/kaprodi')
+              axios.get('api/user/select/kaprodi')
               .then(response => {
                 this.kaprodi = response.data;
                 this.$Progress.finish();
@@ -298,17 +300,23 @@
               });
             })
           },
-          searchJurusan(){
+          searchJurusan(page = 1){
             let query = this.$parent.search;
-            this.$Progress.start();
-            axios.get('api/jurusan/find?q=' + query)
-            .then((response) => {
-                this.jurusan = response.data
-                this.$Progress.finish();
-            })
-            .catch(() => {
-                this.$Progress.fail();
-            });
+            if(this.$parent.search != ''){
+              this.$Progress.start();
+              this.searching= true;
+              axios.get('api/jurusan/find?q=' + query + '&page='+ page)
+              .then((response) => {
+                  this.jurusan = response.data
+                  this.$Progress.finish();
+              })
+              .catch(() => {
+                  this.$Progress.fail();
+              });
+            }else{
+              this.searching= false;
+              cusEvent.$emit('ReloadData');
+            }
           }
         },
         created() {

@@ -101,6 +101,11 @@ class BidangKompetensiController extends Controller
             $pdf = PDF::loadView('print.bidangKompetensi', ['bidangKompetensi' => $bidangKompetensi]);
             return $pdf->output();
         }
+    }
 
+    public function getBidangKompetensiData(){
+        $this->authorize('isMahasiswa');
+        $bidangKompetensi = $this->bidangKompetensi->getBidangKompetensiData();
+        return $bidangKompetensi;
     }
 }

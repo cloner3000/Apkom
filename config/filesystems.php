@@ -43,6 +43,11 @@ return [
 
     'disks' => [
 
+        'kompetensi' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/data/kompetensi/pdf'),
+        ],
+
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),

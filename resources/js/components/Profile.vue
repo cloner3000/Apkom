@@ -55,8 +55,13 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="inputPhoto">Photo</label>
-                                            <input class="form-control-file" @change="updatePhoto" type="file" name="photo" id="inputPhoto" placeholder="Photo" :class="{ 'is-invalid': form.errors.has('photo') }" accept="image/*" >
-                                            <has-error :form="form" field="photo"></has-error>
+                                            <div class="input-group">
+                                                <div class="custom-file">
+                                                    <input type="file" class="custom-file-input" @change="updatePhoto" name="photo" id="inputPhoto" placeholder="Photo" :class="{ 'is-invalid': form.errors.has('photo') }" accept="image/*">
+                                                    <label class="custom-file-label" for="inputPhoto">{{nama_file}}</label>
+                                                    <has-error :form="form" field="photo"></has-error>
+                                                </div>
+                                            </div>
                                         </div>
                                 </div>
                             </div>
@@ -74,6 +79,7 @@
         data() {
             return {
               user:{},
+              nama_file:'Choose File Image',
               form: new Form({
               id:'',
               name:'',
@@ -121,10 +127,11 @@
                 });
             },
             getUpdatePhoto(){
-                return this.form.photo.indexOf('base64') != -1 ? this.form.photo : 'img/profile/' + this.form.photo; 
+                return this.form.photo.indexOf('base64') != -1 ? this.form.photo : 'storage/data/profile/' + this.form.photo; 
             },
             updatePhoto(e){
                 let file = e.target.files[0];
+                this.nama_file = file['name'];
                 if(file['size'] < 2097152){   
                     let reader = new FileReader();
                     reader.onloadend = (file) => {
@@ -132,7 +139,8 @@
                     }
                     reader.readAsDataURL(file); 
                 }else{
-                    e.target.value = ''
+                    e.target.value = '';
+                    this.nama_file = 'Choose File Image';
                     swal.fire({
                     type: 'error',
                     title: 'Oops...',
@@ -145,10 +153,12 @@
             console.log('Component mounted.')
         },
         created() {
+            this.$parent.search = '';
             this.getUser();
-            cusEvent.$on('ReloadData', () => {
-                this.getUser();
-            });
+            cusEvent.$on('ReloadData', this.getUser);
+        },
+        beforeDestroy(){
+            cusEvent.$off('ReloadData', this.getUser);
         }
     }
 </script>

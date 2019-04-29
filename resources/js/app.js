@@ -12,6 +12,12 @@ window.Vue = require('vue');
 import Gate from './gate';
 Vue.prototype.$gate = new Gate(window.user);
 
+import DatePicker from 'vue2-datepicker';
+Vue.component(DatePicker.name, DatePicker);
+
+import Multiselect from 'vue-multiselect'
+Vue.component('multiselect', Multiselect);
+
 import { Form, HasError, AlertError } from 'vform';
 window.Form = Form;
 Vue.component(HasError.name, HasError);
@@ -59,21 +65,28 @@ Vue.component(
     require('./components/NotFound.vue').default
 );
 
+Vue.component(
+    'bukti-kompetensi',
+    require('./components/frontoffice/Kompetensi/BuktiKompetensiWajib').default
+);
+
 import VueRouter from 'vue-router';
 
 Vue.use(VueRouter);
 
 const routes = [
     { path: '/dashboard', component: require('./components/backoffice/Dashboard').default },
-    { path: '/skpi', component: require('./components/backoffice/Skpi/Skpi').default },
-    { path: '/mahasiswa-achievement', component: require('./components/backoffice/Mahasiswa/MahasiswaAchievement').default },
-    { path: '/kompetensi-wajib', component: require('./components/backoffice/KompetensiWajib/KompetensiWajib').default },
-    { path: '/mahasiswa', component: require('./components/backoffice/Mahasiswa/Mahasiswa').default },
-    { path: '/Jurusan', component: require('./components/backoffice/Jurusan/Jurusan').default },
-    { path: '/bidang-kompetensi', component: require('./components/backoffice/BidangKompetensi/BidangKompetensi').default },
-    { path: '/account', component: require('./components/backoffice/Account/Account').default },
+    { path: '/skpi', component: require('./components/backoffice/skpi/Skpi').default },
+    { path: '/mahasiswa-achievement', component: require('./components/backoffice/mahasiswa/MahasiswaAchievement').default },
+    { path: '/kompetensi-wajib', component: require('./components/backoffice/kompetensiwajib/KompetensiWajib').default },
+    { path: '/mahasiswa', component: require('./components/backoffice/mahasiswa/Mahasiswa').default },
+    { path: '/Jurusan', component: require('./components/backoffice/jurusan/Jurusan').default },
+    { path: '/bidang-kompetensi', component: require('./components/backoffice/bidangkompetensi/BidangKompetensi').default },
+    { path: '/account', component: require('./components/backoffice/account/Account').default },
     { path: '/profile', component: require('./components/Profile').default },
-    { path: '/backup', component: require('./components/backoffice/Backup/Backup').default },
+    { path: '/backup', component: require('./components/backoffice/backup/Backup').default },
+    { path: '/mahasiswa-profile', component: require('./components/frontoffice/MahasiswaProfile').default },
+    { path: '/kompetensi', component: require('./components/frontoffice/Kompetensi/Kompetensi').default },
     { path: '*', component: require('./components/NotFound.vue').default }
   ];
 

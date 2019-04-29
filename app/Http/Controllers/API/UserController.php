@@ -46,19 +46,6 @@ class UserController extends Controller
 
     }
 
-    public function profile(){
-        $user = $this->user->profile();
-        return $user;
-
-    }
-
-    public function updateProfile(UserRequest $request){
-        $userTemp = auth('api')->user();
-        $user = $this->user->saveData($request, $userTemp->id);
-        return $user;
-
-    }
-
     /**
      * Display the specified resource.
      *
@@ -123,7 +110,20 @@ class UserController extends Controller
 
     }
 
-    public function getKaprodi()
+    public function profile(){
+        $user = $this->user->profile();
+        return $user;
+
+    }
+
+    public function updateProfile(UserRequest $request){
+        $userTemp = auth('api')->user();
+        $user = $this->user->saveData($request, $userTemp->id);
+        return $user;
+
+    }
+
+    public function getKaprodiData()
     {
         $this->authorize('isWarek');
         $users =  $this->user->getKaprodiData();

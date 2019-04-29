@@ -29,10 +29,13 @@ class Jurusan extends Model
     }
 
     public function searchData($search){
-        $jurusan = self::with('user')->where(function($query) use ($search){
-            $query->where('nama_jurusan','LIKE',"%$search%")
-                    ->orWhere('fakultas','LIKE',"%$search%");
-        })->paginate(8);
+        $jurusan = self::with('user')
+            ->join('users', 'jurusan.id_account','=','users.id')
+            ->where('nama_jurusan','LIKE',"%$search%")
+            ->orWhere('name','LIKE',"%$search%")
+            ->orWhere('fakultas','LIKE',"%$search%")
+            ->select('jurusan.*','users.name')
+            ->paginate(8);
         return JurusanResource::collection($jurusan);
     }
 
@@ -61,11 +64,20 @@ class Jurusan extends Model
         }
     }
 
+    public function getJurusanData(){
+        $jurusan = self::select('id','nama_jurusan')->get();
+        return JurusanResource::collection($jurusan);
+    }
+
     public function user(){
-        return $this->belongsTo('Apkom\User','id_account')->select('id','name');
+        return $this->hasOne('Apkom\User', 'id', 'id_account')->select('id','name');
     }
 
     public function kompetensiWajib(){
-        return $this->hasMany('Apkom\KompetensiWajib');
+        return $this->hasMany('Apkom\KompetensiWajib', 'id_jurusan');
+    }
+
+    public function mahasiswa(){
+        return $this->hasMany('Apkom\Mahasiswa', 'id_jurusan');
     }
 }

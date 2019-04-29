@@ -15,7 +15,6 @@ class JurusanController extends Controller
     public function __construct(Jurusan $jurusan){
         $this->middleware('auth:api');
         $this->jurusan = $jurusan;
-
     }
     /**
      * Display a listing of the resource.
@@ -102,5 +101,11 @@ class JurusanController extends Controller
             return $pdf->output();
         }
 
+    }
+
+    public function getJurusanData(){
+        $this->authorize('isMahasiswa');
+        $jurusan = $this->jurusan->getJurusanData();
+        return $jurusan;
     }
 }

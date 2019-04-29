@@ -33,7 +33,8 @@
               </div>
               <!-- /.card-body -->
               <div class="card-footer">
-                  <pagination :data="bidangKompetensi" align="center" @pagination-change-page="getBidangKompetensi"></pagination>
+                  <pagination v-if="!searching" :data="bidangKompetensi" align="center" @pagination-change-page="getBidangKompetensi"></pagination>
+                  <pagination v-else :data="bidangKompetensi" align="center" @pagination-change-page="searchBidangKompetensi"></pagination>
               </div>
             </div>
             <!-- /.card -->
@@ -79,11 +80,12 @@
         data(){
           return{
             bidangKompetensi : {},
+            searching: false,
+            editMode:false,
             form : new Form({
               id:'',  
               nama_bidang:''
-            }),
-            editMode:false
+            })
           }
         },
         methods:{
@@ -214,17 +216,23 @@
               });
             })
           },
-          searchBidangKompetensi(){
+          searchBidangKompetensi(page = 1){
             let query = this.$parent.search;
-            this.$Progress.start();
-            axios.get('api/bidang-kompetensi/find?q=' + query)
-            .then((response) => {
-                this.bidangKompetensi = response.data
-                this.$Progress.finish();
-            })
-            .catch(() => {
-                this.$Progress.fail();
-            });
+            if(this.$parent.search != ''){
+              this.$Progress.start();
+              this.searching= true;
+              axios.get('api/bidang-kompetensi/find?q=' + query + '&page='+ page)
+              .then((response) => {
+                  this.bidangKompetensi = response.data
+                  this.$Progress.finish();
+              })
+              .catch(() => {
+                  this.$Progress.fail();
+              });
+            }else{
+              this.searching= false;
+              cusEvent.$emit('ReloadData');
+            }
           }
         },
         created() {

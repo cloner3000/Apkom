@@ -48,10 +48,9 @@ class User extends Authenticatable
     }
 
     public function searchData($search){
-        $user = self::where(function($query) use ($search){
-            $query->where('name','LIKE',"%$search%")
-                    ->orWhere('email','LIKE',"%$search%");
-        })->paginate(8);
+        $user = self::where('name','LIKE',"%$search%")
+                    ->orWhere('email','LIKE',"%$search%")
+                    ->paginate(8);            
         return UserResource::collection($user);
     }
 
@@ -70,10 +69,10 @@ class User extends Authenticatable
                 $img->resize(100, null, function ($constraint) {
                     $constraint->aspectRatio();
                 });
-                $img->save(public_path('img/profile/').$fileName);
+                $img->save(public_path('storage/data/profile/').$fileName);
                 $user->photo = $fileName;
                 if($userTemp->photo != 'user.png'){
-                    $imageTemp = public_path('img/profile/').$userTemp->photo;
+                    $imageTemp = public_path('storage/data/profile/').$userTemp->photo;
                     if(file_exists($imageTemp)){
                         @unlink($imageTemp);
                     }
@@ -102,11 +101,15 @@ class User extends Authenticatable
     }
 
     public function getKaprodiData(){
-        $users = self::where('role', 'Kaprodi')->get();
+        $users = self::where('role', 'Kaprodi')->select('id','name')->get();
         return UserResource::collection($users);
     }
 
     public function jurusan(){
-      return $this->hasOne('Apkom\Jurusan','id_account')->select('id','nama_jurusan')->first();
+      return $this->hasOne('Apkom\Jurusan', 'id_account', 'id')->select('id','nama_jurusan')->first();
+    }
+
+    public function mahasiswa(){
+        return $this->hasOne('Apkom\Mahasiswa', 'id_account', 'id')->select('id','nama')->first();
     }
 }

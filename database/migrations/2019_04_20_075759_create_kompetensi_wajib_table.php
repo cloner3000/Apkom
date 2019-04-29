@@ -15,7 +15,7 @@ class CreateKompetensiWajibTable extends Migration
     {
         Schema::create('kompetensi_wajib', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->Integer('id_jurusan')->unsigned();
+            $table->integer('id_jurusan')->unsigned();
             $table->string('nama_kompetensi_wajib');
             $table->timestamps();
             $table->foreign('id_jurusan')
