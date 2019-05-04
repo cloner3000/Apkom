@@ -1,5 +1,5 @@
 <template>
-    <div v-if="this.$gate.isMahasiswa()">
+    <div>
         <div class="card-header bg-white">
             <h3 class="card-title">Kompetensi Wajib Jurusan</h3>
         </div>
@@ -19,22 +19,26 @@
                     </td>
                     <td>
                         <a v-if="data.bukti_wajib" href="#" @click="previewBukti(data)"><i  class="fas fa-eye text-darkblue"></i></a>
-                        <i v-else class="fas fa-times text-red"></i>
+                        <a v-else href="#"><i class="fas fa-times text-red"></i></a>
                     </td>
                 </tr>
                 </tbody>
             </table>
         </div>
-        <div v-if="form.bukti_wajib">
-            <div id="previewBukti" class="modal fade" tabindex="-99" role="dialog">
-                <div  class="modal-dialog modal-dialog-centered" role="document">
+        <div class="card-footer">
+            <pagination v-if="!searching" :data="kompetensiWajib" align="center" @pagination-change-page="getKompetensiWajib"></pagination>
+            <pagination v-else :data="kompetensiWajib" align="center" @pagination-change-page="searchKompetensiWajib"></pagination>
+        </div>
+        <div id="previewBukti" class="modal fade" tabindex="-1" role="dialog">   
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div v-if="form.bukti_wajib != null" class="modal-body">
                     <div v-if="form.bukti_wajib.split('.')[1] == 'pdf'" class="modal-content">
-                    <embed  :src="'storage/data/kompetensi/pdf/'+form.bukti_wajib" width="100%" height="600" type="application/pdf">
+                        <embed  :src="'storage/data/kompetensi/pdf/'+form.bukti_wajib" width="100%" height="600" type="application/pdf">
                     </div>
                     <img v-else-if="form.bukti_wajib.split('.')[1] == 'jpg' || form.bukti_wajib.split('.')[1] == 'jpeg' || form.bukti_wajib.split('.')[1] == 'png'" :src="'storage/data/kompetensi/img/'+form.bukti_wajib">  
-                </div>  
+                </div>
             </div>
-        </div>      
+        </div>
     </div>
 </template>
 <script>
@@ -42,6 +46,7 @@
         data(){
             return{
                 kompetensiWajib: {},
+                searching :false,
                 form : new Form({
                     id:'',
                     nama_kompetensi_wajib:'',
@@ -50,10 +55,10 @@
             }
         },
         methods:{
-            getKompetensiWajib(){
+            getKompetensiWajib(page = 1){
                 if(this.$gate.isMahasiswa()){
                     this.$Progress.start();
-                    axios.get('api/bukti-kompetensi-wajib')
+                    axios.get('api/bukti-kompetensi-wajib?page=' + page)
                     .then(response => {
                         this.kompetensiWajib = response.data;
                         this.$Progress.finish();
@@ -114,16 +119,37 @@
                     });
                 });
             },
+            searchKompetensiWajib(page = 1){
+                let query = this.$root.search;
+                if(this.$root.search != ''){
+                this.$Progress.start();
+                this.searching= true;
+                axios.get('api/bukti-kompetensi-wajib/find?q=' + query + '&page='+ page)
+                .then((response) => {
+                    this.kompetensiWajib = response.data
+                    this.$Progress.finish();
+                })
+                .catch(() => {
+                    this.$Progress.fail();
+                });
+                }else{
+                this.searching= false;
+                cusEvent.$emit('ReloadData');
+                }
+            },
             previewBukti(buktiKompetensiWajib){
                 this.form.fill(buktiKompetensiWajib);
                 $('#previewBukti').modal('show');
             }
         },
-        created() {
-          this.$parent.search = '';
+        mounted(){
+          this.$root.search = '';
           this.getKompetensiWajib();
           cusEvent.$on('Searching', this.searchKompetensiWajib);
           cusEvent.$on('ReloadData', this.getKompetensiWajib);
+        },
+        created() {
+          
         },
         beforeDestroy(){
           cusEvent.$off('Searching', this.searchKompetensiWajib);

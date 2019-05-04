@@ -71,4 +71,15 @@ class BuktiKompetensiWajibController extends Controller
     {
         //
     }
+
+    public function search(Request $request){
+        $this->authorize('isMahasiswa');
+        if ($search = $request->q) {
+            $buktiKompetensiWajib = $this->buktiKompetensiWajib->searchData($request->q);
+        }else{
+            $buktiKompetensiWajib = $this->buktiKompetensiWajib->getData();
+        }
+        return $buktiKompetensiWajib;
+
+    }
 }

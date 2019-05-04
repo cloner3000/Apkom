@@ -81,6 +81,7 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
+          @if(Gate::check('isWarek') || Gate::check('isKaprodi') || Gate::check('isAkademik') )
           <li class="nav-item">
             <router-link to="/dashboard" active-class="active" class="nav-link" exact>
               <i class="nav-icon fas fa-tachometer-alt text-belizehole"></i>
@@ -89,7 +90,32 @@
               </p>
             </router-link>
           </li>
+          <li class="nav-item">
+            <router-link to="/skpi" active-class="active" class="nav-link" exact>
+              <i class="nav-icon fas fa-id-card text-darkblue"></i>
+              <p>
+                SKPI
+              </p>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/mahasiswa-achievement" active-class="active" class="nav-link" exact>
+              <i class="nav-icon fas fa-award text-orange"></i>
+              <p>
+                Mahasiswa Achievement
+              </p>
+            </router-link>
+          </li>
+          @endif     
           @can('isMahasiswa')
+          <li class="nav-item">
+            <router-link to="/skpi-submission" active-class="active" class="nav-link" exact>
+              <i class="nav-icon fas fa-id-card text-darkblue"></i>
+              <p>
+                SKPI Submission
+              </p>
+            </router-link>
+          </li>
           <li class="nav-item">
             <router-link to="/mahasiswa-profile" active-class="active" class="nav-link" exact>
               <i class="nav-icon fas fa-id-card  text-teal"></i>
@@ -107,14 +133,6 @@
             </router-link>
           </li>
           @endcan
-          <li class="nav-item">
-            <router-link to="/skpi" active-class="active" class="nav-link" exact>
-              <i class="nav-icon fas fa-id-card text-darkblue"></i>
-              <p>
-                SKPI
-              </p>
-            </router-link>
-          </li>
           @can('isKaprodi')
           <li class="nav-item">
             <router-link to="/kompetensi-wajib" active-class="active" class="nav-link" exact>
@@ -125,16 +143,6 @@
             </router-link>
           </li>
           @endcan
-          @if(Gate::check('isWarek') || Gate::check('isKaprodi') || Gate::check('isAkademik') )
-          <li class="nav-item">
-            <router-link to="/mahasiswa-achievement" active-class="active" class="nav-link" exact>
-              <i class="nav-icon fas fa-award text-orange"></i>
-              <p>
-                Mahasiswa Achievement
-              </p>
-            </router-link>
-          </li>
-          @endif
           @can('isWarek')
           <li class="nav-item">
             <router-link to="/mahasiswa" active-class="active" class="nav-link" exact>

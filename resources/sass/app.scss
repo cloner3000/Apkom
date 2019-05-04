@@ -9,13 +9,14 @@ $fa-font-path: "../webfonts";
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
-//Admin-lte
-@import '~admin-lte/dist/css/adminlte.css';
-
 // Font awesome
 @import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
 @import "~@fortawesome/fontawesome-free/scss/solid.scss";
 @import "~@fortawesome/fontawesome-free/scss/brands.scss";
+
+//Admin-lte
+@import '~admin-lte/dist/css/adminlte.css';
+@import '~vue-form-wizard/dist/vue-form-wizard.min.css';
 
 //Login
 .line-top{
@@ -84,4 +85,73 @@ $fa-font-path: "../webfonts";
   min-height: 100px;
   width: 100px;
   height: 100px;
+}
+
+//Skpi input chekcbox
+/* The checkwrap */
+.checkwrap {
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.checkwrap input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 18px;
+  width: 18px;
+  background-color: #ddd;
+}
+
+/* On mouse-over, add a grey background color */
+.checkwrap:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.checkwrap input:checked ~ .checkmark {
+  background-color: #28A745;
+  border-radius: 0.25rem;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.checkwrap input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.checkwrap .checkmark:after {
+  left: 7px;
+  top: 4px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
 }

@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div class="row mt-4">
+        <div v-if="this.$gate.isWarek() || this.$gate.isKaprodi() || this.$gate.isAkademik()" class="row mt-4">
           <div class="col-lg-3 col-6">
             <!-- small box -->
             <div class="small-box bg-dark">
@@ -61,6 +61,9 @@
             </div>
           </div>
           <!-- ./col -->
+        </div>
+        <div v-else class="row">
+          <not-found></not-found>
         </div>
     </div>    
 </template>

@@ -101,4 +101,26 @@ class KompetensiController extends Controller
         }
 
     }
+
+    public function skpiKompetensi($id){
+        $this->authorize('isWarek');
+        $kompetensi = $this->kompetensi->getData($id);
+        return $kompetensi;
+    }
+
+    public function skpiSearchKompetensi(Request $request, $id){
+        $this->authorize('isWarek');
+        if ($search = $request->q) {
+            $kompetensi = $this->kompetensi->searchData($request->q, $id);
+        }else{
+            $kompetensi = $this->kompetensi->getData($id);
+        }
+        return $kompetensi;
+    }
+
+    public function changeValidation($id){
+        $this->authorize('isWarek');
+        $kompetensi = $this->kompetensi->changeValidation($id);
+        return $kompetensi;
+    }
 }

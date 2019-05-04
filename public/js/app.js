@@ -2056,6 +2056,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted.');
@@ -3625,9 +3628,415 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      searching: false,
+      skpi: {},
+      kompetensi: {}
+    };
+  },
+  methods: {
+    getSkpi: function getSkpi() {
+      var _this = this;
+
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+
+      if (this.$gate.isWarek() || this.$gate.isKaprodi() || this.$gate.isAkademik()) {
+        this.$Progress.start();
+        axios.get('api/skpi?page=' + page).then(function (response) {
+          _this.skpi = response.data;
+
+          _this.$Progress.finish();
+        })["catch"](function () {
+          _this.$Progress.fail();
+
+          toast.fire({
+            type: 'error',
+            title: 'Load data skpi failed'
+          });
+        });
+      }
+    },
+    deleteSkpi: function deleteSkpi(id) {
+      var _this2 = this;
+
+      swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then(function (result) {
+        if (result.value) {
+          _this2.form["delete"]('api/skpi/' + id).then(function () {
+            _this2.$Progress.start();
+
+            swal.fire('Deleted!', 'Skpi has been deleted.', 'success');
+            cusEvent.$emit('ReloadData');
+
+            _this2.$Progress.finish();
+          })["catch"](function () {
+            _this2.$Progress.fail();
+
+            swal.fire({
+              type: 'error',
+              title: 'Oops...',
+              text: 'Skpi delete failed'
+            });
+          });
+        }
+      });
+    },
+    exportSkpi: function exportSkpi(fileType) {
+      var _this3 = this;
+
+      this.$Progress.start();
+      axios({
+        url: 'api/skpi/export',
+        method: 'GET',
+        params: {
+          type: fileType
+        },
+        responseType: 'blob'
+      }).then(function (response) {
+        var url = window.URL.createObjectURL(new Blob([response.data]));
+        var link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', fileType);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        _this3.$Progress.finish();
+      })["catch"](function () {
+        _this3.$Progress.fail();
+
+        toast.fire({
+          type: 'error',
+          title: 'Data Skpi export failed'
+        });
+      });
+    },
+    searchSkpi: function searchSkpi() {
+      var _this4 = this;
+
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+      var query = this.$parent.search;
+
+      if (this.$parent.search != '') {
+        this.$Progress.start();
+        this.searching = true;
+        axios.get('api/skpi/find?q=' + query + '&page=' + page).then(function (response) {
+          _this4.skpi = response.data;
+
+          _this4.$Progress.finish();
+        })["catch"](function () {
+          _this4.$Progress.fail();
+        });
+      } else {
+        this.searching = false;
+        cusEvent.$emit('ReloadData');
+      }
+    },
+    publishSkpi: function publishSkpi(id) {
+      var _this5 = this;
+
+      this.$Progress.start();
+      axios.get('api/skpi/publish/' + id).then(function () {
+        cusEvent.$emit('ReloadData');
+        toast.fire({
+          type: 'success',
+          title: 'Skpi publish successfull'
+        });
+
+        _this5.$Progress.finish();
+      })["catch"](function () {
+        _this5.$Progress.fail();
+
+        toast.fire({
+          type: 'error',
+          title: 'Skpi publish failed'
+        });
+      });
+    }
+  },
+  created: function created() {
+    this.$parent.search = '';
+    this.getSkpi();
+    cusEvent.$on('Searching', this.searchSkpi);
+    cusEvent.$on('ReloadData', this.getSkpi);
+  },
+  beforeDestroy: function beforeDestroy() {
+    cusEvent.$off('Searching', this.searchSkpi);
+    cusEvent.$off('ReloadData', this.getSkpi);
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/backoffice/skpi/SkpiKompetensi.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/backoffice/skpi/SkpiKompetensi.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      kompetensi: {},
+      searching: false,
+      kompetensiSelect: {}
+    };
+  },
+  methods: {
+    getKompetensi: function getKompetensi() {
+      var _this = this;
+
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+      this.$Progress.start();
+      axios.get('api/kompetensi/skpi/' + this.$route.params.id + '?page=' + page).then(function (response) {
+        _this.kompetensi = response.data;
+
+        _this.$Progress.finish();
+      })["catch"](function () {
+        _this.$Progress.fail();
+
+        toast.fire({
+          type: 'error',
+          title: 'Load data kompetensi failed'
+        });
+      });
+    },
+    changeValidation: function changeValidation(id) {
+      var _this2 = this;
+
+      this.$Progress.start();
+      axios.put('api/kompetensi/skpi/validation/' + id).then(function () {
+        _this2.$Progress.finish();
+      })["catch"](function () {
+        _this2.$Progress.fail();
+
+        toast.fire({
+          type: 'error',
+          title: 'Unvalidation kompetensi failed'
+        });
+      });
+    },
+    searchKompetensi: function searchKompetensi() {
+      var _this3 = this;
+
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+      var query = this.$root.search;
+
+      if (this.$root.search != '') {
+        this.$Progress.start();
+        this.searching = true;
+        axios.get('api/kompetensi/skpi/' + this.$route.params.id + '/find?q=' + query + '&page=' + page).then(function (response) {
+          _this3.kompetensi = response.data;
+
+          _this3.$Progress.finish();
+        })["catch"](function () {
+          _this3.$Progress.fail();
+        });
+      } else {
+        this.searching = false;
+        cusEvent.$emit('ReloadData');
+      }
+    },
+    previewKemampuan: function previewKemampuan(data) {
+      this.kompetensiSelect = data;
+      $('#previewKemampuan').modal('show');
+    },
+    previewBukti: function previewBukti(data) {
+      this.kompetensiSelect = data;
+      $('#previewBukti').modal('show');
+    }
+  },
   mounted: function mounted() {
-    console.log('Component mounted.');
+    this.$root.search = '';
+    this.getKompetensi();
+    cusEvent.$on('Searching', this.searchKompetensi);
+    cusEvent.$on('ReloadData', this.getKompetensi);
+  },
+  beforeDestroy: function beforeDestroy() {
+    cusEvent.$off('Searching', this.searchKompetensi);
+    cusEvent.$off('ReloadData', this.getKompetensi);
   }
 });
 
@@ -3681,10 +4090,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       kompetensiWajib: {},
+      searching: false,
       form: new Form({
         id: '',
         nama_kompetensi_wajib: '',
@@ -3696,9 +4110,11 @@ __webpack_require__.r(__webpack_exports__);
     getKompetensiWajib: function getKompetensiWajib() {
       var _this = this;
 
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+
       if (this.$gate.isMahasiswa()) {
         this.$Progress.start();
-        axios.get('api/bukti-kompetensi-wajib').then(function (response) {
+        axios.get('api/bukti-kompetensi-wajib?page=' + page).then(function (response) {
           _this.kompetensiWajib = response.data;
 
           _this.$Progress.finish();
@@ -3768,17 +4184,39 @@ __webpack_require__.r(__webpack_exports__);
         });
       });
     },
+    searchKompetensiWajib: function searchKompetensiWajib() {
+      var _this4 = this;
+
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+      var query = this.$root.search;
+
+      if (this.$root.search != '') {
+        this.$Progress.start();
+        this.searching = true;
+        axios.get('api/bukti-kompetensi-wajib/find?q=' + query + '&page=' + page).then(function (response) {
+          _this4.kompetensiWajib = response.data;
+
+          _this4.$Progress.finish();
+        })["catch"](function () {
+          _this4.$Progress.fail();
+        });
+      } else {
+        this.searching = false;
+        cusEvent.$emit('ReloadData');
+      }
+    },
     previewBukti: function previewBukti(buktiKompetensiWajib) {
       this.form.fill(buktiKompetensiWajib);
       $('#previewBukti').modal('show');
     }
   },
-  created: function created() {
-    this.$parent.search = '';
+  mounted: function mounted() {
+    this.$root.search = '';
     this.getKompetensiWajib();
     cusEvent.$on('Searching', this.searchKompetensiWajib);
     cusEvent.$on('ReloadData', this.getKompetensiWajib);
   },
+  created: function created() {},
   beforeDestroy: function beforeDestroy() {
     cusEvent.$off('Searching', this.searchKompetensiWajib);
     cusEvent.$off('ReloadData', this.getKompetensiWajib);
@@ -3787,41 +4225,15 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/frontoffice/Kompetensi/Kompetensi.vue?vue&type=script&lang=js&":
-/*!********************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/frontoffice/Kompetensi/Kompetensi.vue?vue&type=script&lang=js& ***!
-  \********************************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/frontoffice/Kompetensi/DataKompetensi.vue?vue&type=script&lang=js&":
+/*!************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/frontoffice/Kompetensi/DataKompetensi.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -4224,9 +4636,9 @@ __webpack_require__.r(__webpack_exports__);
       var _this7 = this;
 
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
-      var query = this.$parent.search;
+      var query = this.$root.search;
 
-      if (this.$parent.search != '') {
+      if (this.$root.search != '') {
         this.$Progress.start();
         this.searching = true;
         axios.get('api/kompetensi/find?q=' + query + '&page=' + page).then(function (response) {
@@ -4277,9 +4689,8 @@ __webpack_require__.r(__webpack_exports__);
       }
     }
   },
-  mounted: function mounted() {},
-  created: function created() {
-    this.$parent.search = '';
+  mounted: function mounted() {
+    this.$root.search = '';
     this.getKompetensi();
     this.getBidang();
     cusEvent.$on('Searching', this.searchKompetensi);
@@ -4293,15 +4704,79 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/frontoffice/MahasiswaProfile.vue?vue&type=script&lang=js&":
-/*!***************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/frontoffice/MahasiswaProfile.vue?vue&type=script&lang=js& ***!
-  \***************************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/frontoffice/kompetensi/Kompetensi.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/frontoffice/kompetensi/Kompetensi.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      tabActive: 'data-kompetensi'
+    };
+  },
+  methods: {
+    changeTab: function changeTab(active) {
+      this.tabActive = active;
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/frontoffice/mahasiswaprofile/MahasiswaProfile.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/frontoffice/mahasiswaprofile/MahasiswaProfile.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
 //
 //
 //
@@ -4514,6 +4989,255 @@ __webpack_require__.r(__webpack_exports__);
   },
   beforeDestroy: function beforeDestroy() {
     cusEvent.$off('ReloadData', this.getMahasiswa, this.getJurusan);
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/frontoffice/skpi/Skpi.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/frontoffice/skpi/Skpi.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      preview: true,
+      mahasiswa: {
+        jurusan: {}
+      },
+      kompetensi: {},
+      kompetensiWajib: {},
+      status: ''
+    };
+  },
+  methods: {
+    getMahasiswa: function getMahasiswa() {
+      var _this = this;
+
+      if (this.$gate.isMahasiswa()) {
+        axios.get('api/mahasiswa/profile').then(function (response) {
+          _this.mahasiswa = response.data;
+        })["catch"](function () {
+          toast.fire({
+            type: 'error',
+            title: 'Load mahasiswa profile failed'
+          });
+        });
+      }
+    },
+    getKompetensi: function getKompetensi() {
+      var _this2 = this;
+
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+
+      if (this.$gate.isMahasiswa()) {
+        axios.get('api/kompetensi?page=' + page).then(function (response) {
+          _this2.kompetensi = response.data;
+        })["catch"](function () {
+          toast.fire({
+            type: 'error',
+            title: 'Load data kompetensi failed'
+          });
+        });
+      }
+    },
+    getKompetensiWajib: function getKompetensiWajib() {
+      var _this3 = this;
+
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+
+      if (this.$gate.isMahasiswa()) {
+        axios.get('api/bukti-kompetensi-wajib?page=' + page).then(function (response) {
+          _this3.kompetensiWajib = response.data;
+        })["catch"](function () {
+          toast.fire({
+            type: 'error',
+            title: 'Load data kompetensi wajib kompetensi failed'
+          });
+        });
+      }
+    },
+    getStatus: function getStatus() {
+      var _this4 = this;
+
+      if (this.$gate.isMahasiswa()) {
+        axios.get('api/skpi/cek').then(function (response) {
+          _this4.status = response.data.status;
+
+          if (_this4.status != 'null') {
+            _this4.$refs.wizard.changeTab(0, 3);
+          }
+        })["catch"](function () {
+          toast.fire({
+            type: 'error',
+            title: 'Get status skpi failed'
+          });
+        });
+      }
+    },
+    onComplete: function onComplete() {
+      var _this5 = this;
+
+      this.$Progress.start();
+      axios.post('api/skpi').then(function (response) {
+        cusEvent.$emit('ReloadData');
+        toast.fire({
+          type: 'success',
+          title: 'Submit skpi successfully'
+        });
+
+        _this5.$Progress.finish();
+      })["catch"](function () {
+        toast.fire({
+          type: 'error',
+          title: 'Submit skpi failed'
+        });
+
+        _this5.$Progress.fail();
+      });
+    }
+  },
+  created: function created() {
+    this.$root.search = '';
+    this.getStatus();
+    this.getMahasiswa();
+    this.getKompetensi();
+    this.getKompetensiWajib();
+    cusEvent.$on('ReloadData', this.getStatus);
+  },
+  beforeDestroy: function beforeDestroy() {
+    cusEvent.$off('ReloadData', this.getStatus);
   }
 });
 
@@ -63819,6 +64543,17 @@ var AlertSuccess_Component = normalizeComponent(
 
 /***/ }),
 
+/***/ "./node_modules/vue-form-wizard/dist/vue-form-wizard.js":
+/*!**************************************************************!*\
+  !*** ./node_modules/vue-form-wizard/dist/vue-form-wizard.js ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+!function(t,e){ true?module.exports=e():undefined}("undefined"!=typeof self?self:this,function(){return function(t){function e(n){if(a[n])return a[n].exports;var i=a[n]={i:n,l:!1,exports:{}};return t[n].call(i.exports,i,i.exports,e),i.l=!0,i.exports}var a={};return e.m=t,e.c=a,e.d=function(t,a,n){e.o(t,a)||Object.defineProperty(t,a,{configurable:!1,enumerable:!0,get:n})},e.n=function(t){var a=t&&t.__esModule?function(){return t.default}:function(){return t};return e.d(a,"a",a),a},e.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},e.p="",e(e.s=7)}([function(t,e){t.exports=function(t,e,a,n,i,r){var s,o=t=t||{},c=typeof t.default;"object"!==c&&"function"!==c||(s=t,o=t.default);var u="function"==typeof o?o.options:o;e&&(u.render=e.render,u.staticRenderFns=e.staticRenderFns,u._compiled=!0),a&&(u.functional=!0),i&&(u._scopeId=i);var l;if(r?(l=function(t){t=t||this.$vnode&&this.$vnode.ssrContext||this.parent&&this.parent.$vnode&&this.parent.$vnode.ssrContext,t||"undefined"==typeof __VUE_SSR_CONTEXT__||(t=__VUE_SSR_CONTEXT__),n&&n.call(this,t),t&&t._registeredComponents&&t._registeredComponents.add(r)},u._ssrRegister=l):n&&(l=n),l){var d=u.functional,b=d?u.render:u.beforeCreate;d?(u._injectStyles=l,u.render=function(t,e){return l.call(e),b(t,e)}):u.beforeCreate=b?[].concat(b,l):[l]}return{esModule:s,exports:o,options:u}}},function(t,e,a){"use strict";var n=a(2),i=a(4),r=a(14);e.a={name:"form-wizard",components:{WizardButton:n.a,WizardStep:i.a},props:{title:{type:String,default:"Awesome Wizard"},subtitle:{type:String,default:"Split a complicated flow in multiple steps"},nextButtonText:{type:String,default:"Next"},backButtonText:{type:String,default:"Back"},finishButtonText:{type:String,default:"Finish"},hideButtons:{type:Boolean,default:!1},validateOnBack:Boolean,color:{type:String,default:"#e74c3c"},errorColor:{type:String,default:"#8b0000"},shape:{type:String,default:"circle"},layout:{type:String,default:"horizontal"},stepsClasses:{type:[String,Array],default:""},stepSize:{type:String,default:"md",validator:function(t){return-1!==["xs","sm","md","lg"].indexOf(t)}},transition:{type:String,default:""},startIndex:{type:Number,default:0,validator:function(t){return t>=0}}},provide:function(){return{addTab:this.addTab,removeTab:this.removeTab}},data:function(){return{activeTabIndex:0,currentPercentage:0,maxStep:0,loading:!1,tabs:[]}},computed:{slotProps:function(){return{nextTab:this.nextTab,prevTab:this.prevTab,activeTabIndex:this.activeTabIndex,isLastStep:this.isLastStep,fillButtonStyle:this.fillButtonStyle}},tabCount:function(){return this.tabs.length},isLastStep:function(){return this.activeTabIndex===this.tabCount-1},isVertical:function(){return"vertical"===this.layout},displayPrevButton:function(){return 0!==this.activeTabIndex},stepPercentage:function(){return 1/(2*this.tabCount)*100},progressBarStyle:function(){return{backgroundColor:this.color,width:this.progress+"%",color:this.color}},fillButtonStyle:function(){return{backgroundColor:this.color,borderColor:this.color,color:"white"}},progress:function(){return this.activeTabIndex>0?this.stepPercentage*(2*this.activeTabIndex+1):this.stepPercentage}},methods:{emitTabChange:function(t,e){this.$emit("on-change",t,e),this.$emit("update:startIndex",e)},addTab:function(t){var e=this.$slots.default.indexOf(t.$vnode);t.tabId=""+t.title.replace(/ /g,"")+e,this.tabs.splice(e,0,t),e<this.activeTabIndex+1&&(this.maxStep=e,this.changeTab(this.activeTabIndex+1,e))},removeTab:function(t){var e=this.tabs,a=e.indexOf(t);a>-1&&(a===this.activeTabIndex&&(this.maxStep=this.activeTabIndex-1,this.changeTab(this.activeTabIndex,this.activeTabIndex-1)),a<this.activeTabIndex&&(this.maxStep=this.activeTabIndex-1,this.activeTabIndex=this.activeTabIndex-1,this.emitTabChange(this.activeTabIndex+1,this.activeTabIndex)),e.splice(a,1))},reset:function(){this.maxStep=0,this.tabs.forEach(function(t){t.checked=!1}),this.navigateToTab(0)},activateAll:function(){this.maxStep=this.tabs.length-1,this.tabs.forEach(function(t){t.checked=!0})},navigateToTab:function(t){var e=this,a=t>this.activeTabIndex;if(t<=this.maxStep){var n=function n(){a&&t-e.activeTabIndex>1?(e.changeTab(e.activeTabIndex,e.activeTabIndex+1),e.beforeTabChange(e.activeTabIndex,n)):(e.changeTab(e.activeTabIndex,t),e.afterTabChange(e.activeTabIndex))};a?this.beforeTabChange(this.activeTabIndex,n):(this.setValidationError(null),n())}return t<=this.maxStep},nextTab:function(){var t=this,e=function(){t.activeTabIndex<t.tabCount-1?(t.changeTab(t.activeTabIndex,t.activeTabIndex+1),t.afterTabChange(t.activeTabIndex)):t.$emit("on-complete")};this.beforeTabChange(this.activeTabIndex,e)},prevTab:function(){var t=this,e=function(){t.activeTabIndex>0&&(t.setValidationError(null),t.changeTab(t.activeTabIndex,t.activeTabIndex-1))};this.validateOnBack?this.beforeTabChange(this.activeTabIndex,e):e()},focusNextTab:function(){var t=Object(r.b)(this.tabs);if(-1!==t&&t<this.tabs.length-1){var e=this.tabs[t+1];e.checked&&Object(r.a)(e.tabId)}},focusPrevTab:function(){var t=Object(r.b)(this.tabs);if(-1!==t&&t>0){var e=this.tabs[t-1].tabId;Object(r.a)(e)}},setLoading:function(t){this.loading=t,this.$emit("on-loading",t)},setValidationError:function(t){this.tabs[this.activeTabIndex].validationError=t,this.$emit("on-error",t)},validateBeforeChange:function(t,e){var a=this;if(this.setValidationError(null),Object(r.c)(t))this.setLoading(!0),t.then(function(t){a.setLoading(!1);var n=!0===t;a.executeBeforeChange(n,e)}).catch(function(t){a.setLoading(!1),a.setValidationError(t)});else{var n=!0===t;this.executeBeforeChange(n,e)}},executeBeforeChange:function(t,e){this.$emit("on-validate",t,this.activeTabIndex),t?e():this.tabs[this.activeTabIndex].validationError="error"},beforeTabChange:function(t,e){if(!this.loading){var a=this.tabs[t];if(a&&void 0!==a.beforeChange){var n=a.beforeChange();this.validateBeforeChange(n,e)}else e()}},afterTabChange:function(t){if(!this.loading){var e=this.tabs[t];e&&void 0!==e.afterChange&&e.afterChange()}},changeTab:function(t,e){var a=!(arguments.length>2&&void 0!==arguments[2])||arguments[2],n=this.tabs[t],i=this.tabs[e];return n&&(n.active=!1),i&&(i.active=!0),a&&this.activeTabIndex!==e&&this.emitTabChange(t,e),this.activeTabIndex=e,this.activateTabAndCheckStep(this.activeTabIndex),!0},tryChangeRoute:function(t){this.$router&&t.route&&this.$router.push(t.route)},checkRouteChange:function(t){var e=-1,a=this.tabs.find(function(a,n){var i=a.route===t;return i&&(e=n),i});if(a&&!a.active){var n=e>this.activeTabIndex;this.navigateToTab(e,n)}},deactivateTabs:function(){this.tabs.forEach(function(t){t.active=!1})},activateTab:function(t){this.deactivateTabs();var e=this.tabs[t];e&&(e.active=!0,e.checked=!0,this.tryChangeRoute(e))},activateTabAndCheckStep:function(t){this.activateTab(t),t>this.maxStep&&(this.maxStep=t),this.activeTabIndex=t},initializeTabs:function(){this.tabs.length>0&&0===this.startIndex&&this.activateTab(this.activeTabIndex),this.startIndex<this.tabs.length?this.activateTabAndCheckStep(this.startIndex):window.console.warn("Prop startIndex set to "+this.startIndex+" is greater than the number of tabs - "+this.tabs.length+". Make sure that the starting index is less than the number of tabs registered")}},mounted:function(){this.initializeTabs()},watch:{"$route.path":function(t){this.checkRouteChange(t)}}}},function(t,e,a){"use strict";function n(t){a(10)}var i=a(3),r=a(11),s=a(0),o=n,c=s(i.a,r.a,!1,o,null,null);e.a=c.exports},function(t,e,a){"use strict";e.a={}},function(t,e,a){"use strict";function n(t){a(12)}var i=a(5),r=a(13),s=a(0),o=n,c=s(i.a,r.a,!1,o,null,null);e.a=c.exports},function(t,e,a){"use strict";e.a={name:"wizard-step",props:{tab:{type:Object,default:function(){}},transition:{type:String,default:""},index:{type:Number,default:0}},computed:{iconActiveStyle:function(){return{backgroundColor:this.tab.color}},stepCheckedStyle:function(){return{borderColor:this.tab.color}},errorStyle:function(){return{borderColor:this.tab.errorColor,backgroundColor:this.tab.errorColor}},stepTitleStyle:function(){return{color:this.tab.validationError?this.tab.errorColor:this.tab.color}},isStepSquare:function(){return"square"===this.tab.shape},isTabShape:function(){return"tab"===this.tab.shape}}}},function(t,e,a){"use strict";e.a={name:"tab-content",props:{title:{type:String,default:""},icon:{type:String,default:""},beforeChange:{type:Function},afterChange:{type:Function},route:{type:[String,Object]},additionalInfo:{type:Object,default:function(){}}},inject:["addTab","removeTab"],data:function(){return{active:!1,validationError:null,checked:!1,tabId:""}},computed:{shape:function(){return this.$parent.shape},color:function(){return this.$parent.color},errorColor:function(){return this.$parent.errorColor}},mounted:function(){this.addTab(this)},destroyed:function(){this.$el&&this.$el.parentNode&&this.$el.parentNode.removeChild(this.$el),this.removeTab(this)}}},function(t,e,a){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n=a(8),i=a(16),r=a(2),s=a(4);a.d(e,"FormWizard",function(){return n.a}),a.d(e,"TabContent",function(){return i.a}),a.d(e,"WizardButton",function(){return r.a}),a.d(e,"WizardStep",function(){return s.a});var o={install:function(t){t.component("form-wizard",n.a),t.component("tab-content",i.a),t.component("wizard-button",r.a),t.component("wizard-step",s.a)}};"undefined"!=typeof window&&window.Vue&&window.Vue.use(o),e.default=o},function(t,e,a){"use strict";function n(t){a(9)}var i=a(1),r=a(15),s=a(0),o=n,c=s(i.a,r.a,!1,o,null,null);e.a=c.exports},function(t,e){},function(t,e){},function(t,e,a){"use strict";var n=function(){var t=this,e=t.$createElement;return(t._self._c||e)("button",{staticClass:"wizard-btn",attrs:{tabindex:"-1",type:"button"}},[t._t("default")],2)},i=[],r={render:n,staticRenderFns:i};e.a=r},function(t,e){},function(t,e,a){"use strict";var n=function(){var t=this,e=t.$createElement,a=t._self._c||e;return a("li",{class:{active:t.tab.active}},[a("a",{class:{disabled:!t.tab.checked},attrs:{href:"javascript:void(0)"}},[a("div",{staticClass:"wizard-icon-circle md",class:{checked:t.tab.checked,square_shape:t.isStepSquare,tab_shape:t.isTabShape},style:[t.tab.checked?t.stepCheckedStyle:{},t.tab.validationError?t.errorStyle:{}],attrs:{role:"tab",tabindex:t.tab.checked?0:"",id:"step-"+t.tab.tabId,"aria-controls":t.tab.tabId,"aria-disabled":t.tab.active,"aria-selected":t.tab.active}},[a("transition",{attrs:{name:t.transition,mode:"out-in"}},[t.tab.active?a("div",{staticClass:"wizard-icon-container",class:{square_shape:t.isStepSquare,tab_shape:t.isTabShape},style:[t.tab.active?t.iconActiveStyle:{},t.tab.validationError?t.errorStyle:{}]},[t._t("active-step",[t.tab.icon?a("i",{staticClass:"wizard-icon",class:t.tab.icon}):a("i",{staticClass:"wizard-icon"},[t._v(t._s(t.index+1))])])],2):t._e(),t._v(" "),t.tab.active?t._e():t._t("default",[!t.tab.active&&t.tab.icon?a("i",{staticClass:"wizard-icon",class:t.tab.icon}):t._e(),t._v(" "),t.tab.active||t.tab.icon?t._e():a("i",{staticClass:"wizard-icon"},[t._v(t._s(t.index+1))])])],2)],1),t._v(" "),t._t("title",[a("span",{staticClass:"stepTitle",class:{active:t.tab.active,has_error:t.tab.validationError},style:t.tab.active?t.stepTitleStyle:{}},[t._v("\n            "+t._s(t.tab.title)+"\n      ")])])],2)])},i=[],r={render:n,staticRenderFns:i};e.a=r},function(t,e,a){"use strict";function n(){return document.activeElement.id}function i(){var t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:[],e=n();return t.findIndex(function(t){return t.tabId===e})}function r(t){document.getElementById(t).focus()}function s(t){return t.then&&"function"==typeof t.then}e.b=i,e.a=r,e.c=s},function(t,e,a){"use strict";var n=function(){var t=this,e=t.$createElement,a=t._self._c||e;return a("div",{staticClass:"vue-form-wizard",class:[t.stepSize,{vertical:t.isVertical}],on:{keyup:[function(e){return"button"in e||!t._k(e.keyCode,"right",39,e.key)?"button"in e&&2!==e.button?null:void t.focusNextTab(e):null},function(e){return"button"in e||!t._k(e.keyCode,"left",37,e.key)?"button"in e&&0!==e.button?null:void t.focusPrevTab(e):null}]}},[a("div",{staticClass:"wizard-header"},[t._t("title",[a("h4",{staticClass:"wizard-title"},[t._v(t._s(t.title))]),t._v(" "),a("p",{staticClass:"category"},[t._v(t._s(t.subtitle))])])],2),t._v(" "),a("div",{staticClass:"wizard-navigation"},[t.isVertical?t._e():a("div",{staticClass:"wizard-progress-with-circle"},[a("div",{staticClass:"wizard-progress-bar",style:t.progressBarStyle})]),t._v(" "),a("ul",{staticClass:"wizard-nav wizard-nav-pills",class:t.stepsClasses,attrs:{role:"tablist"}},[t._l(t.tabs,function(e,n){return t._t("step",[a("wizard-step",{attrs:{tab:e,"step-size":t.stepSize,transition:t.transition,index:n},nativeOn:{click:function(e){t.navigateToTab(n)},keyup:function(e){if(!("button"in e)&&t._k(e.keyCode,"enter",13,e.key))return null;t.navigateToTab(n)}}})],{tab:e,index:n,navigateToTab:t.navigateToTab,stepSize:t.stepSize,transition:t.transition})})],2),t._v(" "),a("div",{staticClass:"wizard-tab-content"},[t._t("default",null,null,t.slotProps)],2)]),t._v(" "),t.hideButtons?t._e():a("div",{staticClass:"wizard-card-footer clearfix"},[t._t("footer",[a("div",{staticClass:"wizard-footer-left"},[t.displayPrevButton?a("span",{attrs:{role:"button",tabindex:"0"},on:{click:t.prevTab,keyup:function(e){if(!("button"in e)&&t._k(e.keyCode,"enter",13,e.key))return null;t.prevTab(e)}}},[t._t("prev",[a("wizard-button",{style:t.fillButtonStyle,attrs:{disabled:t.loading}},[t._v("\n              "+t._s(t.backButtonText)+"\n            ")])],null,t.slotProps)],2):t._e(),t._v(" "),t._t("custom-buttons-left",null,null,t.slotProps)],2),t._v(" "),a("div",{staticClass:"wizard-footer-right"},[t._t("custom-buttons-right",null,null,t.slotProps),t._v(" "),t.isLastStep?a("span",{attrs:{role:"button",tabindex:"0"},on:{click:t.nextTab,keyup:function(e){if(!("button"in e)&&t._k(e.keyCode,"enter",13,e.key))return null;t.nextTab(e)}}},[t._t("finish",[a("wizard-button",{style:t.fillButtonStyle},[t._v("\n              "+t._s(t.finishButtonText)+"\n            ")])],null,t.slotProps)],2):a("span",{attrs:{role:"button",tabindex:"0"},on:{click:t.nextTab,keyup:function(e){if(!("button"in e)&&t._k(e.keyCode,"enter",13,e.key))return null;t.nextTab(e)}}},[t._t("next",[a("wizard-button",{style:t.fillButtonStyle,attrs:{disabled:t.loading}},[t._v("\n            "+t._s(t.nextButtonText)+"\n           ")])],null,t.slotProps)],2)],2)],null,t.slotProps)],2)])},i=[],r={render:n,staticRenderFns:i};e.a=r},function(t,e,a){"use strict";var n=a(6),i=a(17),r=a(0),s=r(n.a,i.a,!1,null,null,null);e.a=s.exports},function(t,e,a){"use strict";var n=function(){var t=this,e=t.$createElement;return(t._self._c||e)("div",{directives:[{name:"show",rawName:"v-show",value:t.active,expression:"active"}],staticClass:"wizard-tab-container",attrs:{role:"tabpanel",id:t.tabId,"aria-hidden":!t.active,"aria-labelledby":"step-"+t.tabId}},[t._t("default",null,{active:t.active})],2)},i=[],r={render:n,staticRenderFns:i};e.a=r}])});
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/NotFound.vue?vue&type=template&id=2ce50e5a&":
 /*!***********************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/NotFound.vue?vue&type=template&id=2ce50e5a& ***!
@@ -64965,89 +65700,109 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "container" }, [
+    this.$gate.isWarek() || this.$gate.isKaprodi() || this.$gate.isAkademik()
+      ? _c("div", { staticClass: "row mt-4" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _vm._m(1),
+          _vm._v(" "),
+          _vm._m(2),
+          _vm._v(" "),
+          _vm._m(3)
+        ])
+      : _c("div", { staticClass: "row" }, [_c("not-found")], 1)
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "row mt-4" }, [
-        _c("div", { staticClass: "col-lg-3 col-6" }, [
-          _c("div", { staticClass: "small-box bg-dark" }, [
-            _c("div", { staticClass: "inner" }, [
-              _c("h3", [_vm._v("150")]),
-              _vm._v(" "),
-              _c("p", [_vm._v("Mahasiswa")])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "icon" }, [
-              _c("i", { staticClass: "fas fa-user-graduate" })
-            ]),
-            _vm._v(" "),
-            _c("a", { staticClass: "small-box-footer", attrs: { href: "#" } }, [
-              _vm._v("More info "),
-              _c("i", { staticClass: "fa fa-arrow-circle-right" })
-            ])
-          ])
+    return _c("div", { staticClass: "col-lg-3 col-6" }, [
+      _c("div", { staticClass: "small-box bg-dark" }, [
+        _c("div", { staticClass: "inner" }, [
+          _c("h3", [_vm._v("150")]),
+          _vm._v(" "),
+          _c("p", [_vm._v("Mahasiswa")])
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "col-lg-3 col-6" }, [
-          _c("div", { staticClass: "small-box bg-danger" }, [
-            _c("div", { staticClass: "inner" }, [
-              _c("h3", [_vm._v("123")]),
-              _vm._v(" "),
-              _c("p", [_vm._v("SKPI Published")])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "icon" }, [
-              _c("i", { staticClass: "fas fa-id-card" })
-            ]),
-            _vm._v(" "),
-            _c("a", { staticClass: "small-box-footer", attrs: { href: "#" } }, [
-              _vm._v("More info "),
-              _c("i", { staticClass: "fa fa-arrow-circle-right" })
-            ])
-          ])
+        _c("div", { staticClass: "icon" }, [
+          _c("i", { staticClass: "fas fa-user-graduate" })
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "col-lg-3 col-6" }, [
-          _c("div", { staticClass: "small-box bg-primary" }, [
-            _c("div", { staticClass: "inner" }, [
-              _c("h3", [_vm._v("44")]),
-              _vm._v(" "),
-              _c("p", [_vm._v("Bidang Kompetensi")])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "icon" }, [
-              _c("i", { staticClass: "fas fa-atom" })
-            ]),
-            _vm._v(" "),
-            _c("a", { staticClass: "small-box-footer", attrs: { href: "#" } }, [
-              _vm._v("More info "),
-              _c("i", { staticClass: "fa fa-arrow-circle-right" })
-            ])
-          ])
+        _c("a", { staticClass: "small-box-footer", attrs: { href: "#" } }, [
+          _vm._v("More info "),
+          _c("i", { staticClass: "fa fa-arrow-circle-right" })
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-lg-3 col-6" }, [
+      _c("div", { staticClass: "small-box bg-danger" }, [
+        _c("div", { staticClass: "inner" }, [
+          _c("h3", [_vm._v("123")]),
+          _vm._v(" "),
+          _c("p", [_vm._v("SKPI Published")])
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "col-lg-3 col-6" }, [
-          _c("div", { staticClass: "small-box bg-orange text-light" }, [
-            _c("div", { staticClass: "inner" }, [
-              _c("h3", [_vm._v("65")]),
-              _vm._v(" "),
-              _c("p", [_vm._v("Unique Visitors")])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "icon" }, [
-              _c("i", { staticClass: "fas fa-award" })
-            ]),
-            _vm._v(" "),
-            _c("a", { staticClass: "small-box-footer", attrs: { href: "#" } }, [
-              _vm._v("More info "),
-              _c("i", { staticClass: "fa fa-arrow-circle-right" })
-            ])
-          ])
+        _c("div", { staticClass: "icon" }, [
+          _c("i", { staticClass: "fas fa-id-card" })
+        ]),
+        _vm._v(" "),
+        _c("a", { staticClass: "small-box-footer", attrs: { href: "#" } }, [
+          _vm._v("More info "),
+          _c("i", { staticClass: "fa fa-arrow-circle-right" })
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-lg-3 col-6" }, [
+      _c("div", { staticClass: "small-box bg-primary" }, [
+        _c("div", { staticClass: "inner" }, [
+          _c("h3", [_vm._v("44")]),
+          _vm._v(" "),
+          _c("p", [_vm._v("Bidang Kompetensi")])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "icon" }, [
+          _c("i", { staticClass: "fas fa-atom" })
+        ]),
+        _vm._v(" "),
+        _c("a", { staticClass: "small-box-footer", attrs: { href: "#" } }, [
+          _vm._v("More info "),
+          _c("i", { staticClass: "fa fa-arrow-circle-right" })
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-lg-3 col-6" }, [
+      _c("div", { staticClass: "small-box bg-orange text-light" }, [
+        _c("div", { staticClass: "inner" }, [
+          _c("h3", [_vm._v("65")]),
+          _vm._v(" "),
+          _c("p", [_vm._v("Unique Visitors")])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "icon" }, [
+          _c("i", { staticClass: "fas fa-award" })
+        ]),
+        _vm._v(" "),
+        _c("a", { staticClass: "small-box-footer", attrs: { href: "#" } }, [
+          _vm._v("More info "),
+          _c("i", { staticClass: "fa fa-arrow-circle-right" })
         ])
       ])
     ])
@@ -69560,9 +70315,598 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container" })
+  return _c("div", { staticClass: "container" }, [
+    this.$gate.isWarek() || this.$gate.isKaprodi() || this.$gate.isAkademik()
+      ? _c("div", [
+          _c("div", { staticClass: "row mt-4" }, [
+            _c("div", { staticClass: "col-md-12" }, [
+              _c("div", { staticClass: "card" }, [
+                _c("div", { staticClass: "card-header" }, [
+                  _c("h3", { staticClass: "card-title" }, [
+                    _vm._v("Manage SKPI")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "card-tools" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-danger",
+                        on: {
+                          click: function($event) {
+                            return _vm.exportSkpi("Skpi.pdf")
+                          }
+                        }
+                      },
+                      [_c("i", { staticClass: "fas fa-file-pdf" })]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-success",
+                        on: {
+                          click: function($event) {
+                            return _vm.exportSkpi("Skpi.xlsx")
+                          }
+                        }
+                      },
+                      [_c("i", { staticClass: "fas fa-file-excel" })]
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "card-body table-responsive p-0" }, [
+                  _c("table", { staticClass: "table table-hover" }, [
+                    _c(
+                      "tbody",
+                      [
+                        _vm._m(0),
+                        _vm._v(" "),
+                        _vm._l(_vm.skpi.data, function(data, index) {
+                          return _c("tr", { key: index }, [
+                            _c("td", { staticClass: "align-middle" }, [
+                              _vm._v(_vm._s(_vm.skpi.meta.from + index))
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "align-middle" }, [
+                              _vm._v(_vm._s(data.nama))
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "align-middle" }, [
+                              _vm._v(_vm._s(data.npm))
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "align-middle" }, [
+                              _vm._v(_vm._s(data.nama_jurusan))
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "text-center" }, [
+                              _vm._v(_vm._s(data.point_skpi))
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "align-middle" }, [
+                              data.status == "progress"
+                                ? _c(
+                                    "span",
+                                    {
+                                      staticClass:
+                                        "badge bg-orange text-white p-1"
+                                    },
+                                    [_vm._v(_vm._s(data.status))]
+                                  )
+                                : _c(
+                                    "span",
+                                    {
+                                      staticClass:
+                                        "badge bg-success text-white p-1"
+                                    },
+                                    [_vm._v(_vm._s(data.status))]
+                                  )
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "td",
+                              { staticClass: "text-center align-middle" },
+                              [
+                                data.status == "published"
+                                  ? _c(
+                                      "button",
+                                      {
+                                        staticClass: "btn btn-link btn-lg",
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.viewModal(data)
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _c("i", {
+                                          staticClass: "fas fa-file-pdf"
+                                        })
+                                      ]
+                                    )
+                                  : _c(
+                                      "button",
+                                      {
+                                        staticClass:
+                                          "btn btn-sm btn-outline-success",
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.publishSkpi(data.id)
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                                Publish\n                              "
+                                        )
+                                      ]
+                                    )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "td",
+                              { staticClass: "text-center align-middle" },
+                              [
+                                _c(
+                                  "router-link",
+                                  {
+                                    staticClass: "btn btn-link btn-lg",
+                                    attrs: {
+                                      to: {
+                                        name: "skpi-kompetensi",
+                                        params: {
+                                          id: data.id_mahasiswa,
+                                          nama: data.nama
+                                        }
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("i", {
+                                      staticClass:
+                                        "fas fa-sign-in-alt text-teal"
+                                    })
+                                  ]
+                                )
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "td",
+                              { staticClass: "text-center align-middle" },
+                              [
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass: "btn btn-link btn-sm",
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.deleteSkpi(data.id)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("i", {
+                                      staticClass: "fas fa-trash text-red"
+                                    })
+                                  ]
+                                )
+                              ]
+                            )
+                          ])
+                        })
+                      ],
+                      2
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "card-footer" },
+                  [
+                    !_vm.searching
+                      ? _c("pagination", {
+                          attrs: { data: _vm.skpi, align: "center" },
+                          on: { "pagination-change-page": _vm.getSkpi }
+                        })
+                      : _c("pagination", {
+                          attrs: { data: _vm.skpi, align: "center" },
+                          on: { "pagination-change-page": _vm.searchSkpi }
+                        })
+                  ],
+                  1
+                )
+              ])
+            ])
+          ])
+        ])
+      : _c("div", { staticClass: "row" }, [_c("not-found")], 1)
+  ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [
+      _c("th", [_vm._v("No")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Nama")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Npm")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Jurusan")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Point Skpi")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Status")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Preview")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Kompetensi")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Action")])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/backoffice/skpi/SkpiKompetensi.vue?vue&type=template&id=6b7392e3&":
+/*!*********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/backoffice/skpi/SkpiKompetensi.vue?vue&type=template&id=6b7392e3& ***!
+  \*********************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "container" }, [
+    this.$gate.isWarek() || this.$gate.isKaprodi()
+      ? _c("div", [
+          _c("div", { staticClass: "row mt-4" }, [
+            _c("div", { staticClass: "col-md-12" }, [
+              _c("div", { staticClass: "card card-primary card-outline" }, [
+                _c("div", { staticClass: "card-header" }, [
+                  _c("h5", { staticClass: "card-title" }, [
+                    _vm._m(0),
+                    _vm._v(
+                      "    \n                        " +
+                        _vm._s(this.$route.params.nama) +
+                        "\n                    "
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "card-body table-responsive p-0" }, [
+                  _c("table", { staticClass: "table table-hover" }, [
+                    _c(
+                      "tbody",
+                      [
+                        _vm._m(1),
+                        _vm._v(" "),
+                        _vm._l(_vm.kompetensi.data, function(data, index) {
+                          return _c("tr", { key: index }, [
+                            _c("td", { staticClass: "align-middle" }, [
+                              _vm._v(_vm._s(_vm.kompetensi.meta.from + index))
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "align-middle" }, [
+                              _vm._v(_vm._s(data.nama_kompetensi))
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "align-middle" }, [
+                              _vm._v(_vm._s(data.bidang_kompetensi.nama_bidang))
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "align-middle" }, [
+                              _vm._v(
+                                _vm._s(data.tgl_mulai) +
+                                  " - " +
+                                  _vm._s(data.tgl_selesai)
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "align-middle" }, [
+                              _vm._v(_vm._s(data.tingkat))
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "align-middle" }, [
+                              _vm._v(_vm._s(data.peran))
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "align-middle" }, [
+                              _vm._v(_vm._s(data.point_kompetensi))
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "td",
+                              { staticClass: "text-center align-middle" },
+                              [
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass: "btn btn-link",
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.previewKemampuan(
+                                          data.kemampuan
+                                        )
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("i", {
+                                      staticClass: "fas fa-external-link-alt"
+                                    })
+                                  ]
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "td",
+                              { staticClass: "text-center align-middle" },
+                              [
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass: "btn btn-link",
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.previewBukti(data)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("i", {
+                                      staticClass: "text-grey fas fa-eye"
+                                    })
+                                  ]
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "td",
+                              { staticClass: "text-center align-middle" },
+                              [
+                                _c("label", { staticClass: "checkwrap" }, [
+                                  _c("input", {
+                                    attrs: { type: "checkbox" },
+                                    domProps: { checked: data.active == 1 },
+                                    on: {
+                                      change: function($event) {
+                                        return _vm.changeValidation(data.id)
+                                      }
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c("span", { staticClass: "checkmark" })
+                                ])
+                              ]
+                            )
+                          ])
+                        })
+                      ],
+                      2
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "card-footer" },
+                  [
+                    !_vm.searching
+                      ? _c("pagination", {
+                          attrs: { data: _vm.kompetensi, align: "center" },
+                          on: { "pagination-change-page": _vm.getKompetensi }
+                        })
+                      : _c("pagination", {
+                          attrs: { data: _vm.kompetensi, align: "center" },
+                          on: { "pagination-change-page": _vm.searchKompetensi }
+                        })
+                  ],
+                  1
+                )
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "modal",
+              attrs: { id: "previewKemampuan", tabindex: "-1", role: "dialog" }
+            },
+            [
+              _c(
+                "div",
+                {
+                  staticClass: "modal-dialog modal-dialog-centered",
+                  attrs: { role: "document" }
+                },
+                [
+                  _c("div", { staticClass: "modal-content" }, [
+                    _vm._m(2),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "modal-body" }, [
+                      _c("div", { staticClass: "card" }, [
+                        _c("div", { staticClass: "card-body p-0" }, [
+                          _c(
+                            "ul",
+                            { staticClass: "nav nav-pills flex-column" },
+                            _vm._l(_vm.kompetensiSelect, function(data, index) {
+                              return _c(
+                                "li",
+                                { key: index, staticClass: "nav-item" },
+                                [
+                                  _c("span", { staticClass: "nav-link" }, [
+                                    _vm._v(_vm._s(data.nama_kemampuan))
+                                  ])
+                                ]
+                              )
+                            }),
+                            0
+                          )
+                        ])
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _vm._m(3)
+                  ])
+                ]
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "modal fade",
+              attrs: { id: "previewBukti", tabindex: "-1", role: "dialog" }
+            },
+            [
+              _c(
+                "div",
+                {
+                  staticClass: "modal-dialog modal-dialog-centered",
+                  attrs: { role: "document" }
+                },
+                [
+                  _vm.kompetensiSelect.bukti != null
+                    ? _c("div", { staticClass: "modal-body" }, [
+                        _vm.kompetensiSelect.bukti.split(".")[1] == "pdf"
+                          ? _c("div", { staticClass: "modal-content" }, [
+                              _c("embed", {
+                                attrs: {
+                                  src:
+                                    "storage/data/kompetensi/pdf/" +
+                                    _vm.kompetensiSelect.bukti,
+                                  width: "100%",
+                                  height: "600",
+                                  type: "application/pdf"
+                                }
+                              })
+                            ])
+                          : _vm.kompetensiSelect.bukti.split(".")[1] == "jpg" ||
+                            _vm.kompetensiSelect.bukti.split(".")[1] ==
+                              "jpeg" ||
+                            _vm.kompetensiSelect.bukti.split(".")[1] == "png"
+                          ? _c("img", {
+                              attrs: {
+                                src:
+                                  "storage/data/kompetensi/img/" +
+                                  _vm.kompetensiSelect.bukti
+                              }
+                            })
+                          : _vm._e()
+                      ])
+                    : _vm._e()
+                ]
+              )
+            ]
+          )
+        ])
+      : _c("div", { staticClass: "row" }, [_c("not-found")], 1)
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "a",
+      {
+        staticClass: "btn btn-white",
+        attrs: { href: "javascript:history.go(-1)" }
+      },
+      [_c("i", { staticClass: "fas fa-arrow-left" })]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [
+      _c("th", [_vm._v("No")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Nama Kompetensi")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Bidang")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Tanggal Kegiatan")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Tingkat")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Peran")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Point")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Kemampuan")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Bukti")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Validation")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header bg-primary" }, [
+      _c("h5", { staticClass: "modal-title" }, [
+        _c("i", { staticClass: "fas fa-user-graduate mr-1" }),
+        _vm._v(
+          "\n                            Kemampuan\n                        "
+        )
+      ]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close text-white",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-danger",
+          attrs: { type: "button", "data-dismiss": "modal" }
+        },
+        [_vm._v("Close")]
+      )
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -69584,115 +70928,125 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return this.$gate.isMahasiswa()
-    ? _c("div", [
-        _vm._m(0),
-        _vm._v(" "),
-        _c("div", { staticClass: "card-body table-responsive p-0" }, [
-          _c("table", { staticClass: "table table-hover" }, [
-            _c(
-              "tbody",
-              [
-                _vm._m(1),
+  return _c("div", [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("div", { staticClass: "card-body table-responsive p-0" }, [
+      _c("table", { staticClass: "table table-hover" }, [
+        _c(
+          "tbody",
+          [
+            _vm._m(1),
+            _vm._v(" "),
+            _vm._l(_vm.kompetensiWajib.data, function(data, index) {
+              return _c("tr", { key: index }, [
+                _c("td", [
+                  _vm._v(_vm._s(_vm.kompetensiWajib.meta.from + index))
+                ]),
                 _vm._v(" "),
-                _vm._l(_vm.kompetensiWajib.data, function(data, index) {
-                  return _c("tr", { key: index }, [
-                    _c("td", [
-                      _vm._v(_vm._s(_vm.kompetensiWajib.meta.from + index))
-                    ]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(data.nama_kompetensi_wajib))]),
-                    _vm._v(" "),
-                    _c("td", [
-                      _c("input", {
-                        attrs: {
-                          type: "file",
-                          accept: "image/*,application/pdf"
-                        },
-                        on: {
-                          input: function($event) {
-                            return _vm.updateFile($event, data)
+                _c("td", [_vm._v(_vm._s(data.nama_kompetensi_wajib))]),
+                _vm._v(" "),
+                _c("td", [
+                  _c("input", {
+                    attrs: { type: "file", accept: "image/*,application/pdf" },
+                    on: {
+                      input: function($event) {
+                        return _vm.updateFile($event, data)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("td", [
+                  data.bukti_wajib
+                    ? _c(
+                        "a",
+                        {
+                          attrs: { href: "#" },
+                          on: {
+                            click: function($event) {
+                              return _vm.previewBukti(data)
+                            }
                           }
+                        },
+                        [_c("i", { staticClass: "fas fa-eye text-darkblue" })]
+                      )
+                    : _c("a", { attrs: { href: "#" } }, [
+                        _c("i", { staticClass: "fas fa-times text-red" })
+                      ])
+                ])
+              ])
+            })
+          ],
+          2
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "card-footer" },
+      [
+        !_vm.searching
+          ? _c("pagination", {
+              attrs: { data: _vm.kompetensiWajib, align: "center" },
+              on: { "pagination-change-page": _vm.getKompetensiWajib }
+            })
+          : _c("pagination", {
+              attrs: { data: _vm.kompetensiWajib, align: "center" },
+              on: { "pagination-change-page": _vm.searchKompetensiWajib }
+            })
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: { id: "previewBukti", tabindex: "-1", role: "dialog" }
+      },
+      [
+        _c(
+          "div",
+          {
+            staticClass: "modal-dialog modal-dialog-centered",
+            attrs: { role: "document" }
+          },
+          [
+            _vm.form.bukti_wajib != null
+              ? _c("div", { staticClass: "modal-body" }, [
+                  _vm.form.bukti_wajib.split(".")[1] == "pdf"
+                    ? _c("div", { staticClass: "modal-content" }, [
+                        _c("embed", {
+                          attrs: {
+                            src:
+                              "storage/data/kompetensi/pdf/" +
+                              _vm.form.bukti_wajib,
+                            width: "100%",
+                            height: "600",
+                            type: "application/pdf"
+                          }
+                        })
+                      ])
+                    : _vm.form.bukti_wajib.split(".")[1] == "jpg" ||
+                      _vm.form.bukti_wajib.split(".")[1] == "jpeg" ||
+                      _vm.form.bukti_wajib.split(".")[1] == "png"
+                    ? _c("img", {
+                        attrs: {
+                          src:
+                            "storage/data/kompetensi/img/" +
+                            _vm.form.bukti_wajib
                         }
                       })
-                    ]),
-                    _vm._v(" "),
-                    _c("td", [
-                      data.bukti_wajib
-                        ? _c(
-                            "a",
-                            {
-                              attrs: { href: "#" },
-                              on: {
-                                click: function($event) {
-                                  return _vm.previewBukti(data)
-                                }
-                              }
-                            },
-                            [
-                              _c("i", {
-                                staticClass: "fas fa-eye text-darkblue"
-                              })
-                            ]
-                          )
-                        : _c("i", { staticClass: "fas fa-times text-red" })
-                    ])
-                  ])
-                })
-              ],
-              2
-            )
-          ])
-        ]),
-        _vm._v(" "),
-        _vm.form.bukti_wajib
-          ? _c("div", [
-              _c(
-                "div",
-                {
-                  staticClass: "modal fade",
-                  attrs: { id: "previewBukti", tabindex: "-99", role: "dialog" }
-                },
-                [
-                  _c(
-                    "div",
-                    {
-                      staticClass: "modal-dialog modal-dialog-centered",
-                      attrs: { role: "document" }
-                    },
-                    [
-                      _vm.form.bukti_wajib.split(".")[1] == "pdf"
-                        ? _c("div", { staticClass: "modal-content" }, [
-                            _c("embed", {
-                              attrs: {
-                                src:
-                                  "storage/data/kompetensi/pdf/" +
-                                  _vm.form.bukti_wajib,
-                                width: "100%",
-                                height: "600",
-                                type: "application/pdf"
-                              }
-                            })
-                          ])
-                        : _vm.form.bukti_wajib.split(".")[1] == "jpg" ||
-                          _vm.form.bukti_wajib.split(".")[1] == "jpeg" ||
-                          _vm.form.bukti_wajib.split(".")[1] == "png"
-                        ? _c("img", {
-                            attrs: {
-                              src:
-                                "storage/data/kompetensi/img/" +
-                                _vm.form.bukti_wajib
-                            }
-                          })
-                        : _vm._e()
-                    ]
-                  )
-                ]
-              )
-            ])
-          : _vm._e()
-      ])
-    : _vm._e()
+                    : _vm._e()
+                ])
+              : _vm._e()
+          ]
+        )
+      ]
+    )
+  ])
 }
 var staticRenderFns = [
   function() {
@@ -69726,10 +71080,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/frontoffice/Kompetensi/Kompetensi.vue?vue&type=template&id=e45892ac&":
-/*!************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/frontoffice/Kompetensi/Kompetensi.vue?vue&type=template&id=e45892ac& ***!
-  \************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/frontoffice/Kompetensi/DataKompetensi.vue?vue&type=template&id=10808a74&":
+/*!****************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/frontoffice/Kompetensi/DataKompetensi.vue?vue&type=template&id=10808a74& ***!
+  \****************************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -69741,960 +71095,764 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container" }, [
-    this.$gate.isMahasiswa()
-      ? _c("div", [
-          _c("div", { staticClass: "row mt-4" }, [
-            _c("div", { staticClass: "col-md-12" }, [
-              _c("div", { staticClass: "card" }, [
-                _vm._m(0),
+  return _c("div", [
+    _c("div", { staticClass: "card-header bg-white" }, [
+      _c("h3", { staticClass: "card-title" }, [_vm._v("Manage Kompetensi")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "card-tools" }, [
+        _c(
+          "button",
+          { staticClass: "btn btn-primary", on: { click: _vm.newModal } },
+          [_c("i", { staticClass: "fas fa-plus-square" }), _vm._v(" Add New")]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-danger",
+            on: {
+              click: function($event) {
+                return _vm.exportKompetensi("Kompetensi.pdf")
+              }
+            }
+          },
+          [_c("i", { staticClass: "fas fa-file-pdf" })]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-success",
+            on: {
+              click: function($event) {
+                return _vm.exportKompetensi("Kompetensi.xlsx")
+              }
+            }
+          },
+          [_c("i", { staticClass: "fas fa-file-excel" })]
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "card-body table-responsive p-0" }, [
+      _c("table", { staticClass: "table table-hover" }, [
+        _c(
+          "tbody",
+          [
+            _vm._m(0),
+            _vm._v(" "),
+            _vm._l(_vm.kompetensi.data, function(data, index) {
+              return _c("tr", { key: index }, [
+                _c("td", [_vm._v(_vm._s(_vm.kompetensi.meta.from + index))]),
                 _vm._v(" "),
-                _c("div", { staticClass: "tab-content" }, [
+                _c("td", [_vm._v(_vm._s(data.nama_kompetensi))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(data.bidang_kompetensi.nama_bidang))]),
+                _vm._v(" "),
+                _c("td", [
+                  _vm._v(
+                    _vm._s(data.tgl_mulai) + " - " + _vm._s(data.tgl_selesai)
+                  )
+                ]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(data.tingkat))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(data.peran))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(data.point_kompetensi))]),
+                _vm._v(" "),
+                _c("td", [
                   _c(
-                    "div",
+                    "a",
                     {
-                      staticClass: "tab-pane active show",
-                      attrs: { id: "kompetensiTab" }
+                      attrs: { href: "#" },
+                      on: {
+                        click: function($event) {
+                          return _vm.previewKompetensi(data)
+                        }
+                      }
                     },
-                    [
-                      _c("div", { staticClass: "card-header bg-white" }, [
-                        _c("h3", { staticClass: "card-title" }, [
-                          _vm._v("Manage Kompetensi")
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "card-tools" }, [
-                          _c(
-                            "button",
-                            {
-                              staticClass: "btn btn-primary",
-                              on: { click: _vm.newModal }
-                            },
-                            [
-                              _c("i", { staticClass: "fas fa-plus-square" }),
-                              _vm._v(" Add New")
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "button",
-                            {
-                              staticClass: "btn btn-danger",
-                              on: {
-                                click: function($event) {
-                                  return _vm.exportKompetensi("Kompetensi.pdf")
-                                }
-                              }
-                            },
-                            [_c("i", { staticClass: "fas fa-file-pdf" })]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "button",
-                            {
-                              staticClass: "btn btn-success",
-                              on: {
-                                click: function($event) {
-                                  return _vm.exportKompetensi("Kompetensi.xlsx")
-                                }
-                              }
-                            },
-                            [_c("i", { staticClass: "fas fa-file-excel" })]
-                          )
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        { staticClass: "card-body table-responsive p-0" },
-                        [
-                          _c("table", { staticClass: "table table-hover" }, [
-                            _c(
-                              "tbody",
-                              [
-                                _vm._m(1),
-                                _vm._v(" "),
-                                _vm._l(_vm.kompetensi.data, function(
-                                  data,
-                                  index
-                                ) {
-                                  return _c("tr", { key: index }, [
-                                    _c("td", [
-                                      _vm._v(
-                                        _vm._s(_vm.kompetensi.meta.from + index)
-                                      )
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("td", [
-                                      _vm._v(_vm._s(data.nama_kompetensi))
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("td", [
-                                      _vm._v(
-                                        _vm._s(
-                                          data.bidang_kompetensi.nama_bidang
-                                        )
-                                      )
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("td", [
-                                      _vm._v(
-                                        _vm._s(data.tgl_mulai) +
-                                          " - " +
-                                          _vm._s(data.tgl_selesai)
-                                      )
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("td", [_vm._v(_vm._s(data.tingkat))]),
-                                    _vm._v(" "),
-                                    _c("td", [_vm._v(_vm._s(data.peran))]),
-                                    _vm._v(" "),
-                                    _c("td", [
-                                      _vm._v(_vm._s(data.point_kompetensi))
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("td", [
-                                      _c(
-                                        "a",
-                                        {
-                                          attrs: { href: "#" },
-                                          on: {
-                                            click: function($event) {
-                                              return _vm.previewKompetensi(data)
-                                            }
-                                          }
-                                        },
-                                        [
-                                          _c("i", {
-                                            staticClass:
-                                              "fas fa-eye text-darkblue"
-                                          })
-                                        ]
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "a",
-                                        {
-                                          attrs: { href: "#" },
-                                          on: {
-                                            click: function($event) {
-                                              return _vm.editModal(data)
-                                            }
-                                          }
-                                        },
-                                        [
-                                          _c("i", {
-                                            staticClass: "fas fa-edit"
-                                          })
-                                        ]
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "a",
-                                        {
-                                          attrs: { href: "#" },
-                                          on: {
-                                            click: function($event) {
-                                              return _vm.deleteKompetensi(
-                                                data.id
-                                              )
-                                            }
-                                          }
-                                        },
-                                        [
-                                          _c("i", {
-                                            staticClass: "fas fa-trash text-red"
-                                          })
-                                        ]
-                                      )
-                                    ])
-                                  ])
-                                })
-                              ],
-                              2
-                            )
-                          ])
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        { staticClass: "card-footer" },
-                        [
-                          !_vm.searching
-                            ? _c("pagination", {
-                                attrs: {
-                                  data: _vm.kompetensi,
-                                  align: "center"
-                                },
-                                on: {
-                                  "pagination-change-page": _vm.getKompetensi
-                                }
-                              })
-                            : _c("pagination", {
-                                attrs: {
-                                  data: _vm.kompetensi,
-                                  align: "center"
-                                },
-                                on: {
-                                  "pagination-change-page": _vm.searchKompetensi
-                                }
-                              })
-                        ],
-                        1
-                      )
-                    ]
+                    [_c("i", { staticClass: "fas fa-eye text-darkblue" })]
                   ),
                   _vm._v(" "),
                   _c(
-                    "div",
+                    "a",
                     {
-                      staticClass: "tab-pane",
-                      attrs: { id: "kompetensiWajibTab" }
+                      attrs: { href: "#" },
+                      on: {
+                        click: function($event) {
+                          return _vm.editModal(data)
+                        }
+                      }
                     },
-                    [_c("bukti-kompetensi")],
-                    1
+                    [_c("i", { staticClass: "fas fa-edit" })]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "a",
+                    {
+                      attrs: { href: "#" },
+                      on: {
+                        click: function($event) {
+                          return _vm.deleteKompetensi(data.id)
+                        }
+                      }
+                    },
+                    [_c("i", { staticClass: "fas fa-trash text-red" })]
                   )
                 ])
               ])
-            ])
-          ]),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              staticClass: "modal",
-              attrs: { id: "modalForm", tabindex: "-1", role: "dialog" }
-            },
-            [
+            })
+          ],
+          2
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "card-footer" },
+      [
+        !_vm.searching
+          ? _c("pagination", {
+              attrs: { data: _vm.kompetensi, align: "center" },
+              on: { "pagination-change-page": _vm.getKompetensi }
+            })
+          : _c("pagination", {
+              attrs: { data: _vm.kompetensi, align: "center" },
+              on: { "pagination-change-page": _vm.searchKompetensi }
+            })
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal",
+        attrs: { id: "modalForm", tabindex: "-1", role: "dialog" }
+      },
+      [
+        _c(
+          "div",
+          {
+            staticClass: "modal-dialog modal-dialog-centered",
+            attrs: { role: "document" }
+          },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _c("div", { staticClass: "modal-header" }, [
+                _c(
+                  "h5",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: !_vm.editMode,
+                        expression: "!editMode"
+                      }
+                    ],
+                    staticClass: "modal-title"
+                  },
+                  [_vm._v("Add New Kompetensi")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "h5",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.editMode,
+                        expression: "editMode"
+                      }
+                    ],
+                    staticClass: "modal-title"
+                  },
+                  [_vm._v("Edit Kompetensi")]
+                ),
+                _vm._v(" "),
+                _vm._m(1)
+              ]),
+              _vm._v(" "),
               _c(
-                "div",
+                "form",
                 {
-                  staticClass: "modal-dialog modal-dialog-centered",
-                  attrs: { role: "document" }
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      _vm.editMode
+                        ? _vm.updateKompetensi()
+                        : _vm.createKompetensi()
+                    }
+                  }
                 },
                 [
-                  _c("div", { staticClass: "modal-content" }, [
-                    _c("div", { staticClass: "modal-header" }, [
-                      _c(
-                        "h5",
-                        {
+                  _c("div", { staticClass: "modal-body" }, [
+                    _c(
+                      "div",
+                      { staticClass: "form-group" },
+                      [
+                        _c("label", { attrs: { for: "inputNamaKompetensi" } }, [
+                          _vm._v("Nama Kompetensi")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
                           directives: [
                             {
-                              name: "show",
-                              rawName: "v-show",
-                              value: !_vm.editMode,
-                              expression: "!editMode"
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.form.nama_kompetensi,
+                              expression: "form.nama_kompetensi"
                             }
                           ],
-                          staticClass: "modal-title"
-                        },
-                        [_vm._v("Add New Kompetensi")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "h5",
-                        {
-                          directives: [
-                            {
-                              name: "show",
-                              rawName: "v-show",
-                              value: _vm.editMode,
-                              expression: "editMode"
+                          staticClass: "form-control",
+                          class: {
+                            "is-invalid": _vm.form.errors.has("nama_kompetensi")
+                          },
+                          attrs: {
+                            type: "text",
+                            name: "nama_kompetensi",
+                            placeholder: "Nama Kompetensi",
+                            id: "inputNamaKompetensi"
+                          },
+                          domProps: { value: _vm.form.nama_kompetensi },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.form,
+                                "nama_kompetensi",
+                                $event.target.value
+                              )
                             }
-                          ],
-                          staticClass: "modal-title"
-                        },
-                        [_vm._v("Edit Kompetensi")]
-                      ),
-                      _vm._v(" "),
-                      _vm._m(2)
-                    ]),
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("has-error", {
+                          attrs: { form: _vm.form, field: "nama_kompetensi" }
+                        })
+                      ],
+                      1
+                    ),
                     _vm._v(" "),
                     _c(
-                      "form",
-                      {
-                        on: {
-                          submit: function($event) {
-                            $event.preventDefault()
-                            _vm.editMode
-                              ? _vm.updateKompetensi()
-                              : _vm.createKompetensi()
-                          }
-                        }
-                      },
+                      "div",
+                      { staticClass: "form-group" },
                       [
-                        _c("div", { staticClass: "modal-body" }, [
-                          _c(
-                            "div",
-                            { staticClass: "form-group" },
-                            [
-                              _c(
-                                "label",
-                                { attrs: { for: "inputNamaKompetensi" } },
-                                [_vm._v("Nama Kompetensi")]
-                              ),
-                              _vm._v(" "),
-                              _c("input", {
+                        _c("label", { attrs: { for: "inputBidang" } }, [
+                          _vm._v("Bidang Kompetensi")
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "select",
+                          {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.form.id_bidang,
+                                expression: "form.id_bidang"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            class: {
+                              "is-invalid": _vm.form.errors.has("id_bidang")
+                            },
+                            attrs: { name: "id_bidang", id: "inputBidang" },
+                            on: {
+                              change: function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.form,
+                                  "id_bidang",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              }
+                            }
+                          },
+                          [
+                            _c(
+                              "option",
+                              { attrs: { value: "", selected: "" } },
+                              [_vm._v("Choose Bidang")]
+                            ),
+                            _vm._v(" "),
+                            _vm._l(_vm.bidang.data, function(data) {
+                              return _c(
+                                "option",
+                                { key: data.id, domProps: { value: data.id } },
+                                [_vm._v(_vm._s(data.nama_bidang))]
+                              )
+                            })
+                          ],
+                          2
+                        ),
+                        _vm._v(" "),
+                        _c("has-error", {
+                          attrs: { form: _vm.form, field: "id_bidang" }
+                        })
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "row" }, [
+                      _c("div", { staticClass: "col-md-6" }, [
+                        _c(
+                          "div",
+                          { staticClass: "form-group" },
+                          [
+                            _c("label", { attrs: { for: "inputTglMulai" } }, [
+                              _vm._v("Tanggal Mulai")
+                            ]),
+                            _c("br"),
+                            _vm._v(" "),
+                            _c("date-picker", {
+                              staticClass: "form-control-file",
+                              class: {
+                                "is-invalid": _vm.form.errors.has("tgl_mulai")
+                              },
+                              attrs: {
+                                lang: "en",
+                                name: "tgl_mulai",
+                                "value-type": "format",
+                                id: "inputTglMulai"
+                              },
+                              model: {
+                                value: _vm.form.tgl_mulai,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.form, "tgl_mulai", $$v)
+                                },
+                                expression: "form.tgl_mulai"
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("has-error", {
+                              attrs: { form: _vm.form, field: "tgl_mulai" }
+                            })
+                          ],
+                          1
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-md-6" }, [
+                        _c(
+                          "div",
+                          { staticClass: "form-group" },
+                          [
+                            _c("label", { attrs: { for: "inputTglSelesai" } }, [
+                              _vm._v("Tanggal Selesai")
+                            ]),
+                            _c("br"),
+                            _vm._v(" "),
+                            _c("date-picker", {
+                              staticClass: "form-control-file",
+                              class: {
+                                "is-invalid": _vm.form.errors.has("tgl_selesai")
+                              },
+                              attrs: {
+                                lang: "en",
+                                name: "tgl_selesai",
+                                "value-type": "format",
+                                id: "inputTglSelesai"
+                              },
+                              model: {
+                                value: _vm.form.tgl_selesai,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.form, "tgl_selesai", $$v)
+                                },
+                                expression: "form.tgl_selesai"
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("has-error", {
+                              attrs: { form: _vm.form, field: "tgl_selesai" }
+                            })
+                          ],
+                          1
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "row" }, [
+                      _c("div", { staticClass: "col-md-6" }, [
+                        _c(
+                          "div",
+                          { staticClass: "form-group" },
+                          [
+                            _c("label", { attrs: { for: "inputTingkat" } }, [
+                              _vm._v("Tingkat")
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "select",
+                              {
                                 directives: [
                                   {
                                     name: "model",
                                     rawName: "v-model",
-                                    value: _vm.form.nama_kompetensi,
-                                    expression: "form.nama_kompetensi"
+                                    value: _vm.form.tingkat,
+                                    expression: "form.tingkat"
                                   }
                                 ],
                                 staticClass: "form-control",
                                 class: {
-                                  "is-invalid": _vm.form.errors.has(
-                                    "nama_kompetensi"
-                                  )
+                                  "is-invalid": _vm.form.errors.has("tingkat")
                                 },
-                                attrs: {
-                                  type: "text",
-                                  name: "nama_kompetensi",
-                                  placeholder: "Nama Kompetensi",
-                                  id: "inputNamaKompetensi"
-                                },
-                                domProps: { value: _vm.form.nama_kompetensi },
+                                attrs: { name: "tingkat", id: "inputTingkat" },
                                 on: {
-                                  input: function($event) {
-                                    if ($event.target.composing) {
-                                      return
-                                    }
+                                  change: function($event) {
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call($event.target.options, function(o) {
+                                        return o.selected
+                                      })
+                                      .map(function(o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
                                     _vm.$set(
                                       _vm.form,
-                                      "nama_kompetensi",
-                                      $event.target.value
+                                      "tingkat",
+                                      $event.target.multiple
+                                        ? $$selectedVal
+                                        : $$selectedVal[0]
                                     )
                                   }
                                 }
-                              }),
-                              _vm._v(" "),
-                              _c("has-error", {
-                                attrs: {
-                                  form: _vm.form,
-                                  field: "nama_kompetensi"
-                                }
-                              })
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "div",
-                            { staticClass: "form-group" },
-                            [
-                              _c("label", { attrs: { for: "inputBidang" } }, [
-                                _vm._v("Bidang Kompetensi")
-                              ]),
-                              _vm._v(" "),
-                              _c(
-                                "select",
-                                {
-                                  directives: [
-                                    {
-                                      name: "model",
-                                      rawName: "v-model",
-                                      value: _vm.form.id_bidang,
-                                      expression: "form.id_bidang"
-                                    }
-                                  ],
-                                  staticClass: "form-control",
-                                  class: {
-                                    "is-invalid": _vm.form.errors.has(
-                                      "id_bidang"
-                                    )
-                                  },
-                                  attrs: {
-                                    name: "id_bidang",
-                                    id: "inputBidang"
-                                  },
-                                  on: {
-                                    change: function($event) {
-                                      var $$selectedVal = Array.prototype.filter
-                                        .call($event.target.options, function(
-                                          o
-                                        ) {
-                                          return o.selected
-                                        })
-                                        .map(function(o) {
-                                          var val =
-                                            "_value" in o ? o._value : o.value
-                                          return val
-                                        })
-                                      _vm.$set(
-                                        _vm.form,
-                                        "id_bidang",
-                                        $event.target.multiple
-                                          ? $$selectedVal
-                                          : $$selectedVal[0]
-                                      )
-                                    }
+                              },
+                              [
+                                _c(
+                                  "option",
+                                  { attrs: { value: "", selected: "" } },
+                                  [_vm._v("Choose Tingkat")]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "option",
+                                  { attrs: { value: "Internasional" } },
+                                  [_vm._v("Internasional")]
+                                ),
+                                _vm._v(" "),
+                                _c("option", { attrs: { value: "Nasional" } }, [
+                                  _vm._v("Nasional")
+                                ]),
+                                _vm._v(" "),
+                                _c("option", { attrs: { value: "Provinsi" } }, [
+                                  _vm._v("Provinsi")
+                                ]),
+                                _vm._v(" "),
+                                _c("option", { attrs: { value: "Nasional" } }, [
+                                  _vm._v("Kota")
+                                ]),
+                                _vm._v(" "),
+                                _c("option", { attrs: { value: "Provinsi" } }, [
+                                  _vm._v("Universitas")
+                                ])
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c("has-error", {
+                              attrs: { form: _vm.form, field: "tingkat" }
+                            })
+                          ],
+                          1
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-md-6" }, [
+                        _c(
+                          "div",
+                          { staticClass: "form-group" },
+                          [
+                            _c("label", { attrs: { for: "inputPeran" } }, [
+                              _vm._v("Peran")
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "select",
+                              {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.form.peran,
+                                    expression: "form.peran"
                                   }
-                                },
-                                [
-                                  _c(
-                                    "option",
-                                    { attrs: { value: "", selected: "" } },
-                                    [_vm._v("Choose Bidang")]
-                                  ),
-                                  _vm._v(" "),
-                                  _vm._l(_vm.bidang.data, function(data) {
-                                    return _c(
-                                      "option",
-                                      {
-                                        key: data.id,
-                                        domProps: { value: data.id }
-                                      },
-                                      [_vm._v(_vm._s(data.nama_bidang))]
-                                    )
-                                  })
                                 ],
-                                2
-                              ),
-                              _vm._v(" "),
-                              _c("has-error", {
-                                attrs: { form: _vm.form, field: "id_bidang" }
-                              })
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "row" }, [
-                            _c("div", { staticClass: "col-md-6" }, [
-                              _c(
-                                "div",
-                                { staticClass: "form-group" },
-                                [
-                                  _c(
-                                    "label",
-                                    { attrs: { for: "inputTglMulai" } },
-                                    [_vm._v("Tanggal Mulai")]
-                                  ),
-                                  _c("br"),
-                                  _vm._v(" "),
-                                  _c("date-picker", {
-                                    staticClass: "form-control-file",
-                                    class: {
-                                      "is-invalid": _vm.form.errors.has(
-                                        "tgl_mulai"
-                                      )
-                                    },
-                                    attrs: {
-                                      lang: "en",
-                                      name: "tgl_mulai",
-                                      "value-type": "format",
-                                      id: "inputTglMulai"
-                                    },
-                                    model: {
-                                      value: _vm.form.tgl_mulai,
-                                      callback: function($$v) {
-                                        _vm.$set(_vm.form, "tgl_mulai", $$v)
-                                      },
-                                      expression: "form.tgl_mulai"
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c("has-error", {
-                                    attrs: {
-                                      form: _vm.form,
-                                      field: "tgl_mulai"
-                                    }
-                                  })
-                                ],
-                                1
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "col-md-6" }, [
-                              _c(
-                                "div",
-                                { staticClass: "form-group" },
-                                [
-                                  _c(
-                                    "label",
-                                    { attrs: { for: "inputTglSelesai" } },
-                                    [_vm._v("Tanggal Selesai")]
-                                  ),
-                                  _c("br"),
-                                  _vm._v(" "),
-                                  _c("date-picker", {
-                                    staticClass: "form-control-file",
-                                    class: {
-                                      "is-invalid": _vm.form.errors.has(
-                                        "tgl_selesai"
-                                      )
-                                    },
-                                    attrs: {
-                                      lang: "en",
-                                      name: "tgl_selesai",
-                                      "value-type": "format",
-                                      id: "inputTglSelesai"
-                                    },
-                                    model: {
-                                      value: _vm.form.tgl_selesai,
-                                      callback: function($$v) {
-                                        _vm.$set(_vm.form, "tgl_selesai", $$v)
-                                      },
-                                      expression: "form.tgl_selesai"
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c("has-error", {
-                                    attrs: {
-                                      form: _vm.form,
-                                      field: "tgl_selesai"
-                                    }
-                                  })
-                                ],
-                                1
-                              )
-                            ])
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "row" }, [
-                            _c("div", { staticClass: "col-md-6" }, [
-                              _c(
-                                "div",
-                                { staticClass: "form-group" },
-                                [
-                                  _c(
-                                    "label",
-                                    { attrs: { for: "inputTingkat" } },
-                                    [_vm._v("Tingkat")]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "select",
-                                    {
-                                      directives: [
-                                        {
-                                          name: "model",
-                                          rawName: "v-model",
-                                          value: _vm.form.tingkat,
-                                          expression: "form.tingkat"
-                                        }
-                                      ],
-                                      staticClass: "form-control",
-                                      class: {
-                                        "is-invalid": _vm.form.errors.has(
-                                          "tingkat"
-                                        )
-                                      },
-                                      attrs: {
-                                        name: "tingkat",
-                                        id: "inputTingkat"
-                                      },
-                                      on: {
-                                        change: function($event) {
-                                          var $$selectedVal = Array.prototype.filter
-                                            .call(
-                                              $event.target.options,
-                                              function(o) {
-                                                return o.selected
-                                              }
-                                            )
-                                            .map(function(o) {
-                                              var val =
-                                                "_value" in o
-                                                  ? o._value
-                                                  : o.value
-                                              return val
-                                            })
-                                          _vm.$set(
-                                            _vm.form,
-                                            "tingkat",
-                                            $event.target.multiple
-                                              ? $$selectedVal
-                                              : $$selectedVal[0]
-                                          )
-                                        }
-                                      }
-                                    },
-                                    [
-                                      _c(
-                                        "option",
-                                        { attrs: { value: "", selected: "" } },
-                                        [_vm._v("Choose Tingkat")]
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "option",
-                                        { attrs: { value: "Internasional" } },
-                                        [_vm._v("Internasional")]
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "option",
-                                        { attrs: { value: "Nasional" } },
-                                        [_vm._v("Nasional")]
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "option",
-                                        { attrs: { value: "Provinsi" } },
-                                        [_vm._v("Provinsi")]
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "option",
-                                        { attrs: { value: "Nasional" } },
-                                        [_vm._v("Kota")]
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "option",
-                                        { attrs: { value: "Provinsi" } },
-                                        [_vm._v("Universitas")]
-                                      )
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _c("has-error", {
-                                    attrs: { form: _vm.form, field: "tingkat" }
-                                  })
-                                ],
-                                1
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "col-md-6" }, [
-                              _c(
-                                "div",
-                                { staticClass: "form-group" },
-                                [
-                                  _c(
-                                    "label",
-                                    { attrs: { for: "inputPeran" } },
-                                    [_vm._v("Peran")]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "select",
-                                    {
-                                      directives: [
-                                        {
-                                          name: "model",
-                                          rawName: "v-model",
-                                          value: _vm.form.peran,
-                                          expression: "form.peran"
-                                        }
-                                      ],
-                                      staticClass: "form-control",
-                                      class: {
-                                        "is-invalid": _vm.form.errors.has(
-                                          "peran"
-                                        )
-                                      },
-                                      attrs: {
-                                        name: "peran",
-                                        id: "inputPeran"
-                                      },
-                                      on: {
-                                        change: function($event) {
-                                          var $$selectedVal = Array.prototype.filter
-                                            .call(
-                                              $event.target.options,
-                                              function(o) {
-                                                return o.selected
-                                              }
-                                            )
-                                            .map(function(o) {
-                                              var val =
-                                                "_value" in o
-                                                  ? o._value
-                                                  : o.value
-                                              return val
-                                            })
-                                          _vm.$set(
-                                            _vm.form,
-                                            "peran",
-                                            $event.target.multiple
-                                              ? $$selectedVal
-                                              : $$selectedVal[0]
-                                          )
-                                        }
-                                      }
-                                    },
-                                    [
-                                      _c(
-                                        "option",
-                                        { attrs: { value: "", selected: "" } },
-                                        [_vm._v("Choose Peran")]
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "option",
-                                        { attrs: { value: "Ketua" } },
-                                        [_vm._v("Ketua")]
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "option",
-                                        { attrs: { value: "Ketua Divisi" } },
-                                        [_vm._v("Ketua Divisi")]
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "option",
-                                        { attrs: { value: "Anggota Panitia" } },
-                                        [_vm._v("Anggota Panitia")]
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "option",
-                                        { attrs: { value: "Peserta" } },
-                                        [_vm._v("Peserta")]
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "option",
-                                        { attrs: { value: "Juara 1" } },
-                                        [_vm._v("Juara 1")]
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "option",
-                                        { attrs: { value: "Juara 2" } },
-                                        [_vm._v("Juara 2")]
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "option",
-                                        { attrs: { value: "Juara 3" } },
-                                        [_vm._v("Juara 3")]
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "option",
-                                        { attrs: { value: "Juara Harapan" } },
-                                        [_vm._v("Juara Harapan")]
-                                      )
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _c("has-error", {
-                                    attrs: { form: _vm.form, field: "peran" }
-                                  })
-                                ],
-                                1
-                              )
-                            ])
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "form-group" }, [
-                            _c("label", { attrs: { for: "inputBukti" } }, [
-                              _vm._v("Bukti Scan Atau PDF")
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "input-group" }, [
-                              _c(
-                                "div",
-                                { staticClass: "custom-file" },
-                                [
-                                  _c("input", {
-                                    staticClass: "custom-file-input",
-                                    class: {
-                                      "is-invalid": _vm.form.errors.has("bukti")
-                                    },
-                                    attrs: {
-                                      type: "file",
-                                      name: "bukti",
-                                      id: "inputBukti",
-                                      placeholder: "Bukti scan atau pdf",
-                                      accept: "image/*,application/pdf"
-                                    },
-                                    on: { change: _vm.updateFile }
-                                  }),
-                                  _vm._v(" "),
-                                  _c(
-                                    "label",
-                                    {
-                                      staticClass: "custom-file-label",
-                                      attrs: { for: "inputBukti" }
-                                    },
-                                    [_vm._v(_vm._s(_vm.nama_file))]
-                                  ),
-                                  _vm._v(" "),
-                                  _c("has-error", {
-                                    attrs: { form: _vm.form, field: "bukti" }
-                                  })
-                                ],
-                                1
-                              )
-                            ])
-                          ]),
-                          _vm._v(" "),
-                          _c(
-                            "div",
-                            { staticClass: "form-group" },
-                            [
-                              _c(
-                                "label",
-                                { attrs: { for: "inputKemampuan" } },
-                                [_vm._v("Kemampuan")]
-                              ),
-                              _vm._v(" "),
-                              _c("multiselect", {
-                                staticClass: "form-control-file",
+                                staticClass: "form-control",
                                 class: {
-                                  "is-invalid": _vm.form.errors.has("kemampuan")
+                                  "is-invalid": _vm.form.errors.has("peran")
                                 },
-                                attrs: {
-                                  id: "inputKemampuan",
-                                  name: "kemampuan",
-                                  "tag-placeholder": "Add Kemampuan",
-                                  placeholder: "Search or Add Kemampuan",
-                                  label: "nama_kemampuan",
-                                  "track-by": "nama_kemampuan",
-                                  options: _vm.options,
-                                  multiple: true,
-                                  taggable: true
-                                },
-                                on: { tag: _vm.addKemampuan },
-                                model: {
-                                  value: _vm.form.kemampuan,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "kemampuan", $$v)
-                                  },
-                                  expression: "form.kemampuan"
+                                attrs: { name: "peran", id: "inputPeran" },
+                                on: {
+                                  change: function($event) {
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call($event.target.options, function(o) {
+                                        return o.selected
+                                      })
+                                      .map(function(o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
+                                    _vm.$set(
+                                      _vm.form,
+                                      "peran",
+                                      $event.target.multiple
+                                        ? $$selectedVal
+                                        : $$selectedVal[0]
+                                    )
+                                  }
                                 }
-                              }),
-                              _vm._v(" "),
-                              _c("has-error", {
-                                attrs: { form: _vm.form, field: "kemampuan" }
-                              })
-                            ],
-                            1
-                          )
+                              },
+                              [
+                                _c(
+                                  "option",
+                                  { attrs: { value: "", selected: "" } },
+                                  [_vm._v("Choose Peran")]
+                                ),
+                                _vm._v(" "),
+                                _c("option", { attrs: { value: "Ketua" } }, [
+                                  _vm._v("Ketua")
+                                ]),
+                                _vm._v(" "),
+                                _c(
+                                  "option",
+                                  { attrs: { value: "Ketua Divisi" } },
+                                  [_vm._v("Ketua Divisi")]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "option",
+                                  { attrs: { value: "Anggota Panitia" } },
+                                  [_vm._v("Anggota Panitia")]
+                                ),
+                                _vm._v(" "),
+                                _c("option", { attrs: { value: "Peserta" } }, [
+                                  _vm._v("Peserta")
+                                ]),
+                                _vm._v(" "),
+                                _c("option", { attrs: { value: "Juara 1" } }, [
+                                  _vm._v("Juara 1")
+                                ]),
+                                _vm._v(" "),
+                                _c("option", { attrs: { value: "Juara 2" } }, [
+                                  _vm._v("Juara 2")
+                                ]),
+                                _vm._v(" "),
+                                _c("option", { attrs: { value: "Juara 3" } }, [
+                                  _vm._v("Juara 3")
+                                ]),
+                                _vm._v(" "),
+                                _c(
+                                  "option",
+                                  { attrs: { value: "Juara Harapan" } },
+                                  [_vm._v("Juara Harapan")]
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c("has-error", {
+                              attrs: { form: _vm.form, field: "peran" }
+                            })
+                          ],
+                          1
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "inputBukti" } }, [
+                        _vm._v("Bukti Scan Atau PDF")
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "input-group" }, [
+                        _c(
+                          "div",
+                          { staticClass: "custom-file" },
+                          [
+                            _c("input", {
+                              staticClass: "custom-file-input",
+                              class: {
+                                "is-invalid": _vm.form.errors.has("bukti")
+                              },
+                              attrs: {
+                                type: "file",
+                                name: "bukti",
+                                id: "inputBukti",
+                                placeholder: "Bukti scan atau pdf",
+                                accept: "image/*,application/pdf"
+                              },
+                              on: { change: _vm.updateFile }
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "label",
+                              {
+                                staticClass: "custom-file-label",
+                                attrs: { for: "inputBukti" }
+                              },
+                              [_vm._v(_vm._s(_vm.nama_file))]
+                            ),
+                            _vm._v(" "),
+                            _c("has-error", {
+                              attrs: { form: _vm.form, field: "bukti" }
+                            })
+                          ],
+                          1
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "form-group" },
+                      [
+                        _c("label", { attrs: { for: "inputKemampuan" } }, [
+                          _vm._v("Kemampuan")
                         ]),
                         _vm._v(" "),
-                        _c("div", { staticClass: "modal-footer" }, [
-                          _c(
-                            "button",
-                            {
-                              directives: [
-                                {
-                                  name: "show",
-                                  rawName: "v-show",
-                                  value: !_vm.editMode,
-                                  expression: "!editMode"
-                                }
-                              ],
-                              staticClass: "btn btn-primary",
-                              attrs: { type: "submit" }
+                        _c("multiselect", {
+                          staticClass: "form-control-file",
+                          class: {
+                            "is-invalid": _vm.form.errors.has("kemampuan")
+                          },
+                          attrs: {
+                            id: "inputKemampuan",
+                            name: "kemampuan",
+                            "tag-placeholder": "Add Kemampuan",
+                            placeholder: "Search or Add Kemampuan",
+                            label: "nama_kemampuan",
+                            "track-by": "nama_kemampuan",
+                            options: _vm.options,
+                            multiple: true,
+                            taggable: true
+                          },
+                          on: { tag: _vm.addKemampuan },
+                          model: {
+                            value: _vm.form.kemampuan,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "kemampuan", $$v)
                             },
-                            [_vm._v("Add")]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "button",
-                            {
-                              directives: [
-                                {
-                                  name: "show",
-                                  rawName: "v-show",
-                                  value: _vm.editMode,
-                                  expression: "editMode"
-                                }
-                              ],
-                              staticClass: "btn btn-success",
-                              attrs: { type: "submit" }
-                            },
-                            [_vm._v("Save")]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "button",
-                            {
-                              staticClass: "btn btn-danger",
-                              attrs: { type: "button", "data-dismiss": "modal" }
-                            },
-                            [_vm._v("Close")]
-                          )
-                        ])
-                      ]
+                            expression: "form.kemampuan"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("has-error", {
+                          attrs: { form: _vm.form, field: "kemampuan" }
+                        })
+                      ],
+                      1
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "modal-footer" }, [
+                    _c(
+                      "button",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: !_vm.editMode,
+                            expression: "!editMode"
+                          }
+                        ],
+                        staticClass: "btn btn-primary",
+                        attrs: { type: "submit" }
+                      },
+                      [_vm._v("Add")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.editMode,
+                            expression: "editMode"
+                          }
+                        ],
+                        staticClass: "btn btn-success",
+                        attrs: { type: "submit" }
+                      },
+                      [_vm._v("Save")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-danger",
+                        attrs: { type: "button", "data-dismiss": "modal" }
+                      },
+                      [_vm._v("Close")]
                     )
                   ])
                 ]
               )
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              staticClass: "modal fade",
-              attrs: { id: "previewKompetensi", tabindex: "-1", role: "dialog" }
-            },
-            [
-              _c(
-                "div",
-                {
-                  staticClass: "modal-dialog modal-dialog-centered",
-                  attrs: { role: "document" }
-                },
-                [
-                  _vm.form.bukti.split(".")[1] == "pdf"
-                    ? _c("div", { staticClass: "modal-content" }, [
-                        _c("embed", {
-                          attrs: {
-                            src:
-                              "storage/data/kompetensi/pdf/" + _vm.form.bukti,
-                            width: "100%",
-                            height: "600",
-                            type: "application/pdf"
-                          }
-                        })
-                      ])
-                    : _vm.form.bukti.split(".")[1] == "jpg" ||
-                      _vm.form.bukti.split(".")[1] == "jpeg" ||
-                      _vm.form.bukti.split(".")[1] == "png"
-                    ? _c("img", {
-                        attrs: {
-                          src: "storage/data/kompetensi/img/" + _vm.form.bukti
-                        }
-                      })
-                    : _vm._e()
-                ]
-              )
-            ]
-          )
-        ])
-      : _c("div", { staticClass: "row" }, [_c("not-found")], 1)
+            ])
+          ]
+        )
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: { id: "previewKompetensi", tabindex: "-1", role: "dialog" }
+      },
+      [
+        _c(
+          "div",
+          {
+            staticClass: "modal-dialog modal-dialog-centered",
+            attrs: { role: "document" }
+          },
+          [
+            _vm.form.bukti.split(".")[1] == "pdf"
+              ? _c("div", { staticClass: "modal-content" }, [
+                  _c("embed", {
+                    attrs: {
+                      src: "storage/data/kompetensi/pdf/" + _vm.form.bukti,
+                      width: "100%",
+                      height: "600",
+                      type: "application/pdf"
+                    }
+                  })
+                ])
+              : _vm.form.bukti.split(".")[1] == "jpg" ||
+                _vm.form.bukti.split(".")[1] == "jpeg" ||
+                _vm.form.bukti.split(".")[1] == "png"
+              ? _c("img", {
+                  attrs: {
+                    src: "storage/data/kompetensi/img/" + _vm.form.bukti
+                  }
+                })
+              : _vm._e()
+          ]
+        )
+      ]
+    )
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-header p-2" }, [
-      _c("ul", { staticClass: "nav nav-pills" }, [
-        _c("li", { staticClass: "nav-item" }, [
-          _c(
-            "a",
-            {
-              staticClass: "nav-link  active show",
-              attrs: { href: "#kompetensiTab", "data-toggle": "tab" }
-            },
-            [_vm._v("Kompetensi")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("li", { staticClass: "nav-item" }, [
-          _c(
-            "a",
-            {
-              staticClass: "nav-link",
-              attrs: { href: "#kompetensiWajibTab", "data-toggle": "tab" }
-            },
-            [_vm._v("Kompetensi Wajib")]
-          )
-        ])
-      ])
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -70741,10 +71899,126 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/frontoffice/MahasiswaProfile.vue?vue&type=template&id=7c185d38&":
-/*!*******************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/frontoffice/MahasiswaProfile.vue?vue&type=template&id=7c185d38& ***!
-  \*******************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/frontoffice/kompetensi/Kompetensi.vue?vue&type=template&id=13dd56ca&":
+/*!************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/frontoffice/kompetensi/Kompetensi.vue?vue&type=template&id=13dd56ca& ***!
+  \************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "container" }, [
+    this.$gate.isMahasiswa()
+      ? _c("div", [
+          _c("div", { staticClass: "row mt-4" }, [
+            _c("div", { staticClass: "col-md-12" }, [
+              _c("div", { staticClass: "card" }, [
+                _c("div", { staticClass: "card-header p-2" }, [
+                  _c("ul", { staticClass: "nav nav-pills" }, [
+                    _c(
+                      "li",
+                      {
+                        staticClass: "nav-item",
+                        on: {
+                          click: function($event) {
+                            return _vm.changeTab("data-kompetensi")
+                          }
+                        }
+                      },
+                      [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "nav-link  active show",
+                            attrs: {
+                              href: "#kompetensiTab",
+                              "data-toggle": "tab"
+                            }
+                          },
+                          [_vm._v("Kompetensi")]
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "li",
+                      {
+                        staticClass: "nav-item",
+                        on: {
+                          click: function($event) {
+                            return _vm.changeTab("bukti-kompetensi")
+                          }
+                        }
+                      },
+                      [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "nav-link",
+                            attrs: {
+                              href: "#kompetensiWajibTab",
+                              "data-toggle": "tab"
+                            }
+                          },
+                          [_vm._v("Kompetensi Wajib")]
+                        )
+                      ]
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "tab-content" }, [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "tab-pane active show",
+                      attrs: { id: "kompetensiTab" }
+                    },
+                    [
+                      _vm.tabActive == "data-kompetensi"
+                        ? _c("div", [_c("data-kompetensi")], 1)
+                        : _vm._e()
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "tab-pane",
+                      attrs: { id: "kompetensiWajibTab" }
+                    },
+                    [
+                      _vm.tabActive == "bukti-kompetensi"
+                        ? _c("div", [_c("bukti-kompetensi")], 1)
+                        : _vm._e()
+                    ]
+                  )
+                ])
+              ])
+            ])
+          ])
+        ])
+      : _c("div", { staticClass: "row" }, [_c("not-found")], 1)
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/frontoffice/mahasiswaprofile/MahasiswaProfile.vue?vue&type=template&id=11df29ea&":
+/*!************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/frontoffice/mahasiswaprofile/MahasiswaProfile.vue?vue&type=template&id=11df29ea& ***!
+  \************************************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -70757,447 +72031,481 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container mt-4" }, [
-    _c("div", { staticClass: "row justify-content-center" }, [
-      _c("div", { staticClass: "col-md-8" }, [
-        _c("div", { staticClass: "card card-primary card-outline" }, [
-          _vm._m(0),
-          _vm._v(" "),
-          _c(
-            "form",
-            {
-              on: {
-                submit: function($event) {
-                  $event.preventDefault()
-                  _vm.mahasiswa.id
-                    ? _vm.updateMahasiswa()
-                    : _vm.createMahasiswa()
-                }
-              }
-            },
-            [
-              _c("div", { staticClass: "card-body" }, [
-                _c(
-                  "div",
-                  { staticClass: "form-group" },
-                  [
-                    _c("label", { attrs: { for: "inputNama" } }, [
-                      _vm._v("Nama Lengkap")
-                    ]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.form.nama,
-                          expression: "form.nama"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      class: { "is-invalid": _vm.form.errors.has("nama") },
-                      attrs: {
-                        type: "text",
-                        name: "nama",
-                        placeholder: "Nama Lengkap",
-                        id: "inputNama"
-                      },
-                      domProps: { value: _vm.form.nama },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.form, "nama", $event.target.value)
-                        }
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("has-error", {
-                      attrs: { form: _vm.form, field: "nama" }
-                    })
-                  ],
-                  1
-                ),
+    this.$gate.isMahasiswa()
+      ? _c("div", [
+          _c("div", { staticClass: "row justify-content-center" }, [
+            _c("div", { staticClass: "col-md-8" }, [
+              _c("div", { staticClass: "card card-primary card-outline" }, [
+                _vm._m(0),
                 _vm._v(" "),
-                _c("div", { staticClass: "row" }, [
-                  _c("div", { staticClass: "col-md-6" }, [
-                    _c(
-                      "div",
-                      { staticClass: "form-group" },
-                      [
-                        _c("label", { attrs: { for: "inputKotaLahir" } }, [
-                          _vm._v("Kota Kelahiran")
-                        ]),
-                        _c("br"),
-                        _vm._v(" "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.form.kota_lahir,
-                              expression: "form.kota_lahir"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          class: {
-                            "is-invalid": _vm.form.errors.has("kota_lahir")
-                          },
-                          attrs: {
-                            type: "text",
-                            name: "kota_lahir",
-                            placeholder: "Kota Kelahiran",
-                            id: "inputKotaLahir"
-                          },
-                          domProps: { value: _vm.form.kota_lahir },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
+                _c(
+                  "form",
+                  {
+                    on: {
+                      submit: function($event) {
+                        $event.preventDefault()
+                        _vm.mahasiswa.id
+                          ? _vm.updateMahasiswa()
+                          : _vm.createMahasiswa()
+                      }
+                    }
+                  },
+                  [
+                    _c("div", { staticClass: "card-body" }, [
+                      _c(
+                        "div",
+                        { staticClass: "form-group" },
+                        [
+                          _c("label", { attrs: { for: "inputNama" } }, [
+                            _vm._v("Nama Lengkap")
+                          ]),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.form.nama,
+                                expression: "form.nama"
                               }
-                              _vm.$set(
-                                _vm.form,
-                                "kota_lahir",
-                                $event.target.value
-                              )
-                            }
-                          }
-                        }),
-                        _vm._v(" "),
-                        _c("has-error", {
-                          attrs: { form: _vm.form, field: "kota_lahir" }
-                        })
-                      ],
-                      1
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-md-6" }, [
-                    _c(
-                      "div",
-                      { staticClass: "form-group" },
-                      [
-                        _c("label", { attrs: { for: "inputTglLahir" } }, [
-                          _vm._v("Tanggal Kelahiran")
-                        ]),
-                        _c("br"),
-                        _vm._v(" "),
-                        _c("date-picker", {
-                          staticClass: "form-control-file",
-                          class: {
-                            "is-invalid": _vm.form.errors.has("tgl_lahir")
-                          },
-                          attrs: {
-                            lang: "en",
-                            "value-type": "format",
-                            name: "tgl_lahir",
-                            id: "inputTglLahir"
-                          },
-                          model: {
-                            value: _vm.form.tgl_lahir,
-                            callback: function($$v) {
-                              _vm.$set(_vm.form, "tgl_lahir", $$v)
+                            ],
+                            staticClass: "form-control",
+                            class: {
+                              "is-invalid": _vm.form.errors.has("nama")
                             },
-                            expression: "form.tgl_lahir"
-                          }
-                        }),
-                        _vm._v(" "),
-                        _c("has-error", {
-                          attrs: { form: _vm.form, field: "tgl_lahir" }
-                        })
-                      ],
-                      1
-                    )
-                  ])
-                ]),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "form-group" },
-                  [
-                    _c("label", { attrs: { for: "inputNoIjazah" } }, [
-                      _vm._v("No Ijazah")
-                    ]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.form.no_ijazah,
-                          expression: "form.no_ijazah"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      class: { "is-invalid": _vm.form.errors.has("no_ijazah") },
-                      attrs: {
-                        type: "text",
-                        name: "no_ijazah",
-                        placeholder: "No Ijazah",
-                        id: "inputNoIjazah"
-                      },
-                      domProps: { value: _vm.form.no_ijazah },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.form, "no_ijazah", $event.target.value)
-                        }
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("has-error", {
-                      attrs: { form: _vm.form, field: "no_ijazah" }
-                    })
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c("div", { staticClass: "row" }, [
-                  _c("div", { staticClass: "col-md-6" }, [
-                    _c(
-                      "div",
-                      { staticClass: "form-group" },
-                      [
-                        _c("label", { attrs: { for: "inputNpm" } }, [
-                          _vm._v("Nomor Pokok Mahasiswa")
-                        ]),
-                        _vm._v(" "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.form.npm,
-                              expression: "form.npm"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          class: { "is-invalid": _vm.form.errors.has("npm") },
-                          attrs: {
-                            type: "text",
-                            name: "npm",
-                            placeholder: "Nomor Pokok Mahasiswa",
-                            id: "inputNpm"
-                          },
-                          domProps: { value: _vm.form.npm },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
+                            attrs: {
+                              type: "text",
+                              name: "nama",
+                              placeholder: "Nama Lengkap",
+                              id: "inputNama"
+                            },
+                            domProps: { value: _vm.form.nama },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(_vm.form, "nama", $event.target.value)
                               }
-                              _vm.$set(_vm.form, "npm", $event.target.value)
                             }
-                          }
-                        }),
-                        _vm._v(" "),
-                        _c("has-error", {
-                          attrs: { form: _vm.form, field: "npm" }
-                        })
-                      ],
-                      1
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-md-6" }, [
-                    _c(
-                      "div",
-                      { staticClass: "form-group" },
-                      [
-                        _c("label", { attrs: { for: "inputIpk" } }, [
-                          _vm._v("Indeks Prestasi Kumulatif")
-                        ]),
-                        _vm._v(" "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.form.ipk,
-                              expression: "form.ipk"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          class: { "is-invalid": _vm.form.errors.has("ipk") },
-                          attrs: {
-                            type: "text",
-                            name: "ipk",
-                            placeholder: "Indeks Prestasi Kumulatif",
-                            id: "inputIpk"
-                          },
-                          domProps: { value: _vm.form.ipk },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.$set(_vm.form, "ipk", $event.target.value)
-                            }
-                          }
-                        }),
-                        _vm._v(" "),
-                        _c("has-error", {
-                          attrs: { form: _vm.form, field: "ipk" }
-                        })
-                      ],
-                      1
-                    )
-                  ])
-                ]),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "form-group" },
-                  [
-                    _c("label", { attrs: { for: "inputJurusan" } }, [
-                      _vm._v("Jurusan")
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "select",
-                      {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.form.id_jurusan,
-                            expression: "form.id_jurusan"
-                          }
+                          }),
+                          _vm._v(" "),
+                          _c("has-error", {
+                            attrs: { form: _vm.form, field: "nama" }
+                          })
                         ],
-                        staticClass: "form-control",
-                        class: {
-                          "is-invalid": _vm.form.errors.has("id_jurusan")
-                        },
-                        attrs: { name: "id_jurusan", id: "inputJurusan" },
-                        on: {
-                          change: function($event) {
-                            var $$selectedVal = Array.prototype.filter
-                              .call($event.target.options, function(o) {
-                                return o.selected
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "row" }, [
+                        _c("div", { staticClass: "col-md-6" }, [
+                          _c(
+                            "div",
+                            { staticClass: "form-group" },
+                            [
+                              _c(
+                                "label",
+                                { attrs: { for: "inputKotaLahir" } },
+                                [_vm._v("Kota Kelahiran")]
+                              ),
+                              _c("br"),
+                              _vm._v(" "),
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.form.kota_lahir,
+                                    expression: "form.kota_lahir"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                class: {
+                                  "is-invalid": _vm.form.errors.has(
+                                    "kota_lahir"
+                                  )
+                                },
+                                attrs: {
+                                  type: "text",
+                                  name: "kota_lahir",
+                                  placeholder: "Kota Kelahiran",
+                                  id: "inputKotaLahir"
+                                },
+                                domProps: { value: _vm.form.kota_lahir },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.form,
+                                      "kota_lahir",
+                                      $event.target.value
+                                    )
+                                  }
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("has-error", {
+                                attrs: { form: _vm.form, field: "kota_lahir" }
                               })
-                              .map(function(o) {
-                                var val = "_value" in o ? o._value : o.value
-                                return val
-                              })
-                            _vm.$set(
-                              _vm.form,
-                              "id_jurusan",
-                              $event.target.multiple
-                                ? $$selectedVal
-                                : $$selectedVal[0]
-                            )
-                          }
-                        }
-                      },
-                      [
-                        _c("option", { attrs: { value: "", selected: "" } }, [
-                          _vm._v("Choose Jurusan")
-                        ]),
-                        _vm._v(" "),
-                        _vm._l(_vm.jurusan.data, function(data) {
-                          return _c(
-                            "option",
-                            { key: data.id, domProps: { value: data.id } },
-                            [_vm._v(_vm._s(data.nama_jurusan))]
+                            ],
+                            1
                           )
-                        })
-                      ],
-                      2
-                    ),
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "col-md-6" }, [
+                          _c(
+                            "div",
+                            { staticClass: "form-group" },
+                            [
+                              _c("label", { attrs: { for: "inputTglLahir" } }, [
+                                _vm._v("Tanggal Kelahiran")
+                              ]),
+                              _c("br"),
+                              _vm._v(" "),
+                              _c("date-picker", {
+                                staticClass: "form-control-file",
+                                class: {
+                                  "is-invalid": _vm.form.errors.has("tgl_lahir")
+                                },
+                                attrs: {
+                                  lang: "en",
+                                  "value-type": "format",
+                                  name: "tgl_lahir",
+                                  id: "inputTglLahir"
+                                },
+                                model: {
+                                  value: _vm.form.tgl_lahir,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "tgl_lahir", $$v)
+                                  },
+                                  expression: "form.tgl_lahir"
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("has-error", {
+                                attrs: { form: _vm.form, field: "tgl_lahir" }
+                              })
+                            ],
+                            1
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "form-group" },
+                        [
+                          _c("label", { attrs: { for: "inputNoIjazah" } }, [
+                            _vm._v("No Ijazah")
+                          ]),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.form.no_ijazah,
+                                expression: "form.no_ijazah"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            class: {
+                              "is-invalid": _vm.form.errors.has("no_ijazah")
+                            },
+                            attrs: {
+                              type: "text",
+                              name: "no_ijazah",
+                              placeholder: "No Ijazah",
+                              id: "inputNoIjazah"
+                            },
+                            domProps: { value: _vm.form.no_ijazah },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  _vm.form,
+                                  "no_ijazah",
+                                  $event.target.value
+                                )
+                              }
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("has-error", {
+                            attrs: { form: _vm.form, field: "no_ijazah" }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "row" }, [
+                        _c("div", { staticClass: "col-md-6" }, [
+                          _c(
+                            "div",
+                            { staticClass: "form-group" },
+                            [
+                              _c("label", { attrs: { for: "inputNpm" } }, [
+                                _vm._v("Nomor Pokok Mahasiswa")
+                              ]),
+                              _vm._v(" "),
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.form.npm,
+                                    expression: "form.npm"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                class: {
+                                  "is-invalid": _vm.form.errors.has("npm")
+                                },
+                                attrs: {
+                                  type: "text",
+                                  name: "npm",
+                                  placeholder: "Nomor Pokok Mahasiswa",
+                                  id: "inputNpm"
+                                },
+                                domProps: { value: _vm.form.npm },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.form,
+                                      "npm",
+                                      $event.target.value
+                                    )
+                                  }
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("has-error", {
+                                attrs: { form: _vm.form, field: "npm" }
+                              })
+                            ],
+                            1
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "col-md-6" }, [
+                          _c(
+                            "div",
+                            { staticClass: "form-group" },
+                            [
+                              _c("label", { attrs: { for: "inputIpk" } }, [
+                                _vm._v("Indeks Prestasi Kumulatif")
+                              ]),
+                              _vm._v(" "),
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.form.ipk,
+                                    expression: "form.ipk"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                class: {
+                                  "is-invalid": _vm.form.errors.has("ipk")
+                                },
+                                attrs: {
+                                  type: "text",
+                                  name: "ipk",
+                                  placeholder: "Indeks Prestasi Kumulatif",
+                                  id: "inputIpk"
+                                },
+                                domProps: { value: _vm.form.ipk },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.form,
+                                      "ipk",
+                                      $event.target.value
+                                    )
+                                  }
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("has-error", {
+                                attrs: { form: _vm.form, field: "ipk" }
+                              })
+                            ],
+                            1
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "form-group" },
+                        [
+                          _c("label", { attrs: { for: "inputJurusan" } }, [
+                            _vm._v("Jurusan")
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.form.id_jurusan,
+                                  expression: "form.id_jurusan"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              class: {
+                                "is-invalid": _vm.form.errors.has("id_jurusan")
+                              },
+                              attrs: { name: "id_jurusan", id: "inputJurusan" },
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.$set(
+                                    _vm.form,
+                                    "id_jurusan",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
+                                }
+                              }
+                            },
+                            [
+                              _c(
+                                "option",
+                                { attrs: { value: "", selected: "" } },
+                                [_vm._v("Choose Jurusan")]
+                              ),
+                              _vm._v(" "),
+                              _vm._l(_vm.jurusan.data, function(data) {
+                                return _c(
+                                  "option",
+                                  {
+                                    key: data.id,
+                                    domProps: { value: data.id }
+                                  },
+                                  [_vm._v(_vm._s(data.nama_jurusan))]
+                                )
+                              })
+                            ],
+                            2
+                          ),
+                          _vm._v(" "),
+                          _c("has-error", {
+                            attrs: { form: _vm.form, field: "id_jurusan" }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "row" }, [
+                        _c("div", { staticClass: "col-md-6" }, [
+                          _c(
+                            "div",
+                            { staticClass: "form-group" },
+                            [
+                              _c("label", { attrs: { for: "inputTglMasuk" } }, [
+                                _vm._v("Tanggal Mulai Studi")
+                              ]),
+                              _c("br"),
+                              _vm._v(" "),
+                              _c("date-picker", {
+                                staticClass: "form-control-file",
+                                class: {
+                                  "is-invalid": _vm.form.errors.has("tgl_masuk")
+                                },
+                                attrs: {
+                                  lang: "en",
+                                  name: "tgl_masuk",
+                                  "value-type": "format",
+                                  id: "inputTglMasuk"
+                                },
+                                model: {
+                                  value: _vm.form.tgl_masuk,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "tgl_masuk", $$v)
+                                  },
+                                  expression: "form.tgl_masuk"
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("has-error", {
+                                attrs: { form: _vm.form, field: "tgl_masuk" }
+                              })
+                            ],
+                            1
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "col-md-6" }, [
+                          _c(
+                            "div",
+                            { staticClass: "form-group" },
+                            [
+                              _c("label", { attrs: { for: "inputTglLulus" } }, [
+                                _vm._v("Tanggal Kelulusan")
+                              ]),
+                              _c("br"),
+                              _vm._v(" "),
+                              _c("date-picker", {
+                                staticClass: "form-control-file",
+                                class: {
+                                  "is-invalid": _vm.form.errors.has("tgl_lulus")
+                                },
+                                attrs: {
+                                  lang: "en",
+                                  name: "tgl_lulus",
+                                  "value-type": "format",
+                                  id: "inputTglLulus"
+                                },
+                                model: {
+                                  value: _vm.form.tgl_lulus,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "tgl_lulus", $$v)
+                                  },
+                                  expression: "form.tgl_lulus"
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("has-error", {
+                                attrs: { form: _vm.form, field: "tgl_lulus" }
+                              })
+                            ],
+                            1
+                          )
+                        ])
+                      ])
+                    ]),
                     _vm._v(" "),
-                    _c("has-error", {
-                      attrs: { form: _vm.form, field: "id_jurusan" }
-                    })
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c("div", { staticClass: "row" }, [
-                  _c("div", { staticClass: "col-md-6" }, [
-                    _c(
-                      "div",
-                      { staticClass: "form-group" },
-                      [
-                        _c("label", { attrs: { for: "inputTglMasuk" } }, [
-                          _vm._v("Tanggal Mulai Studi")
-                        ]),
-                        _c("br"),
-                        _vm._v(" "),
-                        _c("date-picker", {
-                          staticClass: "form-control-file",
-                          class: {
-                            "is-invalid": _vm.form.errors.has("tgl_masuk")
-                          },
-                          attrs: {
-                            lang: "en",
-                            name: "tgl_masuk",
-                            "value-type": "format",
-                            id: "inputTglMasuk"
-                          },
-                          model: {
-                            value: _vm.form.tgl_masuk,
-                            callback: function($$v) {
-                              _vm.$set(_vm.form, "tgl_masuk", $$v)
-                            },
-                            expression: "form.tgl_masuk"
-                          }
-                        }),
-                        _vm._v(" "),
-                        _c("has-error", {
-                          attrs: { form: _vm.form, field: "tgl_masuk" }
-                        })
-                      ],
-                      1
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-md-6" }, [
-                    _c(
-                      "div",
-                      { staticClass: "form-group" },
-                      [
-                        _c("label", { attrs: { for: "inputTglLulus" } }, [
-                          _vm._v("Tanggal Kelulusan")
-                        ]),
-                        _c("br"),
-                        _vm._v(" "),
-                        _c("date-picker", {
-                          staticClass: "form-control-file",
-                          class: {
-                            "is-invalid": _vm.form.errors.has("tgl_lulus")
-                          },
-                          attrs: {
-                            lang: "en",
-                            name: "tgl_lulus",
-                            "value-type": "format",
-                            id: "inputTglLulus"
-                          },
-                          model: {
-                            value: _vm.form.tgl_lulus,
-                            callback: function($$v) {
-                              _vm.$set(_vm.form, "tgl_lulus", $$v)
-                            },
-                            expression: "form.tgl_lulus"
-                          }
-                        }),
-                        _vm._v(" "),
-                        _c("has-error", {
-                          attrs: { form: _vm.form, field: "tgl_lulus" }
-                        })
-                      ],
-                      1
-                    )
-                  ])
-                ])
-              ]),
-              _vm._v(" "),
-              _vm._m(1)
-            ]
-          )
+                    _vm._m(1)
+                  ]
+                )
+              ])
+            ])
+          ])
         ])
-      ])
-    ])
+      : _c("div", { staticClass: "row" }, [_c("not-found")], 1)
   ])
 }
 var staticRenderFns = [
@@ -71209,7 +72517,7 @@ var staticRenderFns = [
       _c("h3", { staticClass: "card-title" }, [
         _c("i", { staticClass: "fas fa-user-graduate" }),
         _vm._v(
-          "\n                         Mahasiswa Profile\n                    "
+          "\n                            Mahasiswa Profile\n                        "
         )
       ])
     ])
@@ -71227,6 +72535,3302 @@ var staticRenderFns = [
     ])
   }
 ]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/frontoffice/skpi/Skpi.vue?vue&type=template&id=209d184a&":
+/*!************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/frontoffice/skpi/Skpi.vue?vue&type=template&id=209d184a& ***!
+  \************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "container" }, [
+    this.$gate.isMahasiswa()
+      ? _c("div", { staticClass: "row justify-content-center" }, [
+          _vm.status != "uncompleted"
+            ? _c("div", { staticClass: "col-md-8 mt-5" }, [
+                _c(
+                  "div",
+                  { staticClass: "card" },
+                  [
+                    _c(
+                      "form-wizard",
+                      {
+                        ref: "wizard",
+                        attrs: {
+                          "hide-buttons": _vm.status != "null" ? true : false,
+                          title: "SKPI SUBMISSION",
+                          subtitle: "Please check preview your data submission",
+                          finishButtonText: "Submit",
+                          color: "#3490DC"
+                        },
+                        on: { "on-complete": _vm.onComplete }
+                      },
+                      [
+                        _c(
+                          "tab-content",
+                          {
+                            attrs: {
+                              title: "Mahasiswa Profile",
+                              icon: "fas fa-user"
+                            }
+                          },
+                          [
+                            _c("div", { staticClass: "card-body" }, [
+                              _c("div", { staticClass: "form-group" }, [
+                                _c("label", { attrs: { for: "inputNama" } }, [
+                                  _vm._v("Nama Lengkap")
+                                ]),
+                                _vm._v(" "),
+                                _c("input", {
+                                  staticClass: "form-control",
+                                  attrs: {
+                                    type: "text",
+                                    name: "nama",
+                                    placeholder: "Nama Lengkap",
+                                    id: "inputNama",
+                                    disabled: ""
+                                  },
+                                  domProps: { value: _vm.mahasiswa.nama }
+                                })
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "form-group" }, [
+                                _c(
+                                  "label",
+                                  { attrs: { for: "inputTanggalLahir" } },
+                                  [_vm._v("Tempat Tanggal Lahir")]
+                                ),
+                                _vm._v(" "),
+                                _c("input", {
+                                  staticClass: "form-control",
+                                  attrs: {
+                                    type: "text",
+                                    name: "tgl_lahir",
+                                    placeholder: "Tempat Tanggal Lahir",
+                                    id: "inputTanggalLahir",
+                                    disabled: ""
+                                  },
+                                  domProps: {
+                                    value:
+                                      _vm.mahasiswa.kota_lahir +
+                                      ", " +
+                                      _vm.mahasiswa.tgl_lahir
+                                  }
+                                })
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "form-group" }, [
+                                _c("label", { attrs: { for: "inputIjazah" } }, [
+                                  _vm._v("No Ijazah")
+                                ]),
+                                _vm._v(" "),
+                                _c("input", {
+                                  staticClass: "form-control",
+                                  attrs: {
+                                    type: "text",
+                                    name: "ijazah",
+                                    placeholder: "No Ijazah",
+                                    id: "inputIjazah",
+                                    disabled: ""
+                                  },
+                                  domProps: { value: _vm.mahasiswa.no_ijazah }
+                                })
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "row" }, [
+                                _c("div", { staticClass: "col-md-6" }, [
+                                  _c("div", { staticClass: "form-group" }, [
+                                    _c(
+                                      "label",
+                                      { attrs: { for: "inputNpm" } },
+                                      [_vm._v("Nomor Pokok Mahasiswa")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c("input", {
+                                      staticClass: "form-control",
+                                      attrs: {
+                                        type: "text",
+                                        name: "npm",
+                                        placeholder: "Nomor Pokok Mahasiswa",
+                                        id: "inputNpm",
+                                        disabled: ""
+                                      },
+                                      domProps: { value: _vm.mahasiswa.npm }
+                                    })
+                                  ])
+                                ]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "col-md-6" }, [
+                                  _c("div", { staticClass: "form-group" }, [
+                                    _c(
+                                      "label",
+                                      { attrs: { for: "inputIpk" } },
+                                      [_vm._v("Indeks Prestasi Kumulatif")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c("input", {
+                                      staticClass: "form-control",
+                                      attrs: {
+                                        type: "text",
+                                        name: "ipk",
+                                        placeholder:
+                                          "Indeks Prestasi Kumulatif",
+                                        id: "inputIpk",
+                                        disabled: ""
+                                      },
+                                      domProps: { value: _vm.mahasiswa.ipk }
+                                    })
+                                  ])
+                                ])
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "form-group" }, [
+                                _c(
+                                  "label",
+                                  { attrs: { for: "inputJurusan" } },
+                                  [_vm._v("Jurusan & Fakultas")]
+                                ),
+                                _vm._v(" "),
+                                _c("input", {
+                                  staticClass: "form-control",
+                                  attrs: {
+                                    type: "text",
+                                    name: "jurusan",
+                                    placeholder: "Jurusan & Fakultas",
+                                    id: "inputJurusan",
+                                    disabled: ""
+                                  },
+                                  domProps: {
+                                    value:
+                                      _vm.mahasiswa.jurusan.nama_jurusan +
+                                      " - " +
+                                      _vm.mahasiswa.jurusan.fakultas
+                                  }
+                                })
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "row" }, [
+                                _c("div", { staticClass: "col-md-6" }, [
+                                  _c("div", { staticClass: "form-group" }, [
+                                    _c(
+                                      "label",
+                                      { attrs: { for: "inputTanggalMulai" } },
+                                      [_vm._v("Tanggal Mulai Studi")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c("input", {
+                                      staticClass: "form-control",
+                                      attrs: {
+                                        type: "text",
+                                        name: "tgl_mulai",
+                                        placeholder: "Tanggal Mulai Studi",
+                                        id: "inputTanggalMulai",
+                                        disabled: ""
+                                      },
+                                      domProps: {
+                                        value: _vm._f("dateSkpi")(
+                                          _vm.mahasiswa.tgl_mulai
+                                        )
+                                      }
+                                    })
+                                  ])
+                                ]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "col-md-6" }, [
+                                  _c("div", { staticClass: "form-group" }, [
+                                    _c(
+                                      "label",
+                                      {
+                                        attrs: { for: "inputTanggalKelulusan" }
+                                      },
+                                      [_vm._v("Tanggal Kelulusan")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c("input", {
+                                      staticClass: "form-control",
+                                      attrs: {
+                                        type: "text",
+                                        name: "tgl_lulus",
+                                        placeholder: "Tanggal Kelulusan",
+                                        id: "inputTanggalKelulusan",
+                                        disabled: ""
+                                      },
+                                      domProps: {
+                                        value: _vm._f("dateSkpi")(
+                                          _vm.mahasiswa.tgl_kelulusan
+                                        )
+                                      }
+                                    })
+                                  ])
+                                ])
+                              ])
+                            ])
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "tab-content",
+                          {
+                            attrs: {
+                              title: "Kompetensi Data",
+                              icon: "fas fa-medal"
+                            }
+                          },
+                          [
+                            _c(
+                              "table",
+                              { staticClass: "table table-condensed" },
+                              [
+                                _c(
+                                  "tbody",
+                                  [
+                                    _c("tr", [
+                                      _c(
+                                        "th",
+                                        { staticStyle: { width: "10px" } },
+                                        [_vm._v("#")]
+                                      ),
+                                      _vm._v(" "),
+                                      _c("th", [_vm._v("Nama Kompetensi")]),
+                                      _vm._v(" "),
+                                      _c("th", [_vm._v("Bidang")]),
+                                      _vm._v(" "),
+                                      _c(
+                                        "th",
+                                        { staticStyle: { width: "40px" } },
+                                        [_vm._v("Point")]
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _vm._l(_vm.kompetensi.data, function(
+                                      data,
+                                      index
+                                    ) {
+                                      return _c("tr", { key: index }, [
+                                        _c("td", [
+                                          _vm._v(
+                                            _vm._s(
+                                              _vm.kompetensi.meta.from + index
+                                            )
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("td", [
+                                          _vm._v(_vm._s(data.nama_kompetensi))
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("td", [
+                                          _vm._v(
+                                            _vm._s(
+                                              data.bidang_kompetensi.nama_bidang
+                                            )
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("td", [
+                                          _vm._v(_vm._s(data.point_kompetensi))
+                                        ])
+                                      ])
+                                    })
+                                  ],
+                                  2
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c("pagination", {
+                              attrs: { data: _vm.kompetensi, align: "center" },
+                              on: {
+                                "pagination-change-page": _vm.getKompetensi
+                              }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "tab-content",
+                          {
+                            attrs: {
+                              title: "Kompetensi Wajib",
+                              icon: "fas fa-award"
+                            }
+                          },
+                          [
+                            _c(
+                              "table",
+                              { staticClass: "table table-condensed" },
+                              [
+                                _c(
+                                  "tbody",
+                                  [
+                                    _c("tr", [
+                                      _c(
+                                        "th",
+                                        { staticStyle: { width: "10px" } },
+                                        [_vm._v("#")]
+                                      ),
+                                      _vm._v(" "),
+                                      _c("th", [_vm._v("Nama Kompetensi")]),
+                                      _vm._v(" "),
+                                      _c(
+                                        "th",
+                                        { staticStyle: { width: "40px" } },
+                                        [_vm._v("Uploaded")]
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _vm._l(_vm.kompetensiWajib.data, function(
+                                      data,
+                                      index
+                                    ) {
+                                      return _c("tr", { key: index }, [
+                                        _c("td", [
+                                          _vm._v(
+                                            _vm._s(
+                                              _vm.kompetensiWajib.meta.from +
+                                                index
+                                            )
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("td", [
+                                          _vm._v(
+                                            _vm._s(data.nama_kompetensi_wajib)
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        _c(
+                                          "td",
+                                          { staticClass: "text-center" },
+                                          [
+                                            _c(
+                                              "span",
+                                              {
+                                                staticClass: "badge bg-success"
+                                              },
+                                              [
+                                                _c("i", {
+                                                  staticClass: "fas fa-check"
+                                                })
+                                              ]
+                                            )
+                                          ]
+                                        )
+                                      ])
+                                    })
+                                  ],
+                                  2
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c("pagination", {
+                              attrs: {
+                                data: _vm.kompetensiWajib,
+                                align: "center"
+                              },
+                              on: {
+                                "pagination-change-page": _vm.getKompetensiWajib
+                              }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "tab-content",
+                          { attrs: { title: "Submit", icon: "fas fa-check" } },
+                          [
+                            _vm.status == "null"
+                              ? _c("div", [
+                                  _c(
+                                    "h3",
+                                    { staticClass: "text-center text-grey" },
+                                    [_vm._v("Submit your submission")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "h3",
+                                    { staticClass: "text-center text-grey" },
+                                    [
+                                      _vm._v(
+                                        "Your submission will be sent to kaprodi"
+                                      )
+                                    ]
+                                  )
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.status == "progress"
+                              ? _c("div", [
+                                  _c(
+                                    "h3",
+                                    { staticClass: "text-center text-grey" },
+                                    [_vm._v("Your submission success")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "h3",
+                                    { staticClass: "text-center text-grey" },
+                                    [_vm._v("it will be validation by kaprodi")]
+                                  )
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.status == "published"
+                              ? _c("div", [
+                                  _c(
+                                    "h3",
+                                    { staticClass: "text-center text-grey" },
+                                    [_vm._v("Your SKPI document published")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "h3",
+                                    { staticClass: "text-center text-grey" },
+                                    [_vm._v("please check to akademik")]
+                                  )
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              { staticClass: "row justify-content-center" },
+                              [
+                                _c(
+                                  "svg",
+                                  {
+                                    attrs: {
+                                      id:
+                                        "5697373c-b41a-41d7-99c7-222dbdce0794",
+                                      "data-name": "Layer 1",
+                                      xmlns: "http://www.w3.org/2000/svg",
+                                      "xmlns:xlink":
+                                        "http://www.w3.org/1999/xlink",
+                                      width: "330",
+                                      height: "280",
+                                      viewBox: "0 0 1132.93 839.14"
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "defs",
+                                      [
+                                        _c(
+                                          "linearGradient",
+                                          {
+                                            attrs: {
+                                              id:
+                                                "f98c7255-8898-49c2-b340-75dadcc4ae5e",
+                                              x1: "819.93",
+                                              y1: "598.64",
+                                              x2: "819.93",
+                                              y2: "132.32",
+                                              gradientUnits: "userSpaceOnUse"
+                                            }
+                                          },
+                                          [
+                                            _c("stop", {
+                                              attrs: {
+                                                offset: "0",
+                                                "stop-color": "gray",
+                                                "stop-opacity": "0.25"
+                                              }
+                                            }),
+                                            _c("stop", {
+                                              attrs: {
+                                                offset: "0.54",
+                                                "stop-color": "gray",
+                                                "stop-opacity": "0.12"
+                                              }
+                                            }),
+                                            _c("stop", {
+                                              attrs: {
+                                                offset: "1",
+                                                "stop-color": "gray",
+                                                "stop-opacity": "0.1"
+                                              }
+                                            })
+                                          ],
+                                          1
+                                        ),
+                                        _c("linearGradient", {
+                                          attrs: {
+                                            id:
+                                              "92d33834-2d44-41fb-b7c9-5faa6db61f67",
+                                            x1: "855.68",
+                                            y1: "218.69",
+                                            x2: "855.68",
+                                            y2: "216.24",
+                                            "xlink:href":
+                                              "#f98c7255-8898-49c2-b340-75dadcc4ae5e"
+                                          }
+                                        }),
+                                        _c("linearGradient", {
+                                          attrs: {
+                                            id:
+                                              "2353f27f-2b2f-460e-adf7-0d1e44be71db",
+                                            x1: "476.17",
+                                            y1: "658.02",
+                                            x2: "476.17",
+                                            y2: "395.19",
+                                            gradientTransform:
+                                              "translate(1189.65 -68.37) rotate(90)",
+                                            "xlink:href":
+                                              "#f98c7255-8898-49c2-b340-75dadcc4ae5e"
+                                          }
+                                        }),
+                                        _c("linearGradient", {
+                                          attrs: {
+                                            id:
+                                              "4f6991c1-2d70-49f7-ad45-4cbe0a2e669a",
+                                            x1: "476.5",
+                                            y1: "725.77",
+                                            x2: "476.5",
+                                            y2: "463.92",
+                                            gradientTransform:
+                                              "translate(1211.67 -75.55) rotate(90)",
+                                            "xlink:href":
+                                              "#f98c7255-8898-49c2-b340-75dadcc4ae5e"
+                                          }
+                                        }),
+                                        _c("linearGradient", {
+                                          attrs: {
+                                            id:
+                                              "0ab0c4d5-5a87-488b-b190-408bea02e292",
+                                            x1: "456.74",
+                                            y1: "719.17",
+                                            x2: "456.74",
+                                            y2: "457.32",
+                                            gradientTransform:
+                                              "translate(1180.41 -54.67) rotate(90)",
+                                            "xlink:href":
+                                              "#f98c7255-8898-49c2-b340-75dadcc4ae5e"
+                                          }
+                                        }),
+                                        _c("linearGradient", {
+                                          attrs: {
+                                            id:
+                                              "7820c60a-6dd2-4e9e-820c-a335a5d419d8",
+                                            x1: "450.43",
+                                            y1: "726.27",
+                                            x2: "450.43",
+                                            y2: "464.42",
+                                            gradientTransform:
+                                              "translate(123.74 -187.29)",
+                                            "xlink:href":
+                                              "#f98c7255-8898-49c2-b340-75dadcc4ae5e"
+                                          }
+                                        }),
+                                        _c("linearGradient", {
+                                          attrs: {
+                                            id:
+                                              "2438f751-850d-4f24-a458-729e3ad7bb58",
+                                            x1: "1003.59",
+                                            y1: "245.51",
+                                            x2: "1003.59",
+                                            y2: "74.84",
+                                            gradientTransform:
+                                              "translate(1155.03 -844.78) rotate(90)",
+                                            "xlink:href":
+                                              "#f98c7255-8898-49c2-b340-75dadcc4ae5e"
+                                          }
+                                        }),
+                                        _c("linearGradient", {
+                                          attrs: {
+                                            id:
+                                              "68c414b5-14a5-48aa-8252-53bc3664f500",
+                                            x1: "864.79",
+                                            y1: "849.53",
+                                            x2: "864.79",
+                                            y2: "427.42",
+                                            "xlink:href":
+                                              "#f98c7255-8898-49c2-b340-75dadcc4ae5e"
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    ),
+                                    _c("title", [_vm._v("upload")]),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M514.88,86.76C477.71,71.65,438.43,59,398.33,60.61c-59,2.32-115.51,37.78-143.27,89.85-23.52,44.11-26.42,95.82-36.55,144.77-12.48,60.32-36.38,117.64-61.92,173.7C142.87,499,128.4,529.8,126.15,562.81c-3.13,45.82,18.78,91.49,53.13,122s80,46.56,125.77,50.07c24.37,1.87,49.83.14,71.48-11.2,22.9-12,39.59-33.69,62.58-45.51,21.31-11,46.23-12.5,70.15-11.07a314.14,314.14,0,0,1,91.59,19.46c33.43,12.56,64.52,30.74,97.88,43.47s70.63,19.84,104.73,9.21c32-10,57.34-34.2,80.17-58.75a1028.14,1028.14,0,0,0,102.2-129.3c20.59-30.84,39.75-63.38,48.86-99.33,17.4-68.72-6.55-146.26-59.69-193.2-44-38.88-103.09-55.76-160.92-66-52.73-9.34-113.7-9.92-162.24-34.26C605.54,135.15,563.42,106.5,514.88,86.76Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#3490dc",
+                                        opacity: "0.1"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M904.73,150.7c-14.28.57-15,37.44-14.11,39.05S887.38,208,887.38,208s-6.48,25.23-5.73,29.92-3.49,7.76-3.49,7.76c-6.34,2.5-14.29,10.56-16.4,12.77l-.53.57s-6.14,4-7.22,5.58-4,.32-4,.32-8.3-.8-9.38-.48c-.74.22-1.9-1.14-2.56-2-.31-.41-.51-.72-.51-.72l-.25-7.44a6.09,6.09,0,0,0-1-.62c.17-.84.38-1.71.64-2.6a22.28,22.28,0,0,0,9.09-8.16c.24-.38.46-.77.67-1.16a3,3,0,0,0,1.89.53,3.75,3.75,0,0,0,.88-.08,7.11,7.11,0,0,0,2.56-1.29,13.7,13.7,0,0,0,4.76-5.58,9.05,9.05,0,0,0,.45-1.33c-.15.25-.31.5-.47.74a7.69,7.69,0,0,0-.53-6.49c-.78-1.26-2-2.28-2.5-3.68-.84-2.41.75-4.9,1.73-7.26a12.21,12.21,0,0,0,.89-6.84,8.74,8.74,0,0,0-3.7-5.77c-3.93-2.55-9.26-1.15-13.81-2.38a37.39,37.39,0,0,1-4.75-1.91,36,36,0,0,0-7.27-2.26c-2.47-.49-5.46-.54-7,1.39a14.38,14.38,0,0,0-1.14,1.93,7.15,7.15,0,0,1-4.47,3.21,16.76,16.76,0,0,1-2.75.29,2.66,2.66,0,0,0,0-1.14c-1.16-3.8,2.16-6.62,6.48-8.32s20.75-14.64,22.66-17.71,15.28-12.7,15.28-12.7,20-5.66,26.56-26.28-31.38,14.4-35.2,15.45-9.29,5-9.29,5l-24.33,14.07a88.12,88.12,0,0,0-13.12,9.06c-5.89,5.09-9.62,13.74-9.62,13.74s-2.33,3.8-5.73,9.3a25.32,25.32,0,0,1-7.42,7.89l.11-.2c-.27.33-8.64,10.9-9.38,15.52s-4.15,23.45-4.15,23.45-3,14.79-5.06,17.7c0,0-1.67,8.49-2.66,9.63s-5,13.17-4.32,14.39c0,0-3.82,8.33-3.15,11.48l-6.89,16.5s-3.74,8.16-3.49,12.93c.12,2.31.22,5,.29,7.2,0,.35,0,.68,0,1l0,0c0,.35,0,.69,0,1-.37.62-1.32,2.2-2.31,4.11-1.42,2.78-2.93,6.25-2.84,8.39.16,3.76.17,12.94-1.56,16.31l-.51-.2a7,7,0,0,0-1,3.32l.12.06c0,.29-.09.59-.12.91-.42,3.83.19,9.16-.77,10.33-1.33,1.62-.67,37.52-.67,37.52s-2.16,22.47,2.16,36.71l-.33,11.15s-.17,10.51.33,12,.67,12.13.67,12.13l2.49,17.79s-3.33,27.49-.5,34.28a37.36,37.36,0,0,1,3,11.81,18.37,18.37,0,0,0,4.58,1.77l0,1-.65,16.72,0,.92s-.08.44-.14,1.17h0c0,.13,0,.27,0,.41a.49.49,0,0,0,0,.12c0,.11,0,.23,0,.35a2.44,2.44,0,0,0,0,.27,1.93,1.93,0,0,1,0,.24v.2c0,.41,0,.85,0,1.31v0c0,.18,0,.37,0,.56s0,.11,0,.16l0,.25c0,.11,0,.22,0,.33l0,.16c0,.17.05.33.08.5a.5.5,0,0,0,0,.12c0,.19.07.37.11.55v0c0,.18.08.36.13.54a.13.13,0,0,1,0,.06l0,0c0,.09.05.19.08.28a.5.5,0,0,0,0,.13c0,.11.07.22.1.34l0,.08c.1.28.2.56.32.84a.36.36,0,0,0,0,.09c0,.1.09.21.14.31l.06.14.13.27.08.15.14.25.09.15c0,.08.09.16.14.24s.07.1.1.16l.15.23.11.15.16.23.12.15.18.22.12.14.21.24.11.12.34.33a.52.52,0,0,0,.11.1,2.73,2.73,0,0,0,.25.23l.16.13.22.18.19.14.22.16.21.14.22.14.23.13.23.14.24.12.25.12.25.12.25.11.27.11.27.1.28.1.3.09.47.14.39.1.31.06.32.07.34,0,.33.05.35,0,.35,0,.36,0,.37,0,.37,0h1.58l.46,0,.38,0,.54-.05.33,0,.91-.1s11.33,1.69,11.7-2.79c0-.23,0-.47.05-.72l0-.57a1.48,1.48,0,0,1,0-.21c0-.22,0-.46,0-.7v-.11c0-.25,0-.5,0-.76v-.54c0-.44,0-.89,0-1.34,0-.17,0-.33,0-.5,0-.46,0-.91,0-1.36v-.07c0-.11,0-.2,0-.31-.07-2.22-.18-4.28-.25-5.43,0-.61-.06-1-.06-1s-3.86-5.82-3.23-8,.49-9.58.49-9.58-1.5-3.55-2.51-6.69c-.08-.24-.15-.48-.22-.71a36.92,36.92,0,0,0,2.36-3,38,38,0,0,0-2.82-22.8,1.42,1.42,0,0,1-.61-1.17.49.49,0,0,1,0-.12l1.93-23.61-1.17-13.74s-.83-9.39,1-13.43l3.65-35.57L772,420.6s1.66-.81,3,3.08,4.64,21.5,4.64,21.5l8,29.11s1.33,10.35,2.49,11.81,1.17,7.92,1.17,7.92,2.49,5.18,2.16,7.44,0,8.41.82,10.51,1.17,17,1.17,17a34.34,34.34,0,0,0,.33,14.72c2,7.44.83,16.82.83,16.82a11.48,11.48,0,0,0,.68.94c-.08.22-.17.44-.25.64-.52,1.35-.93,2.3-.93,2.3s-.12,7.4.5,9.58-3.24,8-3.24,8,0,.36-.06,1c-.07,1.15-.18,3.2-.25,5.43,0,.1,0,.2,0,.31v.08l0,1.34c0,.17,0,.34,0,.51,0,.45,0,.9,0,1.34,0,.08,0,.17,0,.25s0,.13,0,.19v.09c0,.26,0,.52,0,.77v.11c0,.24,0,.48,0,.71a1.28,1.28,0,0,0,0,.19c0,.19,0,.39,0,.58s0,.49.05.72c.38,4.48,11.71,2.79,11.71,2.79l.91.11.32,0,.55,0,.37,0,.47,0H809l.37,0,.37,0,.36,0,.35,0,.34,0,.34-.06.33-.05.32-.07.32-.06.39-.1.47-.14.29-.09.28-.1a2.15,2.15,0,0,0,.27-.1l.27-.11.26-.11.25-.11.25-.13.23-.12.24-.13.22-.14.23-.14.2-.14.22-.16a1.33,1.33,0,0,0,.19-.14,1.84,1.84,0,0,0,.22-.17l.17-.14.25-.22.11-.11.34-.33.1-.12.22-.23.11-.15a2,2,0,0,0,.19-.22l.11-.15.17-.23.1-.15.16-.23a1.4,1.4,0,0,1,.1-.16c0-.08.09-.16.14-.24l.09-.15c0-.09.09-.17.13-.25a1.09,1.09,0,0,0,.08-.15c0-.09.09-.18.13-.27l.07-.14c0-.1.09-.2.14-.31l0-.09c.11-.28.22-.56.31-.84l0-.08c0-.11.07-.22.11-.33a.74.74,0,0,1,0-.14c0-.09,0-.19.08-.28v-.05a.13.13,0,0,0,0-.06c0-.18.1-.36.14-.53v0c0-.18.08-.36.11-.54l0-.13c0-.17.06-.33.08-.49s0-.11,0-.17,0-.22,0-.33,0-.17,0-.25,0-.1,0-.16,0-.37,0-.56v0c0-.46,0-.9,0-1.31v-.44a2.44,2.44,0,0,1,0-.27c0-.12,0-.23,0-.35a.49.49,0,0,1,0-.12c0-.14,0-.28,0-.4v0c-.06-.73-.13-1.17-.13-1.17l0-.91-.63-16.18,0-1c.93-.52,1.88-1.11,2.87-1.8,0,0-.17-9.22,2.49-12.93s-1.33-13.43-1.33-13.43l-1.66-34.77.66-16a15.91,15.91,0,0,1-2-7.76,28.23,28.23,0,0,0-2.66-10s-1.66-5.5.34-7.12-2.16-37-2.16-37,1-25.85-.9-41.2l0-.25.53-.24c-.16-1.23-.33-2.38-.52-3.45l-.56.17a28.1,28.1,0,0,0-1-4L811,363s-.06-.64-.13-1.57c-.09-1.1-.19-2.59-.21-3.9a6.63,6.63,0,0,1,.18-1.64l-.14-.12a3.63,3.63,0,0,1,.14-.85l-.58-.49s-.08-.55-.14-1.39c-.13-1.86-.2-5.1.72-6.93,1.33-2.67,15-12.78,15-12.78L833.5,318s7.64-10.76,13.45-12.86S870.86,291,870.86,291s6.31-6.47,6.81-8l.21-.32H878l0-.21L895,257c6.8-5.5,7.05-17.22,7.05-17.22L903.82,213l-.58-15.84.82-9S919,150.14,904.73,150.7ZM807.35,220a21.43,21.43,0,0,0-2.82,10.62c0,.18,0,.36,0,.54s0,.29,0,.43a21.36,21.36,0,0,0,2.27,9.58,7.85,7.85,0,0,0-1.65,2.93c-.84-1.06-3.3-4.3-3.44-6.45-.17-2.58-2.66-4.36-2.66-4.36s-.46-4.9.16-5.74l.09-.08s.07-.12.21-.32h0c.71-1.07,3.1-4.68,5.57-8.79a7.87,7.87,0,0,0,1.27.42l1.52.38Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill:
+                                          "url(#f98c7255-8898-49c2-b340-75dadcc4ae5e)"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M855.79,217.3c.15-.34.27-.7.39-1.06a22.12,22.12,0,0,0-1,2.45C855.39,218.22,855.6,217.76,855.79,217.3Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill:
+                                          "url(#92d33834-2d44-41fb-b7c9-5faa6db61f67)"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M811.79,241.08s-3.13,14.92-8.9,16.85,7,19,7,19l26.47-1.45.48-5.53s-5-11.07,3.37-24.54S811.79,241.08,811.79,241.08Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#f6bac2"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M770.28,593.35c-.36,4.45-11.31,2.77-11.31,2.77-18.16,2.52-15.16-15.28-15.16-15.28l0-.91.63-16.6.18-4.63s20-9.14,19.49-7.22c-.19.72.23,2.45.81,4.32,1,3.11,2.43,6.63,2.43,6.63s.12,7.34-.48,9.5,3.13,7.94,3.13,7.94,0,.36.06,1A116.68,116.68,0,0,1,770.28,593.35Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#b77983"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M805.29,598.16s-10.95,1.69-11.31-2.77a113.72,113.72,0,0,1,.19-12.51c0-.6.05-1,.05-1s3.73-5.78,3.13-7.94-.48-9.51-.48-9.51.39-.93.9-2.27c1.07-2.81,2.68-7.37,2.35-8.67-.48-1.93,19.49,7.21,19.49,7.21l.2,5.18.61,16.05,0,.91S823.46,600.69,805.29,598.16Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#b77983"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M880.36,142.35C874,162.8,854.7,168.42,854.7,168.42S841.78,178,839.94,181s-17.72,15.88-21.9,17.57-7.37,4.49-6.25,8.25c1,3.49-9.94,20.57-11.59,23.11h0l-.2.32-3.45,3.61-11.71,5.93-9.54-3.05-1.21-11.46,5.06-9,0,0h0a24.83,24.83,0,0,0,7.17-7.83c3.29-5.46,5.54-9.22,5.54-9.22s3.61-8.58,9.3-13.64a84.15,84.15,0,0,1,12.67-9l23.51-14s5.29-3.93,9-5S886.7,121.9,880.36,142.35Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#f6bac2"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M784.84,232.42l15.64-3.13a1,1,0,0,0-.28.65h0l-.2.32-3.45,3.61-11.71,5.93-9.54-3.05-1.21-11.46,5.06-9,0,0c-4.79,10-.12,17.1-.12,17.1Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.05"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M876.3,284.08a2.92,2.92,0,0,0-.11.32,4.39,4.39,0,0,1-.58,1l-6.31,3.08-9.63,1-5-12.11L858,264.1l1.84-2.48.51-.56c.19,2.4,1.16,14.92,1.1,18.68-.08,4.17,3,4.5,3,4.5Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.05"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M875.82,285a2.92,2.92,0,0,0-.11.32c-.48,1.52-6.57,7.94-6.57,7.94s-17.49,11.95-23.1,14-13,12.75-13,12.75l-7.38,15.23s-13.23,10-14.51,12.68c-.89,1.82-.82,5-.69,6.88,0,.83.12,1.38.12,1.38l-3.9,4.07-3.11,3.24-4.38,4.56-7.13-1-22.22-3.53-4.26-2.4-23.65-13.32s0-.83-.06-2.1c0-.56,0-1.2-.06-1.91-.07-2.16-.17-4.85-.28-7.14-.24-4.73,3.37-12.83,3.37-12.83l6.65-16.37c-.64-3.12,3.05-11.39,3.05-11.39-.64-1.2,3.21-13.15,4.17-14.27s2.57-9.55,2.57-9.55c2-2.88,4.89-17.56,4.89-17.56s3.29-18.61,4-23.26,8.8-15.07,9.06-15.39c-5.77,10.58-.72,18.28-.72,18.28l5.78-1L800,230.26c-.72.48-.24,5.77-.24,5.77a6.67,6.67,0,0,1,2.56,4.33c.15,2.35,3,6,3.53,6.65l.08.09a7.83,7.83,0,0,1,3.77-5.38l3.61,4.82,1.21,5.77s-.33.81-2.41,2.41.88,5.77.88,5.77c1,1.69,1.29,7.94,1.29,7.94h0c2.65-2.32,6.81-2.32,6.81-2.32a20.62,20.62,0,0,0,4.09-5.86,2.42,2.42,0,0,1,3.45-1.6,22.18,22.18,0,0,1,3.93-2.73c1.93-1,4.17,1,4.17,1l.24,7.39s.19.3.5.71c.63.88,1.76,2.23,2.47,2,1-.32,9.06.48,9.06.48s2.81,1.2,3.85-.32,7-5.53,7-5.53S861,276.54,861,280.7s3,4.5,3,4.5Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#d39999"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M876,285h-.21C876.17,284,876,285,876,285Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "none"
+                                      }
+                                    }),
+                                    _c("circle", {
+                                      attrs: {
+                                        cx: "776.65",
+                                        cy: "244.82",
+                                        r: "1.44",
+                                        fill: "#4b4442"
+                                      }
+                                    }),
+                                    _c("circle", {
+                                      attrs: {
+                                        cx: "766.14",
+                                        cy: "265.76",
+                                        r: "1.44",
+                                        fill: "#4b4442"
+                                      }
+                                    }),
+                                    _c("circle", {
+                                      attrs: {
+                                        cx: "745.45",
+                                        cy: "310.59",
+                                        r: "1.44",
+                                        fill: "#4b4442"
+                                      }
+                                    }),
+                                    _c("circle", {
+                                      attrs: {
+                                        cx: "755.23",
+                                        cy: "287.97",
+                                        r: "1.44",
+                                        fill: "#4b4442"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M765,555.8c-7.52,8.94-15.64,8.79-20.48,7.53l.18-4.63s20-9.14,19.49-7.22C764,552.2,764.38,553.93,765,555.8Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.05"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M819.81,565.92c-12.77,7.38-20.26-1.27-22-3.72,1.07-2.81,2.68-7.37,2.35-8.67-.48-1.93,19.49,7.21,19.49,7.21Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.05"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M824.94,550.36c-2.56,3.69-2.41,12.83-2.41,12.83-16.52,11.87-25.18-2.57-25.18-2.57s1.12-9.3-.8-16.68a34.81,34.81,0,0,1-.32-14.6s-.32-14.76-1.13-16.84-1.12-8.18-.8-10.43-2.08-7.37-2.08-7.37,0-6.42-1.13-7.86-2.4-11.72-2.4-11.72L781,446.25s-3.21-17.48-4.49-21.33-2.89-3.05-2.89-3.05L769,442.56l-3.53,35.29c-1.77,4-1,13.32-1,13.32l1.12,13.63-1.86,23.42a.49.49,0,0,0,0,.12,1.43,1.43,0,0,0,.58,1.16A38.54,38.54,0,0,1,767,552.12c-12.19,17.65-26.95,8.5-26.95,8.5a37.43,37.43,0,0,0-2.88-11.7c-2.73-6.74.48-34,.48-34l-2.41-17.65s-.16-10.59-.64-12-.32-11.87-.32-11.87l.32-11.07c-4.17-14.12-2.09-36.41-2.09-36.41s-.64-35.61.65-37.22c.93-1.16.34-6.44.74-10.25a7.15,7.15,0,0,1,.94-3.29L735,375c2.09-2.57,2.09-12.83,1.92-16.85-.08-2.12,1.37-5.56,2.75-8.32,1-1.94,1.91-3.54,2.25-4.12l.14-.23s9.14,2.25,33.36,13.8a45.52,45.52,0,0,0,13.78,4.27,30.66,30.66,0,0,0,7.19.11,25.1,25.1,0,0,0,10.34-3.36,18.18,18.18,0,0,0,4.47-3.59c-.33,1-.13,4.42,0,6.46.06.93.13,1.56.13,1.56L814,376.63a31.21,31.21,0,0,1,1,4.31c.19,1.06.35,2.21.5,3.43,1.87,15.22.87,40.87.87,40.87s4,35.13,2.09,36.73-.33,7.06-.33,7.06a28.47,28.47,0,0,1,2.57,9.94,16,16,0,0,0,1.93,7.7l-.65,15.88L823.66,537S827.51,546.67,824.94,550.36Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#8499f0"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M806.13,492.29s12.15-7,14.8-3.85S806.13,492.29,806.13,492.29Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.05"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M813.47,496.14s-2,1,2.41,2.28S813.47,496.14,813.47,496.14Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.05"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M740,476.89c-.41.12,10.11,7.1,19.61,1.32C759.57,478.21,742.37,476.17,740,476.89Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.05"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M759.09,490.24s-2.88,5.66-8.78,6.5S759.09,490.24,759.09,490.24Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.05"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M797.71,502.52s13.84,22,11.19,27.19S797.71,502.52,797.71,502.52Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.05"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M774.37,369.09l-1.44,43.07s8.54-.36,10-14.55,2.53-25.75,2.53-25.75Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.05"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M773.89,368.13l-1.44,43.07s8.54-.36,10-14.56S785,370.9,785,370.9Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#8499f0"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M756.57,370.06s-6.74,18.07-22.16,9.32a7.11,7.11,0,0,1,.94-3.29c4.22,1.77,14,4.36,18-7.36Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.05"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M756.09,368.13s-6.74,18.07-22.16,9.32a7.15,7.15,0,0,1,.94-3.29c4.22,1.78,14,4.36,18-7.35Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.05"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M756.09,369.09s-6.74,18.07-22.16,9.32a7.15,7.15,0,0,1,.94-3.29c4.22,1.78,14,4.36,18-7.35Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#8499f0"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M815.09,385.33c-16.94,8.06-23.15-10.94-23.15-10.94l4,.12c.7,12.15,14.09,8.88,18.68,7.39C814.78,383,814.94,384.11,815.09,385.33Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.05"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M816.05,383.89c-16.93,8.05-23.15-10.95-23.15-10.95l4,.12c.7,12.15,14.09,8.89,18.68,7.4C815.74,381.52,815.9,382.67,816.05,383.89Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.05"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M815.57,384.37c-16.93,8.05-23.15-10.95-23.15-10.95l4,.12c.7,12.16,14.09,8.89,18.68,7.4C815.26,382,815.42,383.15,815.57,384.37Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#8499f0"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M756.09,369.09s-6.74,18.07-22.16,9.32a7.15,7.15,0,0,1,.94-3.29c4.22,1.78,14,4.36,18-7.35Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#fff",
+                                        opacity: "0.1"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M815.57,384.37c-16.93,8.05-23.15-10.95-23.15-10.95l4,.12c.7,12.16,14.09,8.89,18.68,7.4C815.26,382,815.42,383.15,815.57,384.37Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#fff",
+                                        opacity: "0.1"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M770.4,590c0,1.23,0,2.38-.12,3.33-.36,4.45-11.31,2.77-11.31,2.77-10,1.39-13.6-3.41-14.79-8a18.31,18.31,0,0,1-.55-4.56,18.91,18.91,0,0,1,.18-2.74l0-.91a6.69,6.69,0,0,1,6.22,1.27c4.45,3.61,10.35.84,10.35.84s4.33.36,6,1.8c.94.81,2.49-1.14,3.67-3,.07,1.2.18,3.37.25,5.69C770.38,587.68,770.4,588.88,770.4,590Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.05"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M752.84,589.74s-3,2.94-8.66-1.6a18.31,18.31,0,0,1-.55-4.56C746.52,585.78,751.88,589.74,752.84,589.74Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.05"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M770.4,590a2.26,2.26,0,0,1-3.25-.52,21.39,21.39,0,0,0,3.2-3C770.38,587.68,770.4,588.88,770.4,590Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.05"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M793.87,592.06c0,1.24,0,2.39.11,3.33.36,4.46,11.31,2.77,11.31,2.77,10,1.4,13.6-3.4,14.79-8a19.21,19.21,0,0,0,.37-7.3l0-.91a6.77,6.77,0,0,0-6.23,1.27c-4.45,3.61-10.34.84-10.34.84s-4.33.37-6,1.81c-.94.81-2.49-1.14-3.66-3-.07,1.2-.19,3.37-.26,5.69C793.88,589.73,793.86,590.93,793.87,592.06Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.05"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M811.43,591.78s3,2.94,8.65-1.6a18.24,18.24,0,0,0,.56-4.55C817.74,587.82,812.38,591.78,811.43,591.78Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.05"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M793.87,592.06a2.25,2.25,0,0,0,3.24-.52,21.15,21.15,0,0,1-3.2-3C793.88,589.73,793.86,590.93,793.87,592.06Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.05"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M780.67,285s-15.4,42.51-9.47,46.2S780.67,285,780.67,285Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.05"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M791.9,271.88S789,286,790.45,287.28,791.9,271.88,791.9,271.88Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.05"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M823,304.77s-18.93,17.64-17.65,19.09S823,304.77,823,304.77Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.05"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M837.47,265.94c-7.17,2.19-23.93,7.31-24.12,7.27l.93-3.82c2.65-2.32,6.81-2.32,6.81-2.32a20.62,20.62,0,0,0,4.09-5.86,2.42,2.42,0,0,1,3.45-1.6,22.77,22.77,0,0,1,3.93-2.73c1.93-1,4.17,1,4.17,1l.24,7.38S837.16,265.53,837.47,265.94Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.05"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M837.47,265c-7.17,2.19-23.93,7.31-24.12,7.26l.93-3.81c2.65-2.32,6.81-2.32,6.81-2.32a20.62,20.62,0,0,0,4.09-5.86,2.42,2.42,0,0,1,3.45-1.6,22.18,22.18,0,0,1,3.93-2.73c1.93-1,4.17,1,4.17,1l.24,7.39S837.16,264.57,837.47,265Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#d39999"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M812.51,261c1,1.69,1.28,7.94,1.28,7.94L811,271.16l-5.3-15.28-.24-7.94-.1-.45.08.09a7.79,7.79,0,0,1,3.77-5.37l3.61,4.81,1.21,5.77s-.33.81-2.41,2.41S812.51,261,812.51,261Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.05"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M813,260.49c1,1.69,1.29,7.94,1.29,7.94l-2.79,2.25L806.2,255.4l-.24-7.94-.11-.45.08.09a7.83,7.83,0,0,1,3.77-5.38l3.61,4.82,1.21,5.77s-.33.81-2.41,2.41S813,260.49,813,260.49Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#d39999"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M848.36,234.35a21.65,21.65,0,1,1-21.65-21.66A21.47,21.47,0,0,1,848.36,234.35Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.05"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M848.36,233.38a21.66,21.66,0,1,1-21.65-21.65A21.53,21.53,0,0,1,848.36,233.38Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#f6bac2"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M848.36,233.38a21.53,21.53,0,0,1-3.15,11.25c-.32-.57-.51-1.23-.83-1.81-.45-.81-1.49-1.49-2.26-1a2.31,2.31,0,0,0-.71,1c-.63,1.33-1.75,2.66-3.22,2.63a3.19,3.19,0,0,1-2.74-2.34,9.61,9.61,0,0,1-.16-3.82c.22-2.6.26-5.6-1.67-7.35a10.94,10.94,0,0,0-4.18-1.87c-1.47-.48-3-1.24-3.6-2.66-.4-1-.3-2.06-.66-3a5.25,5.25,0,0,0-3.89-2.86,10.2,10.2,0,0,1-6.81,2.33,25.52,25.52,0,0,1-6.7-1.06,21.66,21.66,0,0,1,40.58,10.53Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.05"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M825.18,223.47c.36,1,.26,2.08.66,3,.59,1.42,2.13,2.18,3.6,2.66a11,11,0,0,1,4.18,1.86c1.93,1.76,1.89,4.76,1.67,7.36a9.61,9.61,0,0,0,.16,3.82,3.21,3.21,0,0,0,2.74,2.34c1.47,0,2.59-1.3,3.22-2.63a2.33,2.33,0,0,1,.71-1c.77-.51,1.81.17,2.26,1a9.91,9.91,0,0,0,1.29,2.43,2.88,2.88,0,0,0,2.63.6,6.63,6.63,0,0,0,2.47-1.28,13.54,13.54,0,0,0,4.6-5.53,7.94,7.94,0,0,0-.29-7c-.75-1.26-1.94-2.27-2.41-3.66-.82-2.39.72-4.85,1.67-7.19a12.48,12.48,0,0,0,.85-6.79,8.72,8.72,0,0,0-3.57-5.73c-3.8-2.53-8.94-1.14-13.34-2.36a33.83,33.83,0,0,1-4.59-1.89,34,34,0,0,0-7-2.24c-2.39-.48-5.28-.54-6.79,1.37a15.14,15.14,0,0,0-1.1,1.92,6.91,6.91,0,0,1-4.32,3.18c-1.29.31-2.64.23-4,.42a4.4,4.4,0,0,0-3.33,1.91c-.66,1.2-.38,2.66-.22,4s.08,2.94-1,3.77c-.51.39-1.21.58-1.52,1.13a1.59,1.59,0,0,0,.47,1.89,4.51,4.51,0,0,0,1.91.84,29.23,29.23,0,0,0,7.67,1.31,10.12,10.12,0,0,0,7.14-2.63c-.17.17-1.27.1-1.47.09C822.07,220.65,824.45,221.51,825.18,223.47Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#7e646b"
+                                      }
+                                    }),
+                                    _c("g", { attrs: { opacity: "0.05" } }, [
+                                      _c("path", {
+                                        attrs: {
+                                          d:
+                                            "M852,241.2a6.81,6.81,0,0,1-2.47,1.29,2.9,2.9,0,0,1-2.62-.61,9.76,9.76,0,0,1-1.3-2.43c-.45-.81-1.49-1.49-2.26-1a2.45,2.45,0,0,0-.71,1c-.62,1.33-1.75,2.66-3.22,2.63a3.17,3.17,0,0,1-2.73-2.34,9.61,9.61,0,0,1-.17-3.82c.23-2.6.26-5.59-1.66-7.35a11,11,0,0,0-4.19-1.87c-1.46-.48-3-1.24-3.6-2.66-.4-1-.3-2.06-.66-3-.59-1.59-2.26-2.46-3.89-2.86a10.38,10.38,0,0,1-6.81,2.34,29.66,29.66,0,0,1-7.67-1.32,4.63,4.63,0,0,1-1.91-.83,2.11,2.11,0,0,1-.31-.36,2.8,2.8,0,0,0-1.12.87,1.59,1.59,0,0,0,.47,1.89,4.51,4.51,0,0,0,1.91.84,29.23,29.23,0,0,0,7.67,1.31,10.29,10.29,0,0,0,6.8-2.33c1.63.4,3.31,1.26,3.9,2.85.36,1,.26,2.08.66,3,.6,1.42,2.13,2.18,3.6,2.66a11,11,0,0,1,4.18,1.86c1.93,1.76,1.89,4.76,1.67,7.36a9.61,9.61,0,0,0,.16,3.82,3.21,3.21,0,0,0,2.74,2.34c1.47,0,2.59-1.3,3.22-2.63a2.33,2.33,0,0,1,.71-1c.77-.51,1.81.17,2.26,1a9.61,9.61,0,0,0,1.3,2.43,2.86,2.86,0,0,0,2.62.6,6.63,6.63,0,0,0,2.47-1.28,13.54,13.54,0,0,0,4.6-5.53,8.84,8.84,0,0,0,.43-1.32A14.26,14.26,0,0,1,852,241.2Z",
+                                          transform: "translate(-33.54 -30.43)"
+                                        }
+                                      }),
+                                      _c("path", {
+                                        attrs: {
+                                          d:
+                                            "M854,221.58c.21-.46.41-.92.6-1.37s.26-.7.37-1.06A23.64,23.64,0,0,0,854,221.58Z",
+                                          transform: "translate(-33.54 -30.43)"
+                                        }
+                                      }),
+                                      _c("path", {
+                                        attrs: {
+                                          d:
+                                            "M807.24,215.29c1-.85,1.07-2.37.91-3.68a16.35,16.35,0,0,1-.19-2.31,3.4,3.4,0,0,0-.55.7c-.66,1.2-.38,2.66-.22,4A7.79,7.79,0,0,1,807.24,215.29Z",
+                                          transform: "translate(-33.54 -30.43)"
+                                        }
+                                      })
+                                    ]),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M811.18,364.16c-1.86.13-4.47.27-7.61.38-2.18.07-4.62.12-7.23.12-2.28,0-4.69,0-7.19-.11a154.17,154.17,0,0,1-23.57-2.43c-10.39-2-20-5.45-26-11.29,1-1.94,1.91-3.55,2.25-4.12,0-.56,0-1.21-.06-1.91,10.55,5,43.44,18.89,68.65,11,0,.83.12,1.38.12,1.38l.57.48C810.82,358.7,811,362.12,811.18,364.16Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.05"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M811.18,363.2c-1.86.13-4.47.27-7.61.37-2.18.08-4.62.12-7.23.12-2.28,0-4.69,0-7.19-.11a154.13,154.13,0,0,1-23.57-2.42c-10.39-2-20-5.46-26-11.3,1-1.94,1.91-3.54,2.25-4.12,0-.56,0-1.2-.06-1.91,10.55,5,43.44,18.9,68.65,11.05,0,.83.12,1.38.12,1.38l.57.48C810.82,357.74,811,361.16,811.18,363.2Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#4b4442"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M312.07,800.87A13.75,13.75,0,0,1,309,790.4l44.14-361.17,3.66-30a13.85,13.85,0,0,1,13.64-12.16l129.29-.86A13.83,13.83,0,0,0,513.47,372l-.05-1.37a13.84,13.84,0,0,1,13.83-14.31H663.11a13.83,13.83,0,0,1,13.83,13.8,14.76,14.76,0,0,1-.12,1.86,13.83,13.83,0,0,0,13.36,15.66l130.48,3.33a13.82,13.82,0,0,1,13.28,16.16l-65.23,381-1.23,7.2a13.53,13.53,0,0,1-2,5.16Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#b7b6cc"
+                                      }
+                                    }),
+                                    _c("g", { attrs: { opacity: "0.5" } }, [
+                                      _c("rect", {
+                                        attrs: {
+                                          x: "531.63",
+                                          y: "367.62",
+                                          width: "262.83",
+                                          height: "80.36",
+                                          transform:
+                                            "translate(-82.87 691.12) rotate(-55.36)",
+                                          fill:
+                                            "url(#2353f27f-2b2f-460e-adf7-0d1e44be71db)"
+                                        }
+                                      })
+                                    ]),
+                                    _c("rect", {
+                                      attrs: {
+                                        x: "625.39",
+                                        y: "278.52",
+                                        width: "76.4",
+                                        height: "259.31",
+                                        transform:
+                                          "translate(316.07 -335.26) rotate(34.64)",
+                                        fill: "#f9fafb"
+                                      }
+                                    }),
+                                    _c("rect", {
+                                      attrs: {
+                                        x: "692.62",
+                                        y: "300.18",
+                                        width: "54.01",
+                                        height: "54.01",
+                                        transform:
+                                          "matrix(0.82, 0.57, -0.57, 0.82, 279.97, -381.46)",
+                                        fill: "#f7b643"
+                                      }
+                                    }),
+                                    _c("rect", {
+                                      attrs: {
+                                        x: "655.56",
+                                        y: "353.83",
+                                        width: "54.01",
+                                        height: "54.01",
+                                        transform:
+                                          "translate(303.89 -350.89) rotate(34.64)",
+                                        fill: "#f7b643",
+                                        opacity: "0.5"
+                                      }
+                                    }),
+                                    _c("rect", {
+                                      attrs: {
+                                        x: "618.49",
+                                        y: "407.48",
+                                        width: "54.01",
+                                        height: "54.01",
+                                        transform:
+                                          "translate(327.81 -320.31) rotate(34.64)",
+                                        fill: "#f7b643",
+                                        opacity: "0.3"
+                                      }
+                                    }),
+                                    _c("g", { attrs: { opacity: "0.5" } }, [
+                                      _c("rect", {
+                                        attrs: {
+                                          x: "485.89",
+                                          y: "360.77",
+                                          width: "261.85",
+                                          height: "80.36",
+                                          transform:
+                                            "translate(25.41 850.1) rotate(-73.71)",
+                                          fill:
+                                            "url(#4f6991c1-2d70-49f7-ad45-4cbe0a2e669a)"
+                                        }
+                                      })
+                                    ]),
+                                    _c("rect", {
+                                      attrs: {
+                                        x: "579.25",
+                                        y: "271.97",
+                                        width: "76.4",
+                                        height: "258.33",
+                                        transform:
+                                          "translate(103.77 -187.52) rotate(16.29)",
+                                        fill: "#f9fafb"
+                                      }
+                                    }),
+                                    _c("rect", {
+                                      attrs: {
+                                        x: "617.98",
+                                        y: "280.09",
+                                        width: "54.01",
+                                        height: "54.01",
+                                        transform:
+                                          "translate(78.5 -199.02) rotate(16.29)",
+                                        fill: "#f97878"
+                                      }
+                                    }),
+                                    _c("rect", {
+                                      attrs: {
+                                        x: "599.69",
+                                        y: "342.68",
+                                        width: "54.01",
+                                        height: "54.01",
+                                        transform:
+                                          "translate(95.32 -191.38) rotate(16.29)",
+                                        fill: "#f97878",
+                                        opacity: "0.5"
+                                      }
+                                    }),
+                                    _c("rect", {
+                                      attrs: {
+                                        x: "581.4",
+                                        y: "405.26",
+                                        width: "54.01",
+                                        height: "54.01",
+                                        transform:
+                                          "translate(112.14 -183.74) rotate(16.29)",
+                                        fill: "#f97878",
+                                        opacity: "0.3"
+                                      }
+                                    }),
+                                    _c("g", { attrs: { opacity: "0.5" } }, [
+                                      _c("rect", {
+                                        attrs: {
+                                          x: "461.24",
+                                          y: "361.9",
+                                          width: "261.85",
+                                          height: "80.36",
+                                          transform:
+                                            "translate(110.4 929.68) rotate(-85.4)",
+                                          fill:
+                                            "url(#0ab0c4d5-5a87-488b-b190-408bea02e292)"
+                                        }
+                                      })
+                                    ]),
+                                    _c("rect", {
+                                      attrs: {
+                                        x: "554.62",
+                                        y: "272.96",
+                                        width: "76.4",
+                                        height: "258.33",
+                                        transform:
+                                          "translate(0.59 -76.64) rotate(4.6)",
+                                        fill: "#f9fafb"
+                                      }
+                                    }),
+                                    _c("rect", {
+                                      attrs: {
+                                        x: "573.68",
+                                        y: "277.45",
+                                        width: "54.01",
+                                        height: "54.01",
+                                        transform:
+                                          "translate(-7.21 -77.58) rotate(4.6)",
+                                        fill: "#73b53b"
+                                      }
+                                    }),
+                                    _c("rect", {
+                                      attrs: {
+                                        x: "568.45",
+                                        y: "342.44",
+                                        width: "54.01",
+                                        height: "54.01",
+                                        transform:
+                                          "translate(-2.02 -76.96) rotate(4.6)",
+                                        fill: "#73b53b",
+                                        opacity: "0.5"
+                                      }
+                                    }),
+                                    _c("rect", {
+                                      attrs: {
+                                        x: "563.23",
+                                        y: "407.44",
+                                        width: "54.01",
+                                        height: "54.01",
+                                        transform:
+                                          "translate(3.17 -76.33) rotate(4.6)",
+                                        fill: "#73b53b",
+                                        opacity: "0.3"
+                                      }
+                                    }),
+                                    _c("g", { attrs: { opacity: "0.5" } }, [
+                                      _c("rect", {
+                                        attrs: {
+                                          x: "533.99",
+                                          y: "277.13",
+                                          width: "80.36",
+                                          height: "261.85",
+                                          transform:
+                                            "translate(-51.5 -3.89) rotate(-2.61)",
+                                          fill:
+                                            "url(#7820c60a-6dd2-4e9e-820c-a335a5d419d8)"
+                                        }
+                                      })
+                                    ]),
+                                    _c("rect", {
+                                      attrs: {
+                                        x: "536.63",
+                                        y: "278.86",
+                                        width: "76.4",
+                                        height: "258.33",
+                                        transform:
+                                          "translate(-51.5 -3.86) rotate(-2.61)",
+                                        fill: "#fff"
+                                      }
+                                    }),
+                                    _c("rect", {
+                                      attrs: {
+                                        x: "543.37",
+                                        y: "283.13",
+                                        width: "54.01",
+                                        height: "54.01",
+                                        transform:
+                                          "translate(-47.05 -4.17) rotate(-2.61)",
+                                        fill: "#3490dc"
+                                      }
+                                    }),
+                                    _c("rect", {
+                                      attrs: {
+                                        x: "546.33",
+                                        y: "348.27",
+                                        width: "54.01",
+                                        height: "54.01",
+                                        transform:
+                                          "matrix(1, -0.05, 0.05, 1, -50.01, -3.96)",
+                                        fill: "#3490dc",
+                                        opacity: "0.5"
+                                      }
+                                    }),
+                                    _c("rect", {
+                                      attrs: {
+                                        x: "549.3",
+                                        y: "413.4",
+                                        width: "54.01",
+                                        height: "54.01",
+                                        transform:
+                                          "translate(-52.97 -3.76) rotate(-2.61)",
+                                        fill: "#3490dc",
+                                        opacity: "0.3"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M563.22,621.14,495.34,647.4l-99.21,38.35c-3.75-7-9.27-16.46-16.1-27.75-23.5-38.94-62.38-99.51-97-152.74-39-60-72.57-110.63-72.57-110.63l24.3-7L433.26,330Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#e6ecf8"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M563.22,621.14,495.34,647.4A510.2,510.2,0,0,1,380,658c-23.5-38.94-62.38-99.51-97-152.74L234.77,387.59,433.26,330Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.1"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M613.72,604.8s-105.45,62.38-262.89,48.27l-125.51-306,60.15-10.34,207.94-35.71,118,297.83Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#3490dc"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M611.37,598.89c-24.83,1.22-53.56,1.1-82.46-2.35-31.28-3.68-62.74-11.26-89.71-25.16-22.55-11.61-41.83-24.24-58.64-39.39-43.73-39.33-70.79-95.59-95.09-195.22l207.94-35.71Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.1"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M688.73,581.78S611,597,531.88,587.63c-31.28-3.68-62.74-11.26-89.71-25.16-22.55-11.61-41.82-24.24-58.64-39.39-54.12-48.69-82.7-123.31-112.17-274,0,0,129.22,31.19,257-37.13C528.32,212,571.39,480.78,688.73,581.78Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#f9fafb"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M531.88,587.63c-31.28-3.68-62.74-11.26-89.71-25.16-22.55-11.61-41.82-24.24-58.64-39.39,46.08-3.74,52.7-28.93,52.7-28.93C470.39,548.36,531.88,587.63,531.88,587.63Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.1"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M338.2,304.4s105.08-5.94,134.42-28.59l4.45,14.3s-69.43,30.63-138.87,31Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#3490dc",
+                                        opacity: "0.3"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M338.2,375s101.74-5.57,178.61-42.7l2.6,5.94s-61,35.61-181.21,44.93Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#3490dc",
+                                        opacity: "0.3"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M346.39,402.51s101.74-5.57,178.6-42.7l2.6,5.94s-61,35.6-181.2,44.93Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#3490dc",
+                                        opacity: "0.3"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M354.57,430.06s101.74-5.57,178.61-42.7l2.59,5.94s-61,35.61-181.2,44.93Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#3490dc",
+                                        opacity: "0.3"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M362.76,457.61s101.74-5.57,178.6-42.7l2.6,5.94s-61,35.61-181.2,44.93Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#3490dc",
+                                        opacity: "0.3"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M370.94,485.17s101.74-5.57,178.61-42.7l2.59,5.94s-61,35.6-181.2,44.93Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#3490dc",
+                                        opacity: "0.3"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M1086.31,827.24s-42.28-2.55-37.3,27.08c0,0-1,5.23,3.76,7.61,0,0,.07-2.2,4.33-1.45a19.42,19.42,0,0,0,4.6.22,9.5,9.5,0,0,0,5.61-2.32h0s11.89-4.91,16.51-24.33c0,0,3.42-4.24,3.28-5.33l-7.13,3s2.44,5.15.52,9.42c0,0-.23-9.23-1.6-9-.28,0-3.71,1.78-3.71,1.78s4.19,9,1,15.48c0,0,1.2-11.05-2.34-14.83l-5,2.93s4.9,9.26,1.58,16.82c0,0,.85-11.59-2.64-16.11l-4.55,3.55s4.61,9.13,1.8,15.4c0,0-.37-13.5-2.79-14.52,0,0-4,3.51-4.58,5,0,0,3.15,6.62,1.19,10.12,0,0-1.2-9-2.18-9,0,0-4,6-4.38,10,0,0,.17-6.08,3.42-10.61a12,12,0,0,0-6.08,3.15s.62-4.22,7.06-4.58c0,0,3.28-4.52,4.15-4.8,0,0-6.4-.53-10.28,1.19,0,0,3.42-4,11.46-2.17l4.49-3.66s-8.43-1.16-12,.12c0,0,4.11-3.52,13.21-1l4.89-2.92s-7.18-1.55-11.46-1c0,0,4.51-2.44,12.9.2l3.49-1.57s-5.26-1-6.8-1.2-1.63-.58-1.63-.58a18.14,18.14,0,0,1,9.89,1.1S1086.43,827.71,1086.31,827.24Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#3490dc"
+                                      }
+                                    }),
+                                    _c("ellipse", {
+                                      attrs: {
+                                        cx: "1023.65",
+                                        cy: "834.08",
+                                        rx: "29.92",
+                                        ry: "5.06",
+                                        fill: "#3490dc",
+                                        opacity: "0.1"
+                                      }
+                                    }),
+                                    _c("ellipse", {
+                                      attrs: {
+                                        cx: "813.75",
+                                        cy: "815.19",
+                                        rx: "102",
+                                        ry: "9.24",
+                                        fill: "#3490dc",
+                                        opacity: "0.1"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M1106,729.43s-23.83-1.44-21,15.27a4.07,4.07,0,0,0,2.11,4.29s.05-1.24,2.45-.82a11.11,11.11,0,0,0,2.59.12,5.34,5.34,0,0,0,3.16-1.3h0s6.7-2.77,9.31-13.72c0,0,1.93-2.39,1.85-3l-4,1.71s1.37,2.91.29,5.32c0,0-.13-5.21-.9-5.09-.16,0-2.09,1-2.09,1s2.36,5,.58,8.73c0,0,.68-6.23-1.32-8.37l-2.83,1.66s2.76,5.22.89,9.48c0,0,.48-6.54-1.49-9.08l-2.56,2s2.59,5.15,1,8.68c0,0-.21-7.61-1.57-8.18a16,16,0,0,0-2.59,2.79s1.78,3.74.68,5.71c0,0-.68-5.07-1.23-5.09,0,0-2.24,3.35-2.47,5.65a12.24,12.24,0,0,1,1.93-6,6.7,6.7,0,0,0-3.43,1.78s.35-2.38,4-2.58c0,0,1.85-2.55,2.34-2.71,0,0-3.61-.3-5.8.67,0,0,1.93-2.24,6.46-1.22l2.54-2.07s-4.76-.65-6.77.07c0,0,2.32-2,7.45-.54l2.76-1.65a24.91,24.91,0,0,0-6.47-.55s2.55-1.38,7.27.11l2-.88s-3-.59-3.84-.68-.92-.33-.92-.33a10.32,10.32,0,0,1,5.58.62S1106.08,729.69,1106,729.43Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#3490dc"
+                                      }
+                                    }),
+                                    _c("ellipse", {
+                                      attrs: {
+                                        cx: "1056.06",
+                                        cy: "720.01",
+                                        rx: "16.87",
+                                        ry: "2.85",
+                                        fill: "#3490dc",
+                                        opacity: "0.1"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M965.32,743.93s-28.78-1.74-25.38,18.43a4.91,4.91,0,0,0,2.55,5.18s0-1.5,3-1a13.14,13.14,0,0,0,3.13.15,6.46,6.46,0,0,0,3.82-1.58h0s8.09-3.34,11.24-16.56c0,0,2.33-2.88,2.23-3.63L961,747s1.66,3.5.35,6.41c0,0-.16-6.28-1.09-6.14-.19,0-2.52,1.22-2.52,1.22s2.85,6.1.7,10.54c0,0,.82-7.52-1.59-10.1l-3.42,2s3.33,6.31,1.07,11.45c0,0,.58-7.89-1.79-11l-3.1,2.42s3.14,6.21,1.22,10.48c0,0-.24-9.19-1.89-9.88,0,0-2.71,2.39-3.12,3.37,0,0,2.14,4.51.81,6.89,0,0-.82-6.12-1.49-6.15,0,0-2.69,4.06-3,6.83a14.77,14.77,0,0,1,2.33-7.22,8.1,8.1,0,0,0-4.13,2.15s.42-2.87,4.8-3.12c0,0,2.23-3.08,2.83-3.26,0,0-4.36-.37-7,.8,0,0,2.32-2.7,7.79-1.47l3.06-2.5s-5.73-.78-8.17.08c0,0,2.8-2.39,9-.64l3.33-2s-4.89-1.05-7.81-.67c0,0,3.08-1.66,8.78.14l2.38-1.07s-3.58-.7-4.63-.81-1.1-.4-1.1-.4a12.36,12.36,0,0,1,6.73.74S965.41,744.24,965.32,743.93Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#3490dc"
+                                      }
+                                    }),
+                                    _c("ellipse", {
+                                      attrs: {
+                                        cx: "911.96",
+                                        cy: "738.87",
+                                        rx: "20.37",
+                                        ry: "3.44",
+                                        fill: "#3490dc",
+                                        opacity: "0.1"
+                                      }
+                                    }),
+                                    _c("ellipse", {
+                                      attrs: {
+                                        cx: "54.65",
+                                        cy: "819",
+                                        rx: "29.92",
+                                        ry: "5.06",
+                                        fill: "#3490dc",
+                                        opacity: "0.1"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M68.1,825.92s17.06-.52,22.21-4.18,26.25-8,27.53-2.17,25.65,29.22,6.38,29.38-44.77-3-49.91-6.13S68.1,825.92,68.1,825.92Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#a8a8a8"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M124.56,846.9c-19.27.16-44.77-3-49.91-6.13-3.9-2.38-5.46-10.93-6-14.87l-.57,0s1.08,13.77,6.21,16.9S105,849.1,124.22,849c5.56-.05,7.48-2,7.38-5C130.82,845.76,128.7,846.87,124.56,846.9Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.2"
+                                      }
+                                    }),
+                                    _c("rect", {
+                                      attrs: {
+                                        x: "909.52",
+                                        y: "6.09",
+                                        width: "170.67",
+                                        height: "305.42",
+                                        transform:
+                                          "translate(502.71 1025.38) rotate(-71.99)",
+                                        fill:
+                                          "url(#2438f751-850d-4f24-a458-729e3ad7bb58)"
+                                      }
+                                    }),
+                                    _c("rect", {
+                                      attrs: {
+                                        x: "910.69",
+                                        y: "8.2",
+                                        width: "168.32",
+                                        height: "301.2",
+                                        transform:
+                                          "translate(502.71 1025.38) rotate(-71.99)",
+                                        fill: "#f6f7f9"
+                                      }
+                                    }),
+                                    _c("g", { attrs: { opacity: "0.2" } }, [
+                                      _c("circle", {
+                                        attrs: {
+                                          cx: "874.94",
+                                          cy: "90.37",
+                                          r: "31.36",
+                                          fill: "#3490dc"
+                                        }
+                                      })
+                                    ]),
+                                    _c("g", { attrs: { opacity: "0.2" } }, [
+                                      _c("rect", {
+                                        attrs: {
+                                          x: "1045.5",
+                                          y: "63.87",
+                                          width: "8.59",
+                                          height: "136.63",
+                                          transform:
+                                            "translate(565.98 1059.25) rotate(-71.99)",
+                                          fill: "#3490dc"
+                                        }
+                                      })
+                                    ]),
+                                    _c("g", { attrs: { opacity: "0.2" } }, [
+                                      _c("rect", {
+                                        attrs: {
+                                          x: "1006.86",
+                                          y: "107.86",
+                                          width: "8.59",
+                                          height: "69.6",
+                                          transform:
+                                            "translate(529.32 1029.73) rotate(-71.99)",
+                                          fill: "#3490dc"
+                                        }
+                                      })
+                                    ]),
+                                    _c("g", { attrs: { opacity: "0.2" } }, [
+                                      _c("rect", {
+                                        attrs: {
+                                          x: "1020.51",
+                                          y: "113.85",
+                                          width: "8.59",
+                                          height: "112.57",
+                                          transform:
+                                            "translate(512.62 1061.7) rotate(-71.99)",
+                                          fill: "#3490dc"
+                                        }
+                                      })
+                                    ]),
+                                    _c("g", { attrs: { opacity: "0.2" } }, [
+                                      _c("rect", {
+                                        attrs: {
+                                          x: "1025.18",
+                                          y: "126.38",
+                                          width: "8.59",
+                                          height: "136.63",
+                                          transform:
+                                            "translate(492.49 1083.1) rotate(-71.99)",
+                                          fill: "#3490dc"
+                                        }
+                                      })
+                                    ]),
+                                    _c("g", { attrs: { opacity: "0.5" } }, [
+                                      _c("rect", {
+                                        attrs: {
+                                          x: "1057.14",
+                                          y: "224.95",
+                                          width: "16.61",
+                                          height: "37.81",
+                                          transform:
+                                            "translate(470.59 1151.28) rotate(-71.99)",
+                                          fill: "#3490dc"
+                                        }
+                                      })
+                                    ]),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M968.51,513.39a9.14,9.14,0,0,0-.1-1c0-.35-.11-.7-.17-1-.13-.68-.27-1.35-.43-2-.08-.31-.16-.63-.25-.93a25.36,25.36,0,0,0-5-9.67c-.13-.16-.27-.31-.4-.46s-.54-.58-.81-.85-.52-.51-.78-.74-.5-.44-.74-.64c-.48-.39-.93-.72-1.32-1s-.57-.38-.81-.52a4.44,4.44,0,0,0-1.88-.61l-4.15-.41h0L946,493l-20.27-7.87-.8.28a46,46,0,0,1-1.5-5,4.48,4.48,0,0,0,1.6-1.17,3.65,3.65,0,0,0,1.1-1.41c.51-1.18-.47-3.69-.27-5.13.32-2.31,1.52-4.54,2.5-6.63,2.08-4.49,3.6-9.36,3.35-14.29s-2.5-9.93-6.66-12.68c-2.15-1.43-4.68-2.19-6.92-3.49-1.74-1-3.27-2.34-4.93-3.48a28.34,28.34,0,0,0-27.92-2c-4.21,2.07-7.8,5.17-11.77,7.66s-8.65,4.4-13.3,3.66a3.25,3.25,0,0,0-.14.58l-.39-.05c-.8,2.18,1.16,4.34,3,5.83,3.43,2.83,7.32,5.65,11.79,5.75,1.73,0,3.56-.33,5.13.38a4.7,4.7,0,0,1,1,.6,22.28,22.28,0,0,0,7,22.21l-10.35-3.72s-.43.22-1.1.64l-14.36-9.56S833,453.67,825,469.93s34.67,7.87,34.67,7.87l9.13,5a8.31,8.31,0,0,0,1,5.48l24.89,15.38c-5,1.55-13.29,4-14.76,4-2.13,0-8,2.1-11.73,10.49s-17.07,49.32-28.8,56.14-42.66,52.47-42.66,52.47l.14.36c-.55.15-1.09.3-1.62.48a32.78,32.78,0,0,0-16.07,12.12,5.14,5.14,0,0,0,3.6,8.11c12.21,1.55,18.88-4.08,22.09-8.33.21-.27.4-.54.58-.81a4.27,4.27,0,0,0,3,.14l14.93-12.07s-11.68,11.5-4.83,22l-.52.73a166.91,166.91,0,0,0-25,54.42s-6.4,4.72-6.93,23.61-6.94,49.32-6.94,49.32-4.26,36.21-1.6,47.22c0,0,.31.44.88,1.11-.2.24-.42.5-.66.76-2.33,2.52-6.53,6-11.42,5-7.46-1.58-7.46,11.54,3.2,12.59,6.87.67,20.37,3.74,29.12,5.84a6.13,6.13,0,0,0,7.6-6.54c-.52-4.7-1.47-10.39-3.2-14.44-.11-.25-.22-.5-.33-.73.31-.3.63-.6.94-.92,0,0,0-23.09,3.74-29.38,0,0,10.13-47.75,9.59-59.82-.41-9.44,26.29-46.21,37.91-61.74l-.1-.59c3-4,4.86-6.4,4.86-6.4L868.69,726s4.27,12.59,9.6,19.41c0,0,22.93,43.55,25.6,57.19,2,10.35,6.18,16.46,8.08,18.82l-.69.66c-2.43,2.23-6,4.46-10.06,3.61-7.46-1.58-7.46,11.54,3.2,12.59,6.87.68,20.37,3.75,29.11,5.85a6.14,6.14,0,0,0,7.61-6.55c-.61-5.46-1.8-12.25-4.1-16.26a11.25,11.25,0,0,0-.61-1,5.62,5.62,0,0,0,2.12-1.49s-13.87-33.06-13.87-42c0,0-5.86-34.1-25.59-46.69,0,0,1.86-42.66,7.48-66.4.14-.58.28-1.16.42-1.72a158.22,158.22,0,0,0,15.56-3.24l.53-15.74,2.67,12.59,29.86-18.36s-.26-3.31-.76-8.38c-.26-2.54-.57-5.52-.94-8.75-.3-2.58-.64-5.32-1-8.12-.1-.7-.19-1.41-.29-2.11-.39-2.83-.82-5.69-1.28-8.49q-.27-1.58-.54-3.12c-.25-1.37-.5-2.71-.76-4-.13-.65-.27-1.3-.4-1.93s-.28-1.26-.42-1.87-.28-1.2-.42-1.79c-.08-.29-.15-.58-.22-.86-.15-.57-.3-1.13-.45-1.67a30,30,0,0,1-1.08-6.88c0-.92,0-1.85,0-2.77s.14-1.84.27-2.76c.06-.45.14-.91.23-1.36a30.53,30.53,0,0,1,1.51-5.36c.33-.87.71-1.73,1.12-2.58,1-2,2-4.13,3.06-6.4.54-1.13,1.08-2.29,1.62-3.47s1.09-2.38,1.64-3.6c5.19-11.57,10.31-24.46,11.68-32.93.14-.89.25-1.73.3-2.52A16.08,16.08,0,0,0,968.51,513.39Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill:
+                                          "url(#68c414b5-14a5-48aa-8252-53bc3664f500)"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M879.44,482l-17.59-11.89s-27.93-10.35-35.69,5.69,33.62,7.76,33.62,7.76l17.59,9.82Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#ae6e79"
+                                      }
+                                    }),
+                                    _c("rect", {
+                                      attrs: {
+                                        x: "759.18",
+                                        y: "443.97",
+                                        width: "168.48",
+                                        height: "262.28",
+                                        transform:
+                                          "matrix(0.54, -0.84, 0.84, 0.54, -127.83, 948.19)",
+                                        fill: "#f9fafb"
+                                      }
+                                    }),
+                                    _c("rect", {
+                                      attrs: {
+                                        x: "714.92",
+                                        y: "548.06",
+                                        width: "47.6",
+                                        height: "11.2",
+                                        transform:
+                                          "translate(-158.27 849.87) rotate(-57.57)",
+                                        fill: "#b7b6cc"
+                                      }
+                                    }),
+                                    _c("rect", {
+                                      attrs: {
+                                        x: "731.54",
+                                        y: "532.39",
+                                        width: "104.54",
+                                        height: "10.27",
+                                        transform:
+                                          "translate(-123.74 880.44) rotate(-57.57)",
+                                        fill: "#b7b6cc"
+                                      }
+                                    }),
+                                    _c("rect", {
+                                      attrs: {
+                                        x: "750.06",
+                                        y: "544.15",
+                                        width: "104.54",
+                                        height: "10.27",
+                                        transform:
+                                          "translate(-125.08 901.52) rotate(-57.57)",
+                                        fill: "#b7b6cc"
+                                      }
+                                    }),
+                                    _c("rect", {
+                                      attrs: {
+                                        x: "768.57",
+                                        y: "555.91",
+                                        width: "104.54",
+                                        height: "10.27",
+                                        transform:
+                                          "translate(-126.42 922.61) rotate(-57.57)",
+                                        fill: "#b7b6cc"
+                                      }
+                                    }),
+                                    _c("rect", {
+                                      attrs: {
+                                        x: "787.09",
+                                        y: "567.67",
+                                        width: "104.54",
+                                        height: "10.27",
+                                        transform:
+                                          "matrix(0.54, -0.84, 0.84, 0.54, -127.76, 943.69)",
+                                        fill: "#b7b6cc"
+                                      }
+                                    }),
+                                    _c("rect", {
+                                      attrs: {
+                                        x: "805.6",
+                                        y: "579.44",
+                                        width: "104.54",
+                                        height: "10.27",
+                                        transform:
+                                          "translate(-129.11 964.77) rotate(-57.57)",
+                                        fill: "#fff"
+                                      }
+                                    }),
+                                    _c("rect", {
+                                      attrs: {
+                                        x: "824.12",
+                                        y: "591.2",
+                                        width: "104.54",
+                                        height: "10.27",
+                                        transform:
+                                          "translate(-130.45 985.85) rotate(-57.57)",
+                                        fill: "#fff"
+                                      }
+                                    }),
+                                    _c("rect", {
+                                      attrs: {
+                                        x: "926.91",
+                                        y: "569.86",
+                                        width: "27.07",
+                                        height: "27.07",
+                                        transform:
+                                          "translate(-89.82 1033.93) rotate(-57.57)",
+                                        fill: "#b7b6cc"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M931.47,844.64c-8.49-2.07-21.58-5.09-28.24-5.76-10.35-1-10.35-14-3.1-12.42,3.92.85,7.4-1.36,9.75-3.55a22.84,22.84,0,0,0,2-2.19,6,6,0,0,1,3.35-2.05c3.88-.84,12-2.12,16.91.55a7.31,7.31,0,0,1,2.68,2.94c2.23,4,3.39,10.65,4,16A6,6,0,0,1,931.47,844.64Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#bebed0"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M800.6,849.81c-8.48-2.07-21.57-5.09-28.23-5.76-10.35-1-10.35-14-3.11-12.41,4.74,1,8.82-2.41,11.07-4.89.28-.3.53-.59.74-.86a6,6,0,0,1,3.34-2c3.88-.85,12-2.13,16.92.55,1.46.78,2.62,2.5,3.55,4.73,1.67,4,2.59,9.6,3.1,14.23A6,6,0,0,1,800.6,849.81Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#bebed0"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M804.88,829.13c-12.35,12.73-22.94-.24-24.55-2.38.28-.3.53-.59.74-.86a6,6,0,0,1,3.34-2c3.88-.85,12-2.13,16.92.55C802.79,825.18,804,826.9,804.88,829.13Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.1"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M934.87,822.16c-5.35,3.65-23.36,2.75-23.36,2.75a16.9,16.9,0,0,1-1.63-2,22.84,22.84,0,0,0,2-2.19,6,6,0,0,1,3.35-2.05c3.88-.84,12-2.12,16.91.55A7.31,7.31,0,0,1,934.87,822.16Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.1"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M935.82,819.74c-3.63,4.66-24.31,3.62-24.31,3.62s-6.21-6.21-8.8-19.65-24.83-56.38-24.83-56.38c-5.17-6.73-9.31-19.14-9.31-19.14l-8.79-56.38s-42.41,55.86-41.89,67.76-9.32,59-9.32,59c-3.62,6.21-3.62,29-3.62,29-13.44,14-24.82-2.59-24.82-2.59-2.59-10.86,1.55-46.55,1.55-46.55s6.21-30,6.72-48.62,6.73-23.27,6.73-23.27a165.87,165.87,0,0,1,24.29-53.66c3.12-4.47,5.19-6.86,5.19-6.86l83.79,9.83a52.76,52.76,0,0,0-3.6,11.1c-5.45,23.4-7.26,65.45-7.26,65.45,19.14,12.41,24.83,46,24.83,46C922.37,787.15,935.82,819.74,935.82,819.74Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#5c5c8e"
+                                      }
+                                    }),
+                                    _c("g", { attrs: { opacity: "0.05" } }, [
+                                      _c("path", {
+                                        attrs: {
+                                          d:
+                                            "M855.17,678.7l-1.08-6.89s-42.41,55.86-41.89,67.76-9.31,59-9.31,59c-3.63,6.21-3.63,29-3.63,29a17.68,17.68,0,0,1-8.09,5.19c4.07,1.07,9,.28,14.3-5.19,0,0,0-22.76,3.62-29,0,0,9.83-47.07,9.31-59C818,730.26,843.89,694,855.17,678.7Z",
+                                          transform: "translate(-33.54 -30.43)"
+                                        }
+                                      }),
+                                      _c("path", {
+                                        attrs: {
+                                          d:
+                                            "M922.88,778.36s-5.69-33.62-24.82-46c0,0,1.81-42.05,7.25-65.45a52.71,52.71,0,0,1,3.61-11.1L825.13,646s-.2.22-.56.66l78.14,9.17a52.76,52.76,0,0,0-3.6,11.1c-5.45,23.4-7.26,65.45-7.26,65.45,19.14,12.41,24.83,46,24.83,46,0,8.79,13.45,41.38,13.45,41.38-2.14,2.74-10.2,3.51-16.47,3.68,5,.13,19.67.18,22.67-3.68C936.33,819.74,922.88,787.15,922.88,778.36Z",
+                                          transform: "translate(-33.54 -30.43)"
+                                        }
+                                      })
+                                    ]),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M809.09,638.71a18.9,18.9,0,0,1-2.45,4.28c-3.11,4.19-9.58,9.73-21.42,8.21a5.09,5.09,0,0,1-3.5-8,31.87,31.87,0,0,1,15.59-12,28.46,28.46,0,0,1,6.61-1.34Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#ae6e79"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M918.33,494.05l-41.48-15.17s-11.9,6.21-7.24,15L910,519.23Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#42383c"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M918.49,494.22,877,479.05s-11.9,6.2-7.24,15l40.34,25.34Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.1"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M919.78,469.05s-.52,24.31,10.35,32.59-31.56,12.93-31.56,12.93,6.73-24.83,0-37.76S919.78,469.05,919.78,469.05Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#ae6e79"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M908.4,655.78a52.76,52.76,0,0,0-3.6,11.1c-50,7.64-84.85-13.17-84.85-13.17-.19-.3-.37-.6-.53-.9,3.12-4.47,5.19-6.86,5.19-6.86Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.1"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M809.09,638.71a18.9,18.9,0,0,1-2.45,4.28c-4.79-.8-8.62-10-9.33-11.74a28.46,28.46,0,0,1,6.61-1.34Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.1"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M923.92,490.78,905.3,497.5l-7.76,10.35s-16,5.17-18.1,5.17-7.76,2.07-11.38,10.34S851.51,572,840.13,578.71s-41.38,51.72-41.38,51.72,5.17,14,11.38,11.9l14.48-11.9s-11.38,11.38-4.66,21.73c0,0,42.42,25.34,100.87,9.82l.51-15.51,2.59,12.41,29-18.1s-2.59-33.39-7.26-50.38a30.72,30.72,0,0,1,2-21.41c7.51-15.65,19.1-41.79,17.69-51.32-1.67-11.23-8-16.11-10.44-17.58a4.32,4.32,0,0,0-1.82-.61l-9.47-.94Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#42383c"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M892.11,542.76s-10.35,48.1-21.73,55.86-41.89,32.59-42.93,36.73",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.05"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M887.45,541.21s-10.34,48.1-21.72,55.86-41.9,32.59-42.93,36.72",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#42383c"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d: "M897.28,507.59s35.69-11.9,46-8.8",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.1"
+                                      }
+                                    }),
+                                    _c("g", { attrs: { opacity: "0.05" } }, [
+                                      _c("path", {
+                                        attrs: {
+                                          d:
+                                            "M947.61,569c7.51-15.65,19.1-41.79,17.69-51.32-1.67-11.23-8-16.11-10.44-17.58a4.32,4.32,0,0,0-1.82-.61l-4-.4a4,4,0,0,1,1.2.49c2.42,1.48,8.77,6.35,10.43,17.59,1.41,9.52-10.18,35.67-17.68,51.32a30.7,30.7,0,0,0-2,21.4c4.68,17,7.27,50.38,7.27,50.38l-24.94,15.59.63,3,29-18.1s-2.59-33.39-7.26-50.38A30.72,30.72,0,0,1,947.61,569Z",
+                                          transform: "translate(-33.54 -30.43)"
+                                        }
+                                      }),
+                                      _c("polygon", {
+                                        attrs: {
+                                          points:
+                                            "905.38 467.59 909.86 468.04 890.38 460.35 888.63 460.98 905.38 467.59"
+                                        }
+                                      })
+                                    ]),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M887.45,591.38s16-8.79,21.21-6.72,24.31-.52,24.31-.52",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.05"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M918,475.52c-.59-5.19,1.81-4.4,1.81-4.4s-27.93-5.17-21.21,7.76a29.62,29.62,0,0,1,2.84,11.37h.27C909.47,490.26,914,481.58,918,475.52Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.05"
+                                      }
+                                    }),
+                                    _c("circle", {
+                                      attrs: {
+                                        cx: "868.14",
+                                        cy: "435.52",
+                                        r: "22.24",
+                                        fill: "#ae6e79"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M926,472.53c2-4.43,3.49-9.23,3.25-14.09s-2.42-9.79-6.46-12.51c-2.08-1.4-4.54-2.15-6.71-3.43-1.69-1-3.18-2.31-4.79-3.43a27.11,27.11,0,0,0-27.08-2c-4.08,2-7.56,5.11-11.41,7.56s-8.39,4.33-12.9,3.61c-.78,2.15,1.13,4.27,2.88,5.75,3.33,2.79,7.1,5.57,11.44,5.66,1.68,0,3.45-.32,5,.38a7.17,7.17,0,0,1,2.54,2.36,46.58,46.58,0,0,1,5.28,8.95,7.42,7.42,0,0,0,2.36,3.48c2,1.28,4.59.21,7,.12,3.68-.15,7,2.17,9.72,4.65s5.32,5.32,8.76,6.63c2.57,1,7.71.94,9-2.13.49-1.16-.46-3.64-.26-5.06A24.48,24.48,0,0,1,926,472.53Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.1"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M926.46,472c2-4.43,3.5-9.23,3.25-14.08s-2.41-9.8-6.45-12.51c-2.09-1.41-4.55-2.16-6.71-3.44-1.69-1-3.18-2.3-4.79-3.43a27.11,27.11,0,0,0-27.08-2c-4.08,2-7.56,5.1-11.41,7.55s-8.39,4.34-12.9,3.61c-.78,2.16,1.12,4.28,2.88,5.75,3.33,2.79,7.1,5.57,11.44,5.67,1.68,0,3.45-.33,5,.38a7,7,0,0,1,2.54,2.36,46,46,0,0,1,5.27,8.94,7.44,7.44,0,0,0,2.37,3.48c2,1.28,4.59.21,7,.12,3.68-.14,7,2.18,9.71,4.66s5.32,5.31,8.77,6.62c2.57,1,7.71.94,9-2.13.5-1.16-.45-3.64-.25-5.06A24.46,24.46,0,0,1,926.46,472Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#42383c"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M765.46,800.43a10.31,10.31,0,0,1-6.62,2.34l-446.77-1.9A13.75,13.75,0,0,1,309,790.4l44.14-361.17,27.68-.3a10.46,10.46,0,0,1,10.2,7.72l5.17,19.08a10.46,10.46,0,0,0,10.34,7.72L517,460.8a10.46,10.46,0,0,0,10.21-10.46V437.7a10.46,10.46,0,0,1,10.34-10.46l153.08-1.65A10.46,10.46,0,0,1,701,434.08l67.7,354,.44,2.28A10.4,10.4,0,0,1,765.46,800.43Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.1"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M685.63,430.6l-153.08,1.65A10.46,10.46,0,0,0,522.2,442.7v12.65A10.46,10.46,0,0,1,512,465.8l-110.46,2.65a10.45,10.45,0,0,1-10.35-7.72L386,441.66a10.45,10.45,0,0,0-10.21-7.72l-147.55,1.59a10.45,10.45,0,0,0-10.2,12.2l59.36,349.36a10.46,10.46,0,0,0,10.27,8.71l466.14,2a10.46,10.46,0,0,0,10.31-12.42L696,439.09A10.45,10.45,0,0,0,685.63,430.6Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#e6e8ee"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M901.22,191.36l-.8,8.9L901,216l-1.69,26.55s-.24,11.63-6.81,17.08l-16.77,25.75-.1.05-6.31,3.08-9.63,1-5-12.11L858,264.1l1.84-2.48.51-.56c2-2.2,9.72-10.19,15.85-12.68,0,0,4.09-3,3.37-7.7S885.09,211,885.09,211s4-16.52,3.13-18.13-.16-38.18,13.64-38.74S901.22,191.36,901.22,191.36Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#f6bac2"
+                                      }
+                                    }),
+                                    _c("ellipse", {
+                                      attrs: {
+                                        cx: "151.43",
+                                        cy: "700.88",
+                                        rx: "16.21",
+                                        ry: "2.23",
+                                        fill: "#3490dc",
+                                        opacity: "0.1"
+                                      }
+                                    }),
+                                    _c("ellipse", {
+                                      attrs: {
+                                        cx: "89.34",
+                                        cy: "707.17",
+                                        rx: "16.21",
+                                        ry: "2.23",
+                                        fill: "#3490dc",
+                                        opacity: "0.1"
+                                      }
+                                    }),
+                                    _c("ellipse", {
+                                      attrs: {
+                                        cx: "16.21",
+                                        cy: "698.65",
+                                        rx: "16.21",
+                                        ry: "2.23",
+                                        fill: "#3490dc",
+                                        opacity: "0.1"
+                                      }
+                                    }),
+                                    _c("ellipse", {
+                                      attrs: {
+                                        cx: "114.19",
+                                        cy: "725.1",
+                                        rx: "11.52",
+                                        ry: "1.58",
+                                        fill: "#3490dc",
+                                        opacity: "0.1"
+                                      }
+                                    }),
+                                    _c("ellipse", {
+                                      attrs: {
+                                        cx: "49.75",
+                                        cy: "723.52",
+                                        rx: "11.52",
+                                        ry: "1.58",
+                                        fill: "#3490dc",
+                                        opacity: "0.1"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M122.53,737.11s22.73-74.52-3.56-104.37c-19.67-22.33-42-19.66-52-16.9a18.49,18.49,0,0,0-11.92,9.91c-3.5,7.54-2.87,19.78,21.81,34.07,41.31,23.92,43.88,56.73,43.88,56.73Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#3490dc"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d: "M70.54,626.41s67,21,52,110.7",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "none",
+                                        stroke: "#565987",
+                                        "stroke-miterlimit": "10"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M109.68,633.92s-9.23,6.22-6.29,15.57",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "none",
+                                        stroke: "#565987",
+                                        "stroke-miterlimit": "10"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d: "M77.26,639.46s5.64-5.74,12.51-2.57",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "none",
+                                        stroke: "#565987",
+                                        "stroke-miterlimit": "10"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d: "M103.75,668.32s9.91-5,12.47,1.27",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "none",
+                                        stroke: "#565987",
+                                        "stroke-miterlimit": "10"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d: "M128.26,678.79s-7.44-.59-7.57,3",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "none",
+                                        stroke: "#565987",
+                                        "stroke-miterlimit": "10"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M123.45,737.7s-26.63-54.16-33.94-53c-3.47.57-5.07,4-5.8,7.42a21.79,21.79,0,0,0,1.45,13.18C88.94,714,99.09,730.45,123.45,737.7Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#3490dc"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d: "M89.71,695s27.94,40.52,33.34,42.3",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "none",
+                                        stroke: "#565987",
+                                        "stroke-miterlimit": "10"
+                                      }
+                                    }),
+                                    _c("line", {
+                                      attrs: {
+                                        x1: "53.6",
+                                        y1: "670.9",
+                                        x2: "60.12",
+                                        y2: "670.9",
+                                        fill: "none",
+                                        stroke: "#565987",
+                                        "stroke-miterlimit": "10"
+                                      }
+                                    }),
+                                    _c("line", {
+                                      attrs: {
+                                        x1: "61.41",
+                                        y1: "685.72",
+                                        x2: "71.64",
+                                        y2: "686.16",
+                                        fill: "none",
+                                        stroke: "#565987",
+                                        "stroke-miterlimit": "10"
+                                      }
+                                    }),
+                                    _c("line", {
+                                      attrs: {
+                                        x1: "67.64",
+                                        y1: "673.86",
+                                        x2: "66.53",
+                                        y2: "679.19",
+                                        fill: "none",
+                                        stroke: "#565987",
+                                        "stroke-miterlimit": "10"
+                                      }
+                                    }),
+                                    _c("line", {
+                                      attrs: {
+                                        x1: "78.51",
+                                        y1: "690.07",
+                                        x2: "78.31",
+                                        y2: "694.91",
+                                        fill: "none",
+                                        stroke: "#565987",
+                                        "stroke-miterlimit": "10"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M122.66,737.7s26.62-54.16,33.93-53c3.48.57,5.08,4,5.8,7.42a21.79,21.79,0,0,1-1.45,13.18C157.16,714,147,730.45,122.66,737.7Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#3490dc"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d: "M156.4,695s-28,40.52-33.35,42.3",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "none",
+                                        stroke: "#565987",
+                                        "stroke-miterlimit": "10"
+                                      }
+                                    }),
+                                    _c("line", {
+                                      attrs: {
+                                        x1: "125.43",
+                                        y1: "670.9",
+                                        x2: "118.91",
+                                        y2: "670.9",
+                                        fill: "none",
+                                        stroke: "#565987",
+                                        "stroke-miterlimit": "10"
+                                      }
+                                    }),
+                                    _c("line", {
+                                      attrs: {
+                                        x1: "117.62",
+                                        y1: "685.72",
+                                        x2: "107.39",
+                                        y2: "686.16",
+                                        fill: "none",
+                                        stroke: "#565987",
+                                        "stroke-miterlimit": "10"
+                                      }
+                                    }),
+                                    _c("line", {
+                                      attrs: {
+                                        x1: "111.39",
+                                        y1: "673.86",
+                                        x2: "112.5",
+                                        y2: "679.19",
+                                        fill: "none",
+                                        stroke: "#565987",
+                                        "stroke-miterlimit": "10"
+                                      }
+                                    }),
+                                    _c("line", {
+                                      attrs: {
+                                        x1: "100.52",
+                                        y1: "690.07",
+                                        x2: "100.72",
+                                        y2: "694.91",
+                                        fill: "none",
+                                        stroke: "#565987",
+                                        "stroke-miterlimit": "10"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M76.94,750.35a4.6,4.6,0,0,1-1.51-2.29,2,2,0,0,1,1.06-2.33c1-.37,2,.3,2.8,1S81,748.17,82,748a4.14,4.14,0,0,1-1.28-3.88,1.58,1.58,0,0,1,.35-.79c.54-.58,1.52-.33,2.17.13,2,1.44,2.63,4.23,2.64,6.75a12.9,12.9,0,0,0,0-2.78A2.85,2.85,0,0,1,87,745a3.12,3.12,0,0,1,1.59-.38,3.3,3.3,0,0,1,2.59.74,2.57,2.57,0,0,1-.1,3.17,10.2,10.2,0,0,1-2.68,2.14,6,6,0,0,0-1.91,1.83,1.34,1.34,0,0,0-.14.32H80.53A16.14,16.14,0,0,1,76.94,750.35Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#3490dc"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M178.39,728.53a4.53,4.53,0,0,1-1.51-2.28,2,2,0,0,1,1.05-2.33c1-.37,2,.3,2.8,1s1.7,1.46,2.73,1.31a4.14,4.14,0,0,1-1.29-3.87,1.59,1.59,0,0,1,.36-.79c.54-.58,1.52-.33,2.17.12,2.05,1.45,2.63,4.24,2.64,6.76a13,13,0,0,0,0-2.79,2.86,2.86,0,0,1,1-2.46,3.19,3.19,0,0,1,1.59-.37,3.34,3.34,0,0,1,2.59.73,2.57,2.57,0,0,1-.11,3.18,10,10,0,0,1-2.67,2.14,5.94,5.94,0,0,0-1.91,1.82,1.64,1.64,0,0,0-.14.33H182A16,16,0,0,1,178.39,728.53Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#3490dc"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M144.58,750.35a4.69,4.69,0,0,1-1.52-2.29,2,2,0,0,1,1.06-2.33c1-.37,2,.3,2.8,1s1.69,1.46,2.73,1.32a4.17,4.17,0,0,1-1.29-3.88,1.59,1.59,0,0,1,.36-.79c.54-.58,1.52-.33,2.17.13,2.05,1.44,2.62,4.23,2.64,6.75a12.91,12.91,0,0,0,0-2.78,2.86,2.86,0,0,1,1.05-2.46,3.09,3.09,0,0,1,1.59-.38,3.31,3.31,0,0,1,2.59.74,2.56,2.56,0,0,1-.11,3.17,10.15,10.15,0,0,1-2.67,2.14,6,6,0,0,0-1.91,1.83,1.34,1.34,0,0,0-.14.32h-5.8A16.31,16.31,0,0,1,144.58,750.35Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#3490dc"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M48.69,706.25s-2.17,2.84,1,7.13,5.79,7.91,4.73,10.58c0,0-4.79-8-8.69-8.07S44.4,711,48.69,706.25Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#3490dc"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M48.69,706.25a3.58,3.58,0,0,0-.44.89c-3.8,4.47-5.83,8.64-2.17,8.75,3.4.1,7.49,6.18,8.46,7.72a3.58,3.58,0,0,1-.11.35s-4.79-8-8.69-8.07S44.4,711,48.69,706.25Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.1"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M44.66,709.87c0,1,.11,1.81.25,1.81s.25-.81.25-1.81-.14-.53-.28-.53S44.66,708.87,44.66,709.87Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#ffd037"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M43.27,711.07c.88.48,1.64.76,1.71.64s-.59-.6-1.47-1.08-.53-.13-.6,0S42.39,710.59,43.27,711.07Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#ffd037"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M60.16,706.25s2.18,2.84-1,7.13-5.79,7.91-4.73,10.58c0,0,4.79-8,8.69-8.07S64.45,711,60.16,706.25Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#3490dc"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M60.16,706.25a3.79,3.79,0,0,1,.45.89c3.8,4.47,5.83,8.64,2.17,8.75-3.4.1-7.49,6.18-8.47,7.72a2.06,2.06,0,0,0,.12.35s4.79-8,8.69-8.07S64.45,711,60.16,706.25Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.1"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M64.2,709.87c0,1-.11,1.81-.25,1.81s-.25-.81-.25-1.81.14-.53.28-.53S64.2,708.87,64.2,709.87Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#ffd037"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M65.59,711.07c-.88.48-1.65.76-1.71.64s.59-.6,1.47-1.08.53-.13.59,0S66.46,710.59,65.59,711.07Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#ffd037"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M63.51,723.59s-6.07-.19-7.9-1.49-9.34-2.86-9.8-.77-9.12,10.4-2.27,10.45,15.93-1.07,17.76-2.18S63.51,723.59,63.51,723.59Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#a8a8a8"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M43.42,731.05c6.86.06,15.93-1.06,17.76-2.18,1.39-.84,1.94-3.88,2.13-5.29h.2s-.38,4.9-2.21,6-10.9,2.24-17.76,2.18c-2,0-2.66-.72-2.62-1.76C41.19,730.65,42,731,43.42,731.05Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        opacity: "0.2"
+                                      }
+                                    }),
+                                    _c("circle", {
+                                      attrs: {
+                                        cx: "33.94",
+                                        cy: "126.71",
+                                        r: "21.63",
+                                        fill: "#3490dc",
+                                        opacity: "0.1"
+                                      }
+                                    }),
+                                    _c("circle", {
+                                      attrs: {
+                                        cx: "1074.03",
+                                        cy: "299.56",
+                                        r: "21.63",
+                                        fill: "#3490dc",
+                                        opacity: "0.1"
+                                      }
+                                    }),
+                                    _c("circle", {
+                                      attrs: {
+                                        cx: "685.21",
+                                        cy: "58.02",
+                                        r: "21.63",
+                                        fill: "#3490dc",
+                                        opacity: "0.1"
+                                      }
+                                    }),
+                                    _c("circle", {
+                                      attrs: {
+                                        cx: "77.2",
+                                        cy: "246.04",
+                                        r: "36.25",
+                                        fill: "#3490dc",
+                                        opacity: "0.1"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M463.74,619.07l-1.28-1.28a1.37,1.37,0,0,1,0-2l11.23-11.24a1.37,1.37,0,0,1,2,0l11.23,11.23a1.39,1.39,0,0,1,0,2l-1.28,1.28a1.39,1.39,0,0,1-2,0l-6.64-7v16.61a1.38,1.38,0,0,1-1.38,1.39h-1.85a1.39,1.39,0,0,1-1.39-1.39V612.08l-6.64,7A1.39,1.39,0,0,1,463.74,619.07Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#f6f7f9"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M474.67,594.34a22.79,22.79,0,1,1-22.79,22.79,22.81,22.81,0,0,1,22.79-22.79m0-3a25.79,25.79,0,1,0,25.79,25.79,25.79,25.79,0,0,0-25.79-25.79Z",
+                                        transform: "translate(-33.54 -30.43)",
+                                        fill: "#f6f7f9"
+                                      }
+                                    })
+                                  ]
+                                )
+                              ]
+                            )
+                          ]
+                        )
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              ])
+            : _c("div", { staticClass: "text-center mt-5" }, [
+                _c(
+                  "svg",
+                  {
+                    attrs: {
+                      id: "b9c085e1-b209-40d5-b9c5-2decca8817ec",
+                      "data-name": "Layer 1",
+                      xmlns: "http://www.w3.org/2000/svg",
+                      "xmlns:xlink": "http://www.w3.org/1999/xlink",
+                      width: "650",
+                      height: "300",
+                      viewBox: "0 0 1177 494.25"
+                    }
+                  },
+                  [
+                    _c(
+                      "defs",
+                      [
+                        _c(
+                          "linearGradient",
+                          {
+                            attrs: {
+                              id: "e1e32c93-0bc3-4bc5-85c6-efac924cbce5",
+                              x1: "313.79",
+                              y1: "660.67",
+                              x2: "313.79",
+                              y2: "660.43",
+                              gradientTransform: "matrix(-1, 0, 0, 1, 651, 0)",
+                              gradientUnits: "userSpaceOnUse"
+                            }
+                          },
+                          [
+                            _c("stop", {
+                              attrs: {
+                                offset: "0",
+                                "stop-color": "gray",
+                                "stop-opacity": "0.25"
+                              }
+                            }),
+                            _c("stop", {
+                              attrs: {
+                                offset: "0.54",
+                                "stop-color": "gray",
+                                "stop-opacity": "0.12"
+                              }
+                            }),
+                            _c("stop", {
+                              attrs: {
+                                offset: "1",
+                                "stop-color": "gray",
+                                "stop-opacity": "0.1"
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
+                    _c("title", [_vm._v("online friends")]),
+                    _c("ellipse", {
+                      attrs: {
+                        cx: "588.5",
+                        cy: "473.25",
+                        rx: "588.5",
+                        ry: "21",
+                        fill: "#3f3d56"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M1059,558.69a24.74,24.74,0,0,0,3.27-12.54c0-11.33-7-20.52-15.68-20.52s-15.67,9.19-15.67,20.52a24.74,24.74,0,0,0,3.27,12.54,25.68,25.68,0,0,0,0,25.08,25.66,25.66,0,0,0,0,25.07,25.68,25.68,0,0,0,0,25.08,24.74,24.74,0,0,0-3.27,12.54c0,11.33,7,20.52,15.67,20.52s15.68-9.19,15.68-20.52a24.74,24.74,0,0,0-3.27-12.54,25.68,25.68,0,0,0,0-25.08,25.66,25.66,0,0,0,0-25.07,25.68,25.68,0,0,0,0-25.08Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#3f3d56"
+                      }
+                    }),
+                    _c("ellipse", {
+                      attrs: {
+                        cx: "1035.05",
+                        cy: "318.2",
+                        rx: "15.67",
+                        ry: "20.52",
+                        fill: "#3f3d56"
+                      }
+                    }),
+                    _c("ellipse", {
+                      attrs: {
+                        cx: "1035.05",
+                        cy: "293.12",
+                        rx: "15.67",
+                        ry: "20.52",
+                        fill: "#3f3d56"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M987.88,324.37a75.44,75.44,0,0,1-5.84-8.59l41.19-6.76-44.55.33a75.22,75.22,0,0,1-1.43-59.49l59.76,31L981.9,240.35a75.08,75.08,0,1,1,124,84,74.09,74.09,0,0,1,8.56,13.7L1061,365.84l57-19.13a75.12,75.12,0,0,1-12.11,70.5,75.08,75.08,0,1,1-118,0,75.08,75.08,0,0,1,0-92.84Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#57b894"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M1122,370.79a74.75,74.75,0,0,1-16.07,46.42,75.08,75.08,0,1,1-118,0C977.82,404.44,1122,362.37,1122,370.79Z",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.1"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "171.5",
+                        y: "7",
+                        width: "834",
+                        height: "456",
+                        rx: "20.42",
+                        fill: "#f2f2f2"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M172,29.5H440a0,0,0,0,1,0,0v434a0,0,0,0,1,0,0H192.42A20.42,20.42,0,0,1,172,443.08V29.5A0,0,0,0,1,172,29.5Z",
+                        fill: "#3189d1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M1017,230.29v11.59H183V230.29a20.41,20.41,0,0,1,20.42-20.41H996.58A20.41,20.41,0,0,1,1017,230.29Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#3f3d56"
+                      }
+                    }),
+                    _c("circle", {
+                      attrs: { cx: "193", cy: "23.5", r: "6", fill: "#3189d1" }
+                    }),
+                    _c("circle", {
+                      attrs: { cx: "208", cy: "23.5", r: "6", fill: "#3189d1" }
+                    }),
+                    _c("circle", {
+                      attrs: { cx: "223", cy: "23.5", r: "6", fill: "#3189d1" }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d: "M347.5,429.38",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "none",
+                        stroke: "#f2f2f2",
+                        "stroke-miterlimit": "10",
+                        "stroke-width": "2"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d: "M333.5,428.38",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "none",
+                        stroke: "#f2f2f2",
+                        "stroke-miterlimit": "10",
+                        "stroke-width": "2"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "610.5",
+                        y: "93.12",
+                        width: "347",
+                        height: "11",
+                        rx: "1.24",
+                        fill: "#3189d1",
+                        opacity: "0.3"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "879.5",
+                        y: "114.12",
+                        width: "73",
+                        height: "25",
+                        rx: "1.24",
+                        fill: "#3189d1"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "610.5",
+                        y: "226.88",
+                        width: "347",
+                        height: "11",
+                        rx: "1.24",
+                        fill: "#3189d1",
+                        opacity: "0.3"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "879.5",
+                        y: "247.88",
+                        width: "73",
+                        height: "25",
+                        rx: "1.24",
+                        fill: "#3189d1"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "610.5",
+                        y: "362.88",
+                        width: "347",
+                        height: "11",
+                        rx: "1.24",
+                        fill: "#3189d1",
+                        opacity: "0.3"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "879.5",
+                        y: "383.88",
+                        width: "73",
+                        height: "25",
+                        rx: "1.24",
+                        fill: "#3189d1"
+                      }
+                    }),
+                    _c("circle", {
+                      attrs: {
+                        cx: "535.19",
+                        cy: "249.88",
+                        r: "49.52",
+                        fill: "#3f3d56"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M590.39,478.87a1.39,1.39,0,0,1-.21.33,31,31,0,0,1-1.75,2.59,49.34,49.34,0,0,1-21.75,16.95c-.86.36-1.74.69-2.63,1a17.55,17.55,0,0,1-2.28-2.19,17.11,17.11,0,0,1-4-8.29,21,21,0,0,1-4,.38,2.68,2.68,0,0,1-.4,0c-10.3-.18-19.14-7.72-23.09-18.48l-.16-.46a37.39,37.39,0,0,1-.78-21.74v0c.05-.24.13-.48.2-.71,3.38-11.61,12.3-20.07,22.91-20.74.33,0,.66,0,1,0s.54,0,.81,0h.48C568.18,428,579,441,579.5,457.26a17.27,17.27,0,0,1,7.61,16.92A17.68,17.68,0,0,1,590.39,478.87Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#192534"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M590.18,479.2a31,31,0,0,1-1.75,2.59,16.35,16.35,0,0,0-2.67-3.55,18.83,18.83,0,0,0,.18-2.49,17.26,17.26,0,0,0-7.79-14.43c-.55-16.6-11.84-29.86-25.67-29.86-9.88,0-18.45,6.74-22.76,16.64-.11.26-.21.51-.33.78v0c-.36.86-.68,1.73-1,2.64a36.64,36.64,0,0,1,1.47-5.38L530,446c3.85-10.61,12.45-18.14,22.55-18.59.33,0,.66,0,1,0s.54,0,.81,0h.48c13.25.8,23.86,13.74,24.37,29.83a17.24,17.24,0,0,1,7.63,16.92A17.06,17.06,0,0,1,590.18,479.2Z",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M538,465a6.5,6.5,0,0,1-.34,3c-.59,1.37-2,2.6-1.61,4a3.07,3.07,0,0,0,2.16,1.74c4.31,1.46,9,.59,13.56.79a43.72,43.72,0,0,0,4.57.16,7.28,7.28,0,0,0,4.24-1.48,36.3,36.3,0,0,1-6.67-4.19,7.5,7.5,0,0,1-1.35-1.29,7.91,7.91,0,0,1-1.17-4.58c0-1.59,0-3.18,0-4.76-3.26,0-6.51-.05-9.77-.05-1,0-4.23-.25-4.6.88-.18.56.52,2.21.63,2.84A28.28,28.28,0,0,1,538,465Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#a0616a"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M538,465a6.5,6.5,0,0,1-.34,3c-.59,1.37-2,2.6-1.61,4a3.07,3.07,0,0,0,2.16,1.74c4.31,1.46,9,.59,13.56.79a43.72,43.72,0,0,0,4.57.16,7.28,7.28,0,0,0,4.24-1.48,36.3,36.3,0,0,1-6.67-4.19,7.5,7.5,0,0,1-1.35-1.29,7.91,7.91,0,0,1-1.17-4.58c0-1.59,0-3.18,0-4.76-3.26,0-6.51-.05-9.77-.05-1,0-4.23-.25-4.6.88-.18.56.52,2.21.63,2.84A28.28,28.28,0,0,1,538,465Z",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.1"
+                      }
+                    }),
+                    _c("circle", {
+                      attrs: {
+                        cx: "533.2",
+                        cy: "249.2",
+                        r: "11.49",
+                        fill: "#a0616a"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M566.49,485.4c0,.31-.06.64-.11,1a30.42,30.42,0,0,1-1.63,5.45,26.19,26.19,0,0,1-1.52,3.48c-.43.77-1,1.48-1.46,2.23l-.66,1.07a14.58,14.58,0,0,0-1.07,2.26,42.44,42.44,0,0,1-5.87,1.07,49.06,49.06,0,0,1-5.83.35c-10.45,0-21.72-2.71-29.71-8.25,0,0,1.17-.81,1-1,0-.46-.05-.91-.05-1.37a10.28,10.28,0,0,1,.57-3.48,7,7,0,0,1,1.73-2.84c1-1,2.34-1.62,3.41-2.58a10.12,10.12,0,0,0,2.79-4.85v0c.25-.8.43-1.65.6-2.47a12,12,0,0,1,.92-3.25,2.88,2.88,0,0,1,.22-.38,3.9,3.9,0,0,1,.54-.71,11.7,11.7,0,0,1,3.52-2.36c1.09-.56,2.62-1,3.38-.07l0,.07a14.09,14.09,0,0,1,.63,1.76c.61,1.26,2.31,1.42,3.69,1.39a117,117,0,0,0,14.58-1.22l2.34-.38c1.69-.28,2.87,1.2,3.82,2.64C564.78,476.67,566.86,480.94,566.49,485.4Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#3189d1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M531.4,486.18c-1.07.24-1.69,1.32-2.19,2.3a8.89,8.89,0,0,0-1.19,5.34,7.53,7.53,0,0,0,.23,2.17,2.88,2.88,0,0,0,1.26,1.72",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "none",
+                        stroke: "#000",
+                        "stroke-miterlimit": "10",
+                        opacity: "0.1"
+                      }
+                    }),
+                    _c("ellipse", {
+                      attrs: {
+                        cx: "547.6",
+                        cy: "443.78",
+                        rx: "6.34",
+                        ry: "12.85",
+                        transform: "translate(-29.44 661.57) rotate(-75.66)",
+                        fill: "#192534"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M546.71,447.55c-6.11-1.56-10.63-5-11-8.16a3.2,3.2,0,0,0-.6,1.21c-.87,3.39,4,7.56,10.87,9.32s13.15.43,14-3a3.24,3.24,0,0,0,.08-1.16C558.23,448.28,552.7,449.08,546.71,447.55Z",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M566.79,493.55c0,1.74,0,3.47-.11,5.19-.86.36-1.74.69-2.63,1a36.71,36.71,0,0,1-4,1.14,42.44,42.44,0,0,1-5.87,1.07c-.35-4.14-1.14-8.13-.75-12.33v0a19.86,19.86,0,0,1,3.22-9,7.69,7.69,0,0,1,2.91-2.81,3.58,3.58,0,0,1,3.83.3,5.48,5.48,0,0,1,1.38,2.55,42.3,42.3,0,0,1,1.62,5.75c0,.21.07.44.1.66A39.63,39.63,0,0,1,566.79,493.55Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#a0616a"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M596.2,588.75a49.3,49.3,0,0,1-6,23.71c-.44.8-.9,1.61-1.42,2.41a1.39,1.39,0,0,1-.21.33,31,31,0,0,1-1.75,2.59,48.94,48.94,0,0,1-14.15,13.12l-.29.2a51.13,51.13,0,0,1-5.65,2.93c-.54.24-1.1.47-1.66.7s-1.08.44-1.64.62c-.28.12-.58.22-.87.32h0a.38.38,0,0,0-.1,0c-.61.22-1.24.41-1.86.6l-.47.11c-.56.17-1.12.31-1.68.43a42.31,42.31,0,0,1-5.88,1.07h0a48.26,48.26,0,0,1-5.79.35c-.2,0-.4,0-.6,0a45.09,45.09,0,0,1-8-.74l-.48-.08c-.49-.08-1-.18-1.47-.3h0l-.93-.21a29.29,29.29,0,0,1-2.92-.8,47.36,47.36,0,0,1-5.73-2.13l-.21-.09a48.94,48.94,0,0,1-7.79-4.43,5.33,5.33,0,0,1-.6-.41,49.51,49.51,0,1,1,78.25-40.31Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#3f3d56"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M558.67,576.82a10.51,10.51,0,0,1-21,0c0-.17,0-.34,0-.5a10.5,10.5,0,0,1,21,0C558.66,576.48,558.67,576.65,558.67,576.82Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#192534"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M558.67,576.82a10.51,10.51,0,0,1-21,0c0-.17,0-.34,0-.5a16.58,16.58,0,0,1,21,0C558.66,576.48,558.67,576.65,558.67,576.82Z",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.1"
+                      }
+                    }),
+                    _c("circle", {
+                      attrs: {
+                        cx: "536.66",
+                        cy: "387.22",
+                        r: "16.59",
+                        fill: "#192534"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M538.11,574.5a10.51,10.51,0,0,1,9.12-10.41,10.51,10.51,0,1,0,0,20.83A10.51,10.51,0,0,1,538.11,574.5Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#192534"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M529.44,596.83a10.51,10.51,0,0,1-1.77-13.73,11.56,11.56,0,0,0-1,1A10.51,10.51,0,1,0,542.43,598a11.13,11.13,0,0,0,.85-1.1A10.51,10.51,0,0,1,529.44,596.83Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#192534"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M539.48,611.13A9.22,9.22,0,0,0,537,612c-1.38,1-1.33,3-.92,4.63.94,3.72,3.24,7.29,6.76,8.81a16.71,16.71,0,0,0,6.82,1c2.51,0,5.35-.34,6.91-2.32a9.17,9.17,0,0,0,1.41-3.46c.77-3,1.55-6.1,1.27-9.2-1.52.13-3.22.22-4.42-.74s-1.47-2.79-2-4.31a1.13,1.13,0,0,0-.39-.62,1.27,1.27,0,0,0-.7-.1,28.29,28.29,0,0,1-4.78-.2c-1-.13-3.42-1.16-4.16-.29-.54.63-.2,2.55-.62,3.44A4.76,4.76,0,0,1,539.48,611.13Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#ffc1c7"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M539.48,611.13A9.22,9.22,0,0,0,537,612c-1.38,1-1.33,3-.92,4.63.94,3.72,3.24,7.29,6.76,8.81a16.71,16.71,0,0,0,6.82,1c2.51,0,5.35-.34,6.91-2.32a9.17,9.17,0,0,0,1.41-3.46c.77-3,1.55-6.1,1.27-9.2-1.52.13-3.22.22-4.42-.74s-1.47-2.79-2-4.31a1.13,1.13,0,0,0-.39-.62,1.27,1.27,0,0,0-.7-.1,28.29,28.29,0,0,1-4.78-.2c-1-.13-3.42-1.16-4.16-.29-.54.63-.2,2.55-.62,3.44A4.76,4.76,0,0,1,539.48,611.13Z",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.05"
+                      }
+                    }),
+                    _c("circle", {
+                      attrs: {
+                        cx: "536.43",
+                        cy: "395.23",
+                        r: "11.6",
+                        fill: "#ffc1c7"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M573.36,623.23c-.08.1-.16.22-.25.32l-.49.64a37.62,37.62,0,0,0-5.93,9.85c-.54.24-1.1.47-1.66.7s-1.08.44-1.64.62c-.28.12-.58.22-.87.32h0a.38.38,0,0,0-.1,0c-.61.22-1.24.41-1.86.6l-.47.11c-.56.17-1.12.31-1.68.43a42.31,42.31,0,0,1-5.88,1.07h0a48.26,48.26,0,0,1-5.79.35c-.2,0-.4,0-.6,0a45.09,45.09,0,0,1-8-.74l-.48-.08c-.49-.08-1-.18-1.47-.3h0l-.93-.21a29.29,29.29,0,0,1-2.92-.8,8.8,8.8,0,0,1,2.15-4.5c-2.25-2.69-5.95-3.75-8.34-6.29a8.05,8.05,0,0,1-.58-.76,3.19,3.19,0,0,1-.31-.61,1.71,1.71,0,0,1-.13-.53,4.63,4.63,0,0,1-.09-1.12c-.06-2.84.07-6.08,2.27-7.86a10.35,10.35,0,0,1,3.58-1.6,43.94,43.94,0,0,0,6.5-2.62,5.19,5.19,0,0,1,.38,1.4c.2,1.16.18,2.38.45,3.53a8.52,8.52,0,0,0,3.56,5,13.6,13.6,0,0,0,5.86,2.13c2.06.3,3.7-.77,5.64-1.5a6.54,6.54,0,0,0,2.33-1.32,5.37,5.37,0,0,0,1.31-3.65c0-1.32-.15-2.64-.07-4a1.92,1.92,0,0,1,.05-.41,1.67,1.67,0,0,1,1.14-1.57,2.13,2.13,0,0,1,1.09.2l3.74,1.43a25.93,25.93,0,0,1,4.66,2.15A12.93,12.93,0,0,1,573.36,623.23Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#3189d1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M538.09,637.51l-.48-.08c-.49-.08-1-.18-1.47-.3h0l-.93-.21a29.29,29.29,0,0,1-2.92-.8,47.36,47.36,0,0,1-5.73-2.13,24.76,24.76,0,0,1-1-9.42,17.36,17.36,0,0,1,.84-4c2.1,2,5.68.87,8.06,2.47A5,5,0,0,1,536,624.8a13.29,13.29,0,0,1,1.34,4.09c.15.78.29,1.57.41,2.36,0,.14,0,.25,0,.37s0,.25,0,.38c.08.56.15,1.14.18,1.71C538.09,635,538.09,636.24,538.09,637.51Z",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M537.61,637.43c-.49-.08-1-.18-1.47-.3h0l-.93-.21a29.29,29.29,0,0,1-2.92-.8,47.36,47.36,0,0,1-5.73-2.13l-.21-.09a25.5,25.5,0,0,1-1.27-10.47,18.7,18.7,0,0,1,.82-3.76c2.1,2,5.68.89,8.06,2.49a5.62,5.62,0,0,1,2,2.64,17.52,17.52,0,0,1,.87,3.17c.22,1.17.43,2.34.57,3.53a2.83,2.83,0,0,1,.05.5c0,.11,0,.25,0,.36s0,.28,0,.43C537.64,634.32,537.63,635.88,537.61,637.43Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#3189d1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M572.34,631.11a51.13,51.13,0,0,1-5.65,2.93c-.54.24-1.1.47-1.66.7s-1.08.44-1.64.62c-.28.12-.58.22-.87.32h0a.38.38,0,0,0-.1,0c-.61.22-1.24.41-1.86.6l-.47.11c0-.89,0-1.81.1-2.71.07-.71.15-1.42.25-2.13,0-.13,0-.26.05-.39a1.07,1.07,0,0,0,0-.25c.12-.68.25-1.37.38-2.05a12.53,12.53,0,0,1,1.34-4.09,5,5,0,0,1,1.55-1.72c2.38-1.6,6-.51,8-2.47a17.67,17.67,0,0,1,.81,3.58A23.33,23.33,0,0,1,572.34,631.11Z",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M572.63,630.91l-.29.2a51.13,51.13,0,0,1-5.65,2.93c-.54.24-1.1.47-1.66.7s-1.08.44-1.64.62c-.28.12-.58.22-.87.32h0a.38.38,0,0,0-.1,0c-.61.22-1.24.41-1.86.6,0-1.18,0-2.35.1-3.52,0-.3,0-.61.08-.91,0-.13,0-.28,0-.41s0-.22,0-.31c.15-1.08.33-2.13.55-3.19a17.52,17.52,0,0,1,.87-3.17,5.62,5.62,0,0,1,2-2.64c2.38-1.6,6-.51,8-2.49a17.11,17.11,0,0,1,.84,3.88A23.42,23.42,0,0,1,572.63,630.91Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#3189d1"
+                      }
+                    }),
+                    _c("ellipse", {
+                      attrs: {
+                        cx: "536.2",
+                        cy: "384.32",
+                        rx: "13.92",
+                        ry: "9.28",
+                        fill: "#192534"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M536.13,635.73c0,.21,0,.43,0,.66s0,.44,0,.66a.28.28,0,0,0,0,.08h0l-.93-.21a3.08,3.08,0,0,1,0-.53,6.46,6.46,0,0,1,2.23-4.89,1.48,1.48,0,0,1,.31-.25,5.91,5.91,0,0,1,1.8-1,5.37,5.37,0,0,1,1.88-.36,1.14,1.14,0,0,1,.26,0,3.77,3.77,0,0,1,.48,0l-.33,0a6.37,6.37,0,0,0-4,2,2.11,2.11,0,0,0-.31.36A6.4,6.4,0,0,0,536.13,635.73Z",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.05"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M546.31,636.39a8.1,8.1,0,0,1-.22,1.86,45.09,45.09,0,0,1-8-.74l-.48-.08c-.49-.08-1-.18-1.47-.3h0v-.08c0-.22,0-.43,0-.66s0-.45,0-.66a7.23,7.23,0,0,1,1.32-3.73,2.24,2.24,0,0,1,.31-.38,4.6,4.6,0,0,1,1.75-1.34,3.9,3.9,0,0,1,1.68-.38.68.68,0,0,1,.2,0,2.83,2.83,0,0,1,.41,0C544.34,630.33,546.31,633.07,546.31,636.39Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#3189d1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M563.39,635.36c-.28.12-.58.22-.87.32h0a6.32,6.32,0,0,0-1.78-3.8l-.3-.3a6.57,6.57,0,0,0-3.58-1.63l-.33,0a3.62,3.62,0,0,1,.46,0,1.27,1.27,0,0,1,.27,0,5.87,5.87,0,0,1,1.89.36,6.44,6.44,0,0,1,1.37.66,1.17,1.17,0,0,1,.3.22A6.37,6.37,0,0,1,563.39,635.36Z",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.05"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M562.52,635.68h0a.38.38,0,0,0-.1,0c-.61.22-1.24.41-1.86.6l-.47.11c-.56.17-1.12.31-1.68.43a42.31,42.31,0,0,1-5.88,1.07h0a7.63,7.63,0,0,1-.15-1.53c0-3.32,2-6.06,4.51-6.44a2.6,2.6,0,0,1,.4,0,.62.62,0,0,1,.19,0,3.92,3.92,0,0,1,1.7.38,4.55,4.55,0,0,1,1.34.91,1.92,1.92,0,0,1,.3.28A7.18,7.18,0,0,1,562.52,635.68Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#3189d1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M547.7,595.55c-7.46,0-13.55-3.9-13.91-8.81,0,.15,0,.3,0,.46,0,5.13,6.24,9.28,13.93,9.28s13.92-4.15,13.92-9.28c0-.16,0-.31,0-.46C561.24,591.65,555.15,595.55,547.7,595.55Z",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M497.17,319a49.4,49.4,0,0,0,6,23.7c.45.81.91,1.62,1.42,2.41a1.45,1.45,0,0,0,.22.33A29.4,29.4,0,0,0,506.6,348a47.47,47.47,0,0,0,7.14,7.89,18.86,18.86,0,0,0,1.56,1.34,44.44,44.44,0,0,0,5.44,3.89l.3.2a53.78,53.78,0,0,0,5.64,2.94l1.67.69c.55.23,1.07.45,1.64.63.28.11.57.21.87.31h0s0,0,0,0H531q.91.33,1.86.6l.46.11c.56.17,1.13.32,1.69.43.76.2,1.51.37,2.29.51,1.17.23,2.38.43,3.58.57h0a48.14,48.14,0,0,0,5.79.34h.59a46.07,46.07,0,0,0,8-.75,3.7,3.7,0,0,0,.48-.08c.49-.08,1-.18,1.47-.3h0c.32-.06.61-.13.93-.21,1-.22,2-.48,2.92-.79.59-.19,1.17-.37,1.75-.57,1.17-.41,2.34-.85,3.46-1.35a3.89,3.89,0,0,0,.51-.21l.22-.1q2.22-1,4.32-2.23c1.19-.68,2.35-1.42,3.47-2.2l.07,0a4.06,4.06,0,0,0,.52-.36A49.51,49.51,0,1,0,497.17,319Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#3f3d56"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M557.68,338.62a4.6,4.6,0,0,1,1.45,2.45c-1.44.38-2.91-.33-4.25-1a54.22,54.22,0,0,0-13.07-4.21,2,2,0,0,1-1-.38,1.7,1.7,0,0,1,.06-2.1c.5-.52,1.44-.45,2.12-.48a19.31,19.31,0,0,1,14.69,5.68Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#3189d1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M543.05,334.64a6,6,0,0,1-3.31,3.33c-.81.29-1.68.34-2.5.57a2.77,2.77,0,0,0-1.94,1.53,3.28,3.28,0,0,0-.15,1.08c-.13,3.45-.23,7,1.15,10.2,1.19,2.74,3.37,4.9,5.53,6.95,2.52,2.41,5.19,4.85,8.51,5.93,1.94.63,4.23.7,5.84-.55a8.67,8.67,0,0,0,1.63-1.89,22.86,22.86,0,0,0,2.8-4.77c1.37-3.52.91-7.46.43-11.21a.9.9,0,0,0-.24-.6.94.94,0,0,0-.7-.12,4.12,4.12,0,0,1-4.17-2.4,6.26,6.26,0,0,1-.23-2.2l.07-4.28a3.63,3.63,0,0,0-.16-1.36,3.42,3.42,0,0,0-1.79-1.55,44.23,44.23,0,0,0-7.28-2.87c-1.1-.32-1.94-.86-2.43.32S543.62,333.4,543.05,334.64Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#fbbebe"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M543.05,334.64a6,6,0,0,1-3.31,3.33c-.81.29-1.68.34-2.5.57a2.77,2.77,0,0,0-1.94,1.53,3.28,3.28,0,0,0-.15,1.08c-.13,3.45-.23,7,1.15,10.2,1.19,2.74,3.37,4.9,5.53,6.95,2.52,2.41,5.19,4.85,8.51,5.93,1.94.63,4.23.7,5.84-.55a8.67,8.67,0,0,0,1.63-1.89,22.86,22.86,0,0,0,2.8-4.77c1.37-3.52.91-7.46.43-11.21a.9.9,0,0,0-.24-.6.94.94,0,0,0-.7-.12,4.12,4.12,0,0,1-4.17-2.4,6.26,6.26,0,0,1-.23-2.2l.07-4.28a3.63,3.63,0,0,0-.16-1.36,3.42,3.42,0,0,0-1.79-1.55,44.23,44.23,0,0,0-7.28-2.87c-1.1-.32-1.94-.86-2.43.32S543.62,333.4,543.05,334.64Z",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.1"
+                      }
+                    }),
+                    _c("circle", {
+                      attrs: {
+                        cx: "543.13",
+                        cy: "122.18",
+                        r: "13.06",
+                        fill: "#fbbebe"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M537.28,367.6c1.17.23,2.38.43,3.58.57h0a48.14,48.14,0,0,0,5.79.34h.59a46.07,46.07,0,0,0,8-.75,3.7,3.7,0,0,0,.48-.08c.49-.08,1-.18,1.47-.3h0c.32-.06.61-.13.93-.21,1-.22,2-.48,2.92-.79.59-.19,1.17-.37,1.75-.57,1.17-.41,2.34-.85,3.46-1.35a24.5,24.5,0,0,1-.71-2.71,29.92,29.92,0,0,1-.38-5.92c0-1.59.07-3.17,0-4.75a11.69,11.69,0,0,0-.55-3.78,4.83,4.83,0,0,0-2.44-2.83c-1.49-.66-3.73-1-5.2-.26a3.56,3.56,0,0,0-.48.31,2.49,2.49,0,0,0-.72,1c-.48,1.2-1,2.41-1.46,3.61a11.44,11.44,0,0,1-1.17,2.38,5.9,5.9,0,0,1-6.47,2.13,3.83,3.83,0,0,1-.43-.17c-2-.81-3.83-2.56-5.92-2.09a3.94,3.94,0,0,0-2.61,2.26,1,1,0,0,0-.07.18,10.15,10.15,0,0,0-.72,3.28A43.74,43.74,0,0,0,537.28,367.6Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#f2f2f2"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M513.74,355.92a18.86,18.86,0,0,0,1.56,1.34,44.44,44.44,0,0,0,5.44,3.89l.3.2a53.78,53.78,0,0,0,5.64,2.94l1.67.69c.55.23,1.07.45,1.64.63.28.11.57.21.87.31h0s0,0,0,0H531q.91.33,1.86.6l.46.11c.56.17,1.13.32,1.69.43.76.2,1.51.37,2.29.51,1.17.23,2.38.43,3.58.57h0a48.14,48.14,0,0,0,5.79.34h.59a46.07,46.07,0,0,0,8-.75,3.7,3.7,0,0,0,.48-.08c.49-.08,1-.18,1.47-.3h0c.32-.06.61-.13.93-.21,1-.22,2-.48,2.92-.79.59-.19,1.17-.37,1.75-.57,1.17-.41,2.34-.85,3.46-1.35a3.89,3.89,0,0,0,.51-.21l.22-.1q2.22-1,4.32-2.23a74.86,74.86,0,0,0,2.5-8,1,1,0,0,1,0-.16c-1.56-2.77-2.94-5.65-4.49-8.42a6.43,6.43,0,0,0-5.15-3.88,12.6,12.6,0,0,0-3.35-.62,12.61,12.61,0,0,1-1.92-.33c-1.3-.29-2.74-.57-3.22,0v0a.17.17,0,0,0-.07.13,2.74,2.74,0,0,0,.23,2c.22.63.51,1.29.66,1.83a2.75,2.75,0,0,1,.15.8,27.27,27.27,0,0,1-.12,3.51c-.28,1.7-1.22,3.2-1.66,4.85-.2.78-.3,1.59-.43,2.38a25.62,25.62,0,0,1-1.39,5.22,3.57,3.57,0,0,1-.51,1c-.82,1-2.18.62-3.47.43-.94-.8-.89-2.22-1-3.42a18,18,0,0,0-1.82-5.78l-.34-.72c-1-2.07-2-4.13-2.94-6.21-1.21-2.58-2.46-5.53-1.46-8.2.29-.8.76-1.51,1.08-2.28a2.48,2.48,0,0,0,.13-.35,3.33,3.33,0,0,0,.15-.91,2,2,0,0,0-.46-1.55.8.8,0,0,0-.2-.21.32.32,0,0,0-.12-.08,2.38,2.38,0,0,0-2.18-.1,9.13,9.13,0,0,0-1.15.51A55,55,0,0,0,533.1,337a2.84,2.84,0,0,0-1.18,1.37,10.24,10.24,0,0,1-.19,1.13c-.28.71-1.13.92-1.86,1.08a22.77,22.77,0,0,0-14.52,10.67,11.72,11.72,0,0,0-1.24,2.75A11.42,11.42,0,0,0,513.74,355.92Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#3189d1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M560.38,317.68c-1.77,1.81-4.6,1.88-7.13,1.84l.08-1-3.55,1.27a9.41,9.41,0,0,0,2.33-2.5,1.59,1.59,0,0,0-1.73-.11,3.6,3.6,0,0,0-1.29,1.28,11.66,11.66,0,0,0-1.29,10.38,2.3,2.3,0,0,1-2.29-.15,4,4,0,0,1-1.47-1.86c-.21-.48-.43-1-.93-1.19a1,1,0,0,0-1.12.5,2.12,2.12,0,0,0-.24,1.27c.07,1,.82,2,1,3s1.66,1.8.88,2.47a11.41,11.41,0,0,1-2.84.67,1.23,1.23,0,0,1-.82-.81c-.79-1.74-.51-3.77-1-5.62a13.81,13.81,0,0,0-2.06-4.09,5.72,5.72,0,0,0-.78-1.05,2.63,2.63,0,0,1-.76-.87c-.13-.36.12-.89.5-.82a15.62,15.62,0,0,0-2-1.64c.7-.88,1.38-1.78,2-2.68.23-.32.47-.71.3-1.06a1.07,1.07,0,0,0-.4-.39L534,313.32c0-.84,1.67-.53,1.93-1.32a1.08,1.08,0,0,0,0-.64l-.62-2.26,2.36,1.07a1.6,1.6,0,0,0,.9.21c.62-.09.92-.82,1-1.45a4.12,4.12,0,0,1,.24-1.86c1.07,0,2.14,0,3.2,0a2.09,2.09,0,0,0-.39-1.51l7.88-.44a11,11,0,0,1,4,.28,3.14,3.14,0,0,0,1.33.3c.45,0,.91-.47.78-.91a14.31,14.31,0,0,1,3.21,2.47,3.09,3.09,0,0,0,.91.75,1,1,0,0,0,1.11-.13c.22-.23.32-.64.64-.66s.36.16.48.31a7.81,7.81,0,0,1,1.09,1.9,6.82,6.82,0,0,0,1.65-.44,1.78,1.78,0,0,0-.3,2c.26.67.74,1.24,1.06,1.88a7.8,7.8,0,0,1,.63,2.18c.16.94.16,2.13-.67,2.59a2.24,2.24,0,0,1-2.3-.52C562.21,315.76,561.86,316.16,560.38,317.68Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#192534"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M515.3,357.26a44.44,44.44,0,0,0,5.44,3.89l.3.2a53.78,53.78,0,0,0,5.64,2.94l1.67.69c.55.23,1.07.45,1.64.63.28.11.57.21.87.31h0s0,0,0,0c-.35-1-.58-2-.89-3a16.94,16.94,0,0,0-4.29-7.06c-1.72-1.72-4.46-4.23-7-2.71a8,8,0,0,0-2,1.93,8.94,8.94,0,0,0-1.24,1.83C515.39,357,515.35,357.12,515.3,357.26Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#3189d1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M562.85,365.8c1.17-.41,2.34-.85,3.46-1.35a3.89,3.89,0,0,0,.51-.21l.22-.1q2.22-1,4.32-2.23c1.19-.68,2.35-1.42,3.47-2.2l.07,0a20.82,20.82,0,0,1,0-3.35,2.63,2.63,0,0,0-.07-1.12,2.67,2.67,0,0,0-.56-.77,4.6,4.6,0,0,1-.41-.47c-1.13-1.27-2.05-2.64-4-2.44s-3.63,1.88-4.45,3.75a3.43,3.43,0,0,0-.22.56,38.8,38.8,0,0,0-1.3,5.31c-.26,1.11-.59,2.18-.83,3.29C563,364.88,562.91,365.34,562.85,365.8Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#3189d1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d: "M337.43,660.43h0l-.44.24Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "url(#e1e32c93-0bc3-4bc5-85c6-efac924cbce5)"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M276,606.42c-3.86,11.12.65,29.17,2.74,37.22a112,112,0,0,1,2.74,17.72,37.34,37.34,0,0,0,14.18-.32l-3.38-16.59c2.41-9.83,0-36.09,0-36.09s5.47-10.15,6-25.62c.47-15.22,4.22-20.14,4.34-20.3h0c7.73,4,17.56,47.21,17.56,47.21-.81,10.47.16,26.58,3.38,35.28a43.76,43.76,0,0,1,2.42,17.24,5.31,5.31,0,0,0,4.38.84c4.6-.74,10.12-4.71,10.12-4.71s-1.77-47-3.06-48.81,0-11.92,0-11.92l-2.1-16.44s.32-27.87-2.74-32.7c-2.64-4.18-3.25-11.51-3.37-13.44,0-.3,0-.47,0-.47l-4.66-5.59s-45.11-3.38-48.5,0c-.83.83-1.34,2.72-1.65,5.1-.93,7.31.14,19.23.14,19.23s1.35,8.86,3.29,17.88a39.27,39.27,0,0,1,0,16.44A49.15,49.15,0,0,1,276,606.42Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#575a89"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M278.78,677.07c2,2.66,13.86,1.53,15.87.7,1.23-.5,1.14-2.82.81-5.2-.21-1.52-.52-3.07-.65-4.2-.32-2.9,1-8.78,1-8.78s-2.66,2.82-3.3,0a3.08,3.08,0,0,0-2.3-2.18,6,6,0,0,0-4.18.26c-2.1.9-5.59,2.84-5,5.46.88,3.7-2.26,9-2.26,9a4,4,0,0,0,0,5Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#cbceda"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M278.78,677.07c2,2.66,13.86,1.53,15.87.7,1.23-.5,1.14-2.82.81-5.2-1.27.59-3.44,1.09-7,.75a21.39,21.39,0,0,0-2.53-.08,57.55,57.55,0,0,1-7.69-.15A3.84,3.84,0,0,0,278.78,677.07Z",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M320.11,609.65c-.81,10.47.16,26.58,3.38,35.28a43.76,43.76,0,0,1,2.42,17.24,5.31,5.31,0,0,0,4.38.84c-1-6.79-5.11-36.07-7.77-59.2a96.89,96.89,0,0,0-17.15-44.47l-2.82,3.1C310.28,566.47,320.11,609.65,320.11,609.65Z",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M283.62,440.32l2,9.67,9.64,16.19,11.88-5.07s16.15-16.92,6-19.34a8.77,8.77,0,0,1-3.37-1.5,7,7,0,0,1-2.63-5.83,17.84,17.84,0,0,1,1.65-6.93L288,421a33.86,33.86,0,0,1,1.49,8.42c.16,5.66-1.95,8.45-3.67,9.78A6.27,6.27,0,0,1,283.62,440.32Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#fbbebe"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M288,421a33.86,33.86,0,0,1,1.49,8.42,13.28,13.28,0,0,0,1.21,1.28A16.35,16.35,0,0,0,302,435.25a16.13,16.13,0,0,0,5.08-.81,17.84,17.84,0,0,1,1.65-6.93Z",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M285.58,418.33A16.44,16.44,0,1,0,302,401.9,16.35,16.35,0,0,0,285.58,418.33Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#fbbebe"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M283.62,440.32l2,9.67,9.64,16.19,11.88-5.07s16.15-16.92,6-19.34a8.77,8.77,0,0,1-3.37-1.5c1.83,5-5.73,15.52-5.73,15.52-.88,1.29-2.9.48-2.9.48-4.88-.74-13.85-14.75-15.31-17.08A6.27,6.27,0,0,1,283.62,440.32Z",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M274.31,534c2.86.65,18.69,4.16,24.69,3.28,6.61-1,19.45-1.61,19.45-1.61s8.18.44,10.69-.71c0-.3,0-.47,0-.47l-4.66-5.59s-45.11-3.38-48.5,0C275.13,529.76,274.62,531.65,274.31,534Z",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M304,456.27s8.5-11.77,5.29-16.36l14.36,5.89s8.64-1.05,11.76,11.85a22.52,22.52,0,0,1,.54,6.55,19.47,19.47,0,0,0,2.36,9.79c3.55,7.09,2.74,23.36-4.51,25s-9.83.8-9.83.8,1,29.48,5.16,32.87-10.68,2.58-10.68,2.58-12.84.64-19.45,1.61-25.13-3.39-25.13-3.39,2.74-12.4,3.7-20.3,3.23-24.7,3.23-24.7l-16.44-22.26s-2.9-13.45,7.25-19.41,14-7.43,14-7.43,10.2,16.61,15.52,17.42C301.1,456.76,303.12,457.57,304,456.27Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#3f3d56"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M322.85,460.94s.16,5.32-.81,7.42-4.51,13.69-4.51,13.69h8.05s-4.35-4.67-4-6.93S322.85,460.94,322.85,460.94Z",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M299,501.06s17.79-4.35,19.45-8.06,6.23-12,6.23-12l-1.88-2.53-8.65,6.79s-10.31,8.22-15.15,9S299,501.06,299,501.06Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#fbbebe"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M299,501.06s17.79-4.35,19.45-8.06,6.23-12,6.23-12l-1.88-2.53-8.65,6.79s-10.31,8.22-15.15,9S299,501.06,299,501.06Z",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.05"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M283.62,480.12v9.65h1.55a45.12,45.12,0,0,1,21.9,5.67l2.91,1.61.78.44,5-11.25-4.67-4.19-.24,0c-1.15.11-6.09.53-8.18-.18s-4.46-2.82-10.33-1.32c-2.88.74-5.35,4-8.15,3Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#fbbebe"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M268.07,462.56l-3.22,3.62V475s2.74,27.71,11.44,30.77S300.52,504,300.52,504s4-10.63,2.13-11.28-16.58-4.53-16.58-4.53.2-16.25-3-21.08c0,0,2.1-15.15-5.15-15.47S268.07,462.56,268.07,462.56Z",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M267.59,462.56l-3.23,3.62V475s2.74,27.71,11.44,30.77S300,504,300,504s4-10.63,2.14-11.28-16.59-4.53-16.59-4.53.21-16.25-3-21.08c0,0,2.09-15.15-5.16-15.47S267.59,462.56,267.59,462.56Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#3f3d56"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M290.09,425.31a6.37,6.37,0,0,1,.37-3.13A2.43,2.43,0,0,1,293,420.7c1.38.32,2,2.12,3.33,2.55a2.63,2.63,0,0,0,2.92-1.51,7.58,7.58,0,0,0,.56-3.51c0-1.34,0-2.69,0-4s.05-3.05.95-4.2c1.13-1.43,3.77-2.06,5.53-2a4.63,4.63,0,0,1,3.15,1.27,4.1,4.1,0,0,0,3.32,1.18,2.88,2.88,0,0,0,2.32-2,.09.09,0,0,1,0-.05,16.43,16.43,0,1,0-24.44,21.81A42.26,42.26,0,0,1,290.09,425.31Z",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M312.78,410a2.9,2.9,0,0,0,2.32-2c.13-.52.1-1.08.25-1.59.38-1.27,1.73-1.93,2.63-2.89,1.82-1.93,1.7-5.1.41-7.41-1-1.87-3-3.44-5.15-3.08-1.3.23-2.43,1.16-3.75,1.24a7.84,7.84,0,0,1-3.59-1.16,13.53,13.53,0,0,0-8.91-.79,5.11,5.11,0,0,0-2.45,1.24,20.09,20.09,0,0,0-1.3,1.83c-1.51,1.92-4.2,2.29-6.59,2.72s-5.1,1.38-5.89,3.69c-.52,1.52,0,3.18.28,4.77a1.37,1.37,0,0,1-.06,1c-.37.62-1.31.36-2,.51-1.35.28-1.7,2-1.75,3.42-.06,1.59-.1,3.18-.13,4.77a4.67,4.67,0,0,0,1.51,4l5.32,6.39c2.36,2.84,4.86,6.14,4.39,9.8,1.11.5,2.44-.47,2.81-1.64a7.24,7.24,0,0,0-.18-3.63,44.22,44.22,0,0,1-.84-6.29,6.37,6.37,0,0,1,.37-3.13,2.42,2.42,0,0,1,2.55-1.48c1.38.32,2,2.11,3.33,2.55a2.64,2.64,0,0,0,2.92-1.51,7.58,7.58,0,0,0,.56-3.51v-4c0-1.46.05-3,.95-4.2,1.13-1.43,3.77-2.05,5.53-2a4.73,4.73,0,0,1,3.15,1.27A4.07,4.07,0,0,0,312.78,410Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#3f3d56"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M309.07,460.54l-5,20.73S300.05,481.24,309.07,460.54Z",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M291.83,457.08s6.61,10.82,4,22l-1.23.09S296.83,474,291.83,457.08Z",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M287.64,518.3s-8.11-2.68-8.7,3.54C278.94,521.84,280.47,517.57,287.64,518.3Z",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M311.09,482.53s1.61,11.28-1.29,15.79A35.21,35.21,0,0,0,324,500.25l1-17.72Z",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M310,497.05l.78.44,5-11.25-4.67-4.19h-.25v0C310.92,482.59,312.22,492.28,310,497.05Z",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M311.09,482.05s1.61,11.28-1.29,15.79A35.43,35.43,0,0,0,324,499.77l5.64-17.72Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#3f3d56"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M325,670.21a3.64,3.64,0,0,0,3.13,3.19c4.37.66,14.91,2.32,17.57,3.59,3.39,1.61,16.76.48,17.4-1.13a2.53,2.53,0,0,0-.23-1.93,5.13,5.13,0,0,0-2.16-2.33,6.5,6.5,0,0,0-1-.43c-2.52-.84-7.27-2.62-8.56-4.49,0,0-5.93-5.19-7.62-8a3.87,3.87,0,0,0-3.1-1.93c-1.41-.06-3,.65-3.62,3.74,0,0-7.73,4.41-9.82.54,0,0-.33,5.94-1.61,7.57h0A2.17,2.17,0,0,0,325,670.21Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#cbceda"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M325,670.21a3.64,3.64,0,0,0,3.13,3.19c4.37.66,14.91,2.32,17.57,3.59,3.39,1.61,16.76.48,17.4-1.13a2.53,2.53,0,0,0-.23-1.93,5.13,5.13,0,0,0-2.16-2.33c-2.18,1.45-7,2.87-17.66,1.2-10.16-1.58-15.19-3.14-17.64-4.19h0A2.17,2.17,0,0,0,325,670.21Z",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.1"
+                      }
+                    }),
+                    _c("g", { attrs: { opacity: "0.1" } }, [
+                      _c("path", {
+                        attrs: {
+                          d:
+                            "M281.06,406.76s0-.05,0-.07a15.41,15.41,0,0,1-.49-3.66A22.68,22.68,0,0,0,281,406,1.81,1.81,0,0,1,281.06,406.76Z",
+                          transform: "translate(-11.5 -202.87)"
+                        }
+                      }),
+                      _c("path", {
+                        attrs: {
+                          d:
+                            "M290.46,421.84a4.88,4.88,0,0,0-.4,1.85,5.57,5.57,0,0,1,.4-2.57,2.43,2.43,0,0,1,2.55-1.48c1.38.32,2,2.12,3.33,2.55a2.63,2.63,0,0,0,2.92-1.51,7.56,7.56,0,0,0,.56-3.51c0-1.34,0-2.69,0-4s.05-3.05.95-4.2c1.13-1.43,3.77-2.06,5.53-2a4.63,4.63,0,0,1,3.15,1.27,4.1,4.1,0,0,0,3.32,1.18,2.87,2.87,0,0,0,2.32-2c.13-.52.1-1.08.25-1.59.38-1.27,1.73-1.93,2.63-2.89a5.2,5.2,0,0,0,1.36-3.4,5.46,5.46,0,0,1-1.36,4.13c-.9,1-2.25,1.62-2.63,2.88-.15.52-.12,1.07-.25,1.59a2.88,2.88,0,0,1-2.32,2,4.07,4.07,0,0,1-3.32-1.19,4.68,4.68,0,0,0-3.15-1.27c-1.76-.06-4.4.57-5.53,2-.9,1.15-.94,2.74-.95,4.2s0,2.69,0,4a7.54,7.54,0,0,1-.56,3.5,2.61,2.61,0,0,1-2.92,1.51c-1.35-.43-1.95-2.22-3.33-2.54A2.41,2.41,0,0,0,290.46,421.84Z",
+                          transform: "translate(-11.5 -202.87)"
+                        }
+                      }),
+                      _c("path", {
+                        attrs: {
+                          d:
+                            "M277.22,417.41a6.29,6.29,0,0,0,1.37,2.22l5.32,6.39c2.24,2.69,4.61,5.8,4.43,9.24-.16-3.15-2.35-6-4.43-8.52l-5.32-6.39a4.67,4.67,0,0,1-1.51-4A4.07,4.07,0,0,0,277.22,417.41Z",
+                          transform: "translate(-11.5 -202.87)"
+                        }
+                      }),
+                      _c("path", {
+                        attrs: {
+                          d:
+                            "M291.11,434.18a3.7,3.7,0,0,0,.16-.87,4.47,4.47,0,0,1-.16,1.59c-.37,1.17-1.69,2.14-2.81,1.63a5.49,5.49,0,0,0,.05-.7A2.29,2.29,0,0,0,291.11,434.18Z",
+                          transform: "translate(-11.5 -202.87)"
+                        }
+                      })
+                    ]),
+                    _c("path", {
+                      attrs: {
+                        d: "M344.64,660.15s-1.68,3-7.78.35",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d: "M293.05,660.86s-5.26,6.2-11.89,2",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d: "M277.74,587.58s3.71,2.32,3.84,3.65-1.92-1-1.92-1Z",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M276.27,605.39a7.74,7.74,0,0,0,4.58,1.79c2.78.12,2.55,3.74.73,2.66A45.56,45.56,0,0,1,276.27,605.39Z",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d: "M275.56,607.71s1.79,8.77,3.24,7.08",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M94.79,662.63c3-5.51-.41-12.26-4.29-17.17s-8.61-10-8.51-16.29c.15-9,9.7-14.32,17.33-19.09a84,84,0,0,0,15.56-12.51,23,23,0,0,0,4.78-6.4c1.58-3.52,1.53-7.52,1.43-11.37q-.5-19.27-1.9-38.49",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "none",
+                        stroke: "#3f3d56",
+                        "stroke-miterlimit": "10",
+                        "stroke-width": "4"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M133.7,540.61a14,14,0,0,0-7-11.5l-3.14,6.21.09-7.52a14,14,0,1,0,10.06,12.81Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#57b894"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M108.67,635.6a14,14,0,1,1,.68-11.3l-8.77,7.13,9.65-2.23A14,14,0,0,1,108.67,635.6Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#57b894"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M101.74,608.35a14,14,0,0,1-4.45-27.53l-.08,5.78,3.18-6.29h0a14,14,0,0,1,14.67,13.36,13.84,13.84,0,0,1-.6,4.79A14,14,0,0,1,101.74,608.35Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#57b894"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M135.81,585.68a14,14,0,1,1,6.2-26.27l-2.48,6.8,5.11-4.9a14,14,0,0,1,4.53,9.69,13.79,13.79,0,0,1-.35,3.87A14.05,14.05,0,0,1,135.81,585.68Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#57b894"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M131.81,544.35c-3.24.35-6.39,1.36-9.64,1.56s-6.82-.58-8.88-3.1c-1.1-1.36-1.66-3.09-2.59-4.57a10,10,0,0,0-3.54-3.33,14,14,0,1,0,26.24,9.32Q132.61,544.26,131.81,544.35Z",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M135.81,585.68a14,14,0,0,1-13.35-20,10.37,10.37,0,0,1,2.82,2.82c1,1.51,1.61,3.26,2.78,4.64,2.19,2.57,5.92,3.41,9.31,3.26s6.66-1.12,10-1.43c.47,0,.94-.07,1.42-.08A14.05,14.05,0,0,1,135.81,585.68Z",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M101.74,608.35a14,14,0,0,1-13.47-19.76,11.36,11.36,0,0,1,3,2.85c1.09,1.54,1.77,3.31,3.05,4.73,2.37,2.64,6.35,3.57,9.93,3.48s6.83-.92,10.28-1.19A14,14,0,0,1,101.74,608.35Z",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M108.67,635.6a14,14,0,0,1-25.59-11.45,13.59,13.59,0,0,1,3.08,2.75c1.34,1.62,2.22,3.47,3.76,5,2.87,2.82,7.5,4,11.63,4.09A60,60,0,0,0,108.67,635.6Z",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.1"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M73.62,656.29S84.7,656,88,653.57s17-5.21,17.86-1.4,16.65,19,4.14,19.06-29.05-2-32.39-4S73.62,656.29,73.62,656.29Z",
+                        transform: "translate(-11.5 -202.87)",
+                        fill: "#656380"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M110.27,669.9c-12.51.11-29.06-1.94-32.39-4-2.54-1.55-3.55-7.1-3.89-9.65h-.37s.7,8.93,4,11,19.89,4.08,32.39,4c3.61,0,4.86-1.31,4.79-3.21C114.33,669.17,113,669.88,110.27,669.9Z",
+                        transform: "translate(-11.5 -202.87)",
+                        opacity: "0.2"
+                      }
+                    })
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "h3",
+                  { staticClass: "text-center text-grey" },
+                  [
+                    _vm._v("Please Fill "),
+                    _c("router-link", { attrs: { to: "/mahasiswa-profile" } }, [
+                      _vm._v("Mahasiswa Profile")
+                    ]),
+                    _vm._v(" and "),
+                    _c("router-link", { attrs: { to: "/kompetensi" } }, [
+                      _vm._v("Kompetensi")
+                    ])
+                  ],
+                  1
+                )
+              ])
+        ])
+      : _c("div", { staticClass: "row" }, [_c("not-found")], 1)
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -87131,15 +91735,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue2_datepicker__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue2_datepicker__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var vue_multiselect__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-multiselect */ "./node_modules/vue-multiselect/dist/vue-multiselect.min.js");
 /* harmony import */ var vue_multiselect__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vue_multiselect__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var vform__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vform */ "./node_modules/vform/dist/vform.common.js");
-/* harmony import */ var vform__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(vform__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var vue_progressbar__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue-progressbar */ "./node_modules/vue-progressbar/dist/vue-progressbar.js");
-/* harmony import */ var vue_progressbar__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(vue_progressbar__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var vue_form_wizard__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-form-wizard */ "./node_modules/vue-form-wizard/dist/vue-form-wizard.js");
+/* harmony import */ var vue_form_wizard__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(vue_form_wizard__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var vform__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vform */ "./node_modules/vform/dist/vform.common.js");
+/* harmony import */ var vform__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(vform__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var vue_progressbar__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue-progressbar */ "./node_modules/vue-progressbar/dist/vue-progressbar.js");
+/* harmony import */ var vue_progressbar__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(vue_progressbar__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_8__);
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -87155,12 +91761,14 @@ Vue.component(vue2_datepicker__WEBPACK_IMPORTED_MODULE_1___default.a.name, vue2_
 
 Vue.component('multiselect', vue_multiselect__WEBPACK_IMPORTED_MODULE_2___default.a);
 
-window.Form = vform__WEBPACK_IMPORTED_MODULE_3__["Form"];
-Vue.component(vform__WEBPACK_IMPORTED_MODULE_3__["HasError"].name, vform__WEBPACK_IMPORTED_MODULE_3__["HasError"]);
-Vue.component(vform__WEBPACK_IMPORTED_MODULE_3__["AlertError"].name, vform__WEBPACK_IMPORTED_MODULE_3__["AlertError"]);
+Vue.use(vue_form_wizard__WEBPACK_IMPORTED_MODULE_3___default.a);
+
+window.Form = vform__WEBPACK_IMPORTED_MODULE_4__["Form"];
+Vue.component(vform__WEBPACK_IMPORTED_MODULE_4__["HasError"].name, vform__WEBPACK_IMPORTED_MODULE_4__["HasError"]);
+Vue.component(vform__WEBPACK_IMPORTED_MODULE_4__["AlertError"].name, vform__WEBPACK_IMPORTED_MODULE_4__["AlertError"]);
 Vue.component('pagination', __webpack_require__(/*! laravel-vue-pagination */ "./node_modules/laravel-vue-pagination/dist/laravel-vue-pagination.common.js"));
 
-Vue.use(vue_progressbar__WEBPACK_IMPORTED_MODULE_4___default.a, {
+Vue.use(vue_progressbar__WEBPACK_IMPORTED_MODULE_5___default.a, {
   color: '#01C24F',
   failedColor: '#C10022',
   thickness: '3px',
@@ -87170,27 +91778,33 @@ Vue.use(vue_progressbar__WEBPACK_IMPORTED_MODULE_4___default.a, {
   }
 });
 
-var toast = sweetalert2__WEBPACK_IMPORTED_MODULE_5___default.a.mixin({
+var toast = sweetalert2__WEBPACK_IMPORTED_MODULE_6___default.a.mixin({
   toast: true,
   position: 'top-end',
   showConfirmButton: false,
   timer: 3000
 });
-window.swal = sweetalert2__WEBPACK_IMPORTED_MODULE_5___default.a;
+window.swal = sweetalert2__WEBPACK_IMPORTED_MODULE_6___default.a;
 window.toast = toast;
 Vue.component('passport-clients', __webpack_require__(/*! ./components/passport/Clients.vue */ "./resources/js/components/passport/Clients.vue")["default"]);
 Vue.component('passport-authorized-clients', __webpack_require__(/*! ./components/passport/AuthorizedClients.vue */ "./resources/js/components/passport/AuthorizedClients.vue")["default"]);
 Vue.component('passport-personal-access-tokens', __webpack_require__(/*! ./components/passport/PersonalAccessTokens.vue */ "./resources/js/components/passport/PersonalAccessTokens.vue")["default"]);
 Vue.component('not-found', __webpack_require__(/*! ./components/NotFound.vue */ "./resources/js/components/NotFound.vue")["default"]);
+Vue.component('data-kompetensi', __webpack_require__(/*! ./components/frontoffice/Kompetensi/DataKompetensi */ "./resources/js/components/frontoffice/Kompetensi/DataKompetensi.vue")["default"]);
 Vue.component('bukti-kompetensi', __webpack_require__(/*! ./components/frontoffice/Kompetensi/BuktiKompetensiWajib */ "./resources/js/components/frontoffice/Kompetensi/BuktiKompetensiWajib.vue")["default"]);
 
-Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_6__["default"]);
+Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_7__["default"]);
 var routes = [{
   path: '/dashboard',
   component: __webpack_require__(/*! ./components/backoffice/Dashboard */ "./resources/js/components/backoffice/Dashboard.vue")["default"]
 }, {
   path: '/skpi',
   component: __webpack_require__(/*! ./components/backoffice/skpi/Skpi */ "./resources/js/components/backoffice/skpi/Skpi.vue")["default"]
+}, {
+  path: '/skpi-kompetensi',
+  name: 'skpi-kompetensi',
+  props: true,
+  component: __webpack_require__(/*! ./components/backoffice/skpi/SkpiKompetensi */ "./resources/js/components/backoffice/skpi/SkpiKompetensi.vue")["default"]
 }, {
   path: '/mahasiswa-achievement',
   component: __webpack_require__(/*! ./components/backoffice/mahasiswa/MahasiswaAchievement */ "./resources/js/components/backoffice/mahasiswa/MahasiswaAchievement.vue")["default"]
@@ -87216,23 +91830,29 @@ var routes = [{
   path: '/backup',
   component: __webpack_require__(/*! ./components/backoffice/backup/Backup */ "./resources/js/components/backoffice/backup/Backup.vue")["default"]
 }, {
+  path: '/skpi-submission',
+  component: __webpack_require__(/*! ./components/frontoffice/skpi/Skpi */ "./resources/js/components/frontoffice/skpi/Skpi.vue")["default"]
+}, {
   path: '/mahasiswa-profile',
-  component: __webpack_require__(/*! ./components/frontoffice/MahasiswaProfile */ "./resources/js/components/frontoffice/MahasiswaProfile.vue")["default"]
+  component: __webpack_require__(/*! ./components/frontoffice/mahasiswaprofile/MahasiswaProfile */ "./resources/js/components/frontoffice/mahasiswaprofile/MahasiswaProfile.vue")["default"]
 }, {
   path: '/kompetensi',
-  component: __webpack_require__(/*! ./components/frontoffice/Kompetensi/Kompetensi */ "./resources/js/components/frontoffice/Kompetensi/Kompetensi.vue")["default"]
+  component: __webpack_require__(/*! ./components/frontoffice/kompetensi/Kompetensi */ "./resources/js/components/frontoffice/kompetensi/Kompetensi.vue")["default"]
 }, {
   path: '*',
   component: __webpack_require__(/*! ./components/NotFound.vue */ "./resources/js/components/NotFound.vue")["default"]
 }];
-var router = new vue_router__WEBPACK_IMPORTED_MODULE_6__["default"]({
+var router = new vue_router__WEBPACK_IMPORTED_MODULE_7__["default"]({
   mode: 'history',
   routes: routes
 });
 
-moment__WEBPACK_IMPORTED_MODULE_7___default.a.locale('id');
+moment__WEBPACK_IMPORTED_MODULE_8___default.a.locale('id');
 Vue.filter('date', function (date) {
-  return moment__WEBPACK_IMPORTED_MODULE_7___default()(date).format('lll');
+  return moment__WEBPACK_IMPORTED_MODULE_8___default()(date).format('lll');
+});
+Vue.filter('dateSkpi', function (date) {
+  return moment__WEBPACK_IMPORTED_MODULE_8___default()(date).format('LL');
 });
 var cusEvent = new Vue();
 window.cusEvent = cusEvent;
@@ -88086,6 +92706,75 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/backoffice/skpi/SkpiKompetensi.vue":
+/*!********************************************************************!*\
+  !*** ./resources/js/components/backoffice/skpi/SkpiKompetensi.vue ***!
+  \********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _SkpiKompetensi_vue_vue_type_template_id_6b7392e3___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SkpiKompetensi.vue?vue&type=template&id=6b7392e3& */ "./resources/js/components/backoffice/skpi/SkpiKompetensi.vue?vue&type=template&id=6b7392e3&");
+/* harmony import */ var _SkpiKompetensi_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SkpiKompetensi.vue?vue&type=script&lang=js& */ "./resources/js/components/backoffice/skpi/SkpiKompetensi.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _SkpiKompetensi_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _SkpiKompetensi_vue_vue_type_template_id_6b7392e3___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _SkpiKompetensi_vue_vue_type_template_id_6b7392e3___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/backoffice/skpi/SkpiKompetensi.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/backoffice/skpi/SkpiKompetensi.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************!*\
+  !*** ./resources/js/components/backoffice/skpi/SkpiKompetensi.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SkpiKompetensi_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./SkpiKompetensi.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/backoffice/skpi/SkpiKompetensi.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SkpiKompetensi_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/backoffice/skpi/SkpiKompetensi.vue?vue&type=template&id=6b7392e3&":
+/*!***************************************************************************************************!*\
+  !*** ./resources/js/components/backoffice/skpi/SkpiKompetensi.vue?vue&type=template&id=6b7392e3& ***!
+  \***************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SkpiKompetensi_vue_vue_type_template_id_6b7392e3___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./SkpiKompetensi.vue?vue&type=template&id=6b7392e3& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/backoffice/skpi/SkpiKompetensi.vue?vue&type=template&id=6b7392e3&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SkpiKompetensi_vue_vue_type_template_id_6b7392e3___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SkpiKompetensi_vue_vue_type_template_id_6b7392e3___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/components/frontoffice/Kompetensi/BuktiKompetensiWajib.vue":
 /*!*********************************************************************************!*\
   !*** ./resources/js/components/frontoffice/Kompetensi/BuktiKompetensiWajib.vue ***!
@@ -88155,17 +92844,86 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/frontoffice/Kompetensi/Kompetensi.vue":
+/***/ "./resources/js/components/frontoffice/Kompetensi/DataKompetensi.vue":
+/*!***************************************************************************!*\
+  !*** ./resources/js/components/frontoffice/Kompetensi/DataKompetensi.vue ***!
+  \***************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _DataKompetensi_vue_vue_type_template_id_10808a74___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DataKompetensi.vue?vue&type=template&id=10808a74& */ "./resources/js/components/frontoffice/Kompetensi/DataKompetensi.vue?vue&type=template&id=10808a74&");
+/* harmony import */ var _DataKompetensi_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DataKompetensi.vue?vue&type=script&lang=js& */ "./resources/js/components/frontoffice/Kompetensi/DataKompetensi.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _DataKompetensi_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _DataKompetensi_vue_vue_type_template_id_10808a74___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _DataKompetensi_vue_vue_type_template_id_10808a74___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/frontoffice/Kompetensi/DataKompetensi.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/frontoffice/Kompetensi/DataKompetensi.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************************!*\
+  !*** ./resources/js/components/frontoffice/Kompetensi/DataKompetensi.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DataKompetensi_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./DataKompetensi.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/frontoffice/Kompetensi/DataKompetensi.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DataKompetensi_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/frontoffice/Kompetensi/DataKompetensi.vue?vue&type=template&id=10808a74&":
+/*!**********************************************************************************************************!*\
+  !*** ./resources/js/components/frontoffice/Kompetensi/DataKompetensi.vue?vue&type=template&id=10808a74& ***!
+  \**********************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DataKompetensi_vue_vue_type_template_id_10808a74___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./DataKompetensi.vue?vue&type=template&id=10808a74& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/frontoffice/Kompetensi/DataKompetensi.vue?vue&type=template&id=10808a74&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DataKompetensi_vue_vue_type_template_id_10808a74___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DataKompetensi_vue_vue_type_template_id_10808a74___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/frontoffice/kompetensi/Kompetensi.vue":
 /*!***********************************************************************!*\
-  !*** ./resources/js/components/frontoffice/Kompetensi/Kompetensi.vue ***!
+  !*** ./resources/js/components/frontoffice/kompetensi/Kompetensi.vue ***!
   \***********************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Kompetensi_vue_vue_type_template_id_e45892ac___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Kompetensi.vue?vue&type=template&id=e45892ac& */ "./resources/js/components/frontoffice/Kompetensi/Kompetensi.vue?vue&type=template&id=e45892ac&");
-/* harmony import */ var _Kompetensi_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Kompetensi.vue?vue&type=script&lang=js& */ "./resources/js/components/frontoffice/Kompetensi/Kompetensi.vue?vue&type=script&lang=js&");
+/* harmony import */ var _Kompetensi_vue_vue_type_template_id_13dd56ca___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Kompetensi.vue?vue&type=template&id=13dd56ca& */ "./resources/js/components/frontoffice/kompetensi/Kompetensi.vue?vue&type=template&id=13dd56ca&");
+/* harmony import */ var _Kompetensi_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Kompetensi.vue?vue&type=script&lang=js& */ "./resources/js/components/frontoffice/kompetensi/Kompetensi.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var vue_multiselect_dist_vue_multiselect_min_css_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-multiselect/dist/vue-multiselect.min.css?vue&type=style&index=0&lang=css& */ "./node_modules/vue-multiselect/dist/vue-multiselect.min.css?vue&type=style&index=0&lang=css&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
@@ -88178,8 +92936,8 @@ __webpack_require__.r(__webpack_exports__);
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
   _Kompetensi_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Kompetensi_vue_vue_type_template_id_e45892ac___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Kompetensi_vue_vue_type_template_id_e45892ac___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _Kompetensi_vue_vue_type_template_id_13dd56ca___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Kompetensi_vue_vue_type_template_id_13dd56ca___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -88189,55 +92947,55 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/frontoffice/Kompetensi/Kompetensi.vue"
+component.options.__file = "resources/js/components/frontoffice/kompetensi/Kompetensi.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/components/frontoffice/Kompetensi/Kompetensi.vue?vue&type=script&lang=js&":
+/***/ "./resources/js/components/frontoffice/kompetensi/Kompetensi.vue?vue&type=script&lang=js&":
 /*!************************************************************************************************!*\
-  !*** ./resources/js/components/frontoffice/Kompetensi/Kompetensi.vue?vue&type=script&lang=js& ***!
+  !*** ./resources/js/components/frontoffice/kompetensi/Kompetensi.vue?vue&type=script&lang=js& ***!
   \************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Kompetensi_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Kompetensi.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/frontoffice/Kompetensi/Kompetensi.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Kompetensi_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Kompetensi.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/frontoffice/kompetensi/Kompetensi.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Kompetensi_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/components/frontoffice/Kompetensi/Kompetensi.vue?vue&type=template&id=e45892ac&":
+/***/ "./resources/js/components/frontoffice/kompetensi/Kompetensi.vue?vue&type=template&id=13dd56ca&":
 /*!******************************************************************************************************!*\
-  !*** ./resources/js/components/frontoffice/Kompetensi/Kompetensi.vue?vue&type=template&id=e45892ac& ***!
+  !*** ./resources/js/components/frontoffice/kompetensi/Kompetensi.vue?vue&type=template&id=13dd56ca& ***!
   \******************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Kompetensi_vue_vue_type_template_id_e45892ac___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Kompetensi.vue?vue&type=template&id=e45892ac& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/frontoffice/Kompetensi/Kompetensi.vue?vue&type=template&id=e45892ac&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Kompetensi_vue_vue_type_template_id_e45892ac___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Kompetensi_vue_vue_type_template_id_13dd56ca___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Kompetensi.vue?vue&type=template&id=13dd56ca& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/frontoffice/kompetensi/Kompetensi.vue?vue&type=template&id=13dd56ca&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Kompetensi_vue_vue_type_template_id_13dd56ca___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Kompetensi_vue_vue_type_template_id_e45892ac___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Kompetensi_vue_vue_type_template_id_13dd56ca___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
 /***/ }),
 
-/***/ "./resources/js/components/frontoffice/MahasiswaProfile.vue":
-/*!******************************************************************!*\
-  !*** ./resources/js/components/frontoffice/MahasiswaProfile.vue ***!
-  \******************************************************************/
+/***/ "./resources/js/components/frontoffice/mahasiswaprofile/MahasiswaProfile.vue":
+/*!***********************************************************************************!*\
+  !*** ./resources/js/components/frontoffice/mahasiswaprofile/MahasiswaProfile.vue ***!
+  \***********************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _MahasiswaProfile_vue_vue_type_template_id_7c185d38___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MahasiswaProfile.vue?vue&type=template&id=7c185d38& */ "./resources/js/components/frontoffice/MahasiswaProfile.vue?vue&type=template&id=7c185d38&");
-/* harmony import */ var _MahasiswaProfile_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./MahasiswaProfile.vue?vue&type=script&lang=js& */ "./resources/js/components/frontoffice/MahasiswaProfile.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony import */ var _MahasiswaProfile_vue_vue_type_template_id_11df29ea___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MahasiswaProfile.vue?vue&type=template&id=11df29ea& */ "./resources/js/components/frontoffice/mahasiswaprofile/MahasiswaProfile.vue?vue&type=template&id=11df29ea&");
+/* harmony import */ var _MahasiswaProfile_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./MahasiswaProfile.vue?vue&type=script&lang=js& */ "./resources/js/components/frontoffice/mahasiswaprofile/MahasiswaProfile.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -88247,8 +93005,8 @@ __webpack_require__.r(__webpack_exports__);
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
   _MahasiswaProfile_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _MahasiswaProfile_vue_vue_type_template_id_7c185d38___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _MahasiswaProfile_vue_vue_type_template_id_7c185d38___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _MahasiswaProfile_vue_vue_type_template_id_11df29ea___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _MahasiswaProfile_vue_vue_type_template_id_11df29ea___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -88258,38 +93016,107 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/frontoffice/MahasiswaProfile.vue"
+component.options.__file = "resources/js/components/frontoffice/mahasiswaprofile/MahasiswaProfile.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/components/frontoffice/MahasiswaProfile.vue?vue&type=script&lang=js&":
-/*!*******************************************************************************************!*\
-  !*** ./resources/js/components/frontoffice/MahasiswaProfile.vue?vue&type=script&lang=js& ***!
-  \*******************************************************************************************/
+/***/ "./resources/js/components/frontoffice/mahasiswaprofile/MahasiswaProfile.vue?vue&type=script&lang=js&":
+/*!************************************************************************************************************!*\
+  !*** ./resources/js/components/frontoffice/mahasiswaprofile/MahasiswaProfile.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MahasiswaProfile_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./MahasiswaProfile.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/frontoffice/MahasiswaProfile.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MahasiswaProfile_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./MahasiswaProfile.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/frontoffice/mahasiswaprofile/MahasiswaProfile.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MahasiswaProfile_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/components/frontoffice/MahasiswaProfile.vue?vue&type=template&id=7c185d38&":
-/*!*************************************************************************************************!*\
-  !*** ./resources/js/components/frontoffice/MahasiswaProfile.vue?vue&type=template&id=7c185d38& ***!
-  \*************************************************************************************************/
+/***/ "./resources/js/components/frontoffice/mahasiswaprofile/MahasiswaProfile.vue?vue&type=template&id=11df29ea&":
+/*!******************************************************************************************************************!*\
+  !*** ./resources/js/components/frontoffice/mahasiswaprofile/MahasiswaProfile.vue?vue&type=template&id=11df29ea& ***!
+  \******************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MahasiswaProfile_vue_vue_type_template_id_7c185d38___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./MahasiswaProfile.vue?vue&type=template&id=7c185d38& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/frontoffice/MahasiswaProfile.vue?vue&type=template&id=7c185d38&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MahasiswaProfile_vue_vue_type_template_id_7c185d38___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MahasiswaProfile_vue_vue_type_template_id_11df29ea___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./MahasiswaProfile.vue?vue&type=template&id=11df29ea& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/frontoffice/mahasiswaprofile/MahasiswaProfile.vue?vue&type=template&id=11df29ea&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MahasiswaProfile_vue_vue_type_template_id_11df29ea___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MahasiswaProfile_vue_vue_type_template_id_7c185d38___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MahasiswaProfile_vue_vue_type_template_id_11df29ea___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/frontoffice/skpi/Skpi.vue":
+/*!***********************************************************!*\
+  !*** ./resources/js/components/frontoffice/skpi/Skpi.vue ***!
+  \***********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Skpi_vue_vue_type_template_id_209d184a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Skpi.vue?vue&type=template&id=209d184a& */ "./resources/js/components/frontoffice/skpi/Skpi.vue?vue&type=template&id=209d184a&");
+/* harmony import */ var _Skpi_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Skpi.vue?vue&type=script&lang=js& */ "./resources/js/components/frontoffice/skpi/Skpi.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Skpi_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Skpi_vue_vue_type_template_id_209d184a___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Skpi_vue_vue_type_template_id_209d184a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/frontoffice/skpi/Skpi.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/frontoffice/skpi/Skpi.vue?vue&type=script&lang=js&":
+/*!************************************************************************************!*\
+  !*** ./resources/js/components/frontoffice/skpi/Skpi.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Skpi_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Skpi.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/frontoffice/skpi/Skpi.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Skpi_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/frontoffice/skpi/Skpi.vue?vue&type=template&id=209d184a&":
+/*!******************************************************************************************!*\
+  !*** ./resources/js/components/frontoffice/skpi/Skpi.vue?vue&type=template&id=209d184a& ***!
+  \******************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Skpi_vue_vue_type_template_id_209d184a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Skpi.vue?vue&type=template&id=209d184a& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/frontoffice/skpi/Skpi.vue?vue&type=template&id=209d184a&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Skpi_vue_vue_type_template_id_209d184a___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Skpi_vue_vue_type_template_id_209d184a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

@@ -24,8 +24,13 @@ class Kompetensi extends Model
         'bukti'
     ];
 
-    public function getData(){
-        $kompetensi = self::where('id_mahasiswa',auth('api')->user()->mahasiswa()->id)
+    public function getData($id = false){
+        if($id){
+            $id_mahasiswa = $id;
+        }else{
+            $id_mahasiswa = auth('api')->user()->mahasiswa()->id;
+        }
+        $kompetensi = self::where('id_mahasiswa', $id_mahasiswa)
         ->with('bidangKompetensi')->with('kemampuan')->latest()->paginate(8);
         return KompetensiResource::collection($kompetensi);
     }
@@ -36,8 +41,13 @@ class Kompetensi extends Model
         return KompetensiResource::collection($kompetensi);
     }
 
-    public function searchData($search){
-        $kompetensi = self::where('id_mahasiswa',auth('api')->user()->mahasiswa()->id)
+    public function searchData($search, $id = false){
+        if($id){
+            $id_mahasiswa = $id;
+        }else{
+            $id_mahasiswa = auth('api')->user()->mahasiswa()->id;
+        }
+        $kompetensi = self::where('id_mahasiswa',$id_mahasiswa)
         ->with('bidangKompetensi')
         ->with('kemampuan')
         ->join('bidang_kompetensi', 'kompetensi.id_bidang', '=', 'bidang_kompetensi.id')
@@ -75,9 +85,9 @@ class Kompetensi extends Model
             }
             $sync = Kemampuan::where('id_kompetensi', $kompetensi->id)->whereNotIn('id', $kemampuan_ids)->delete();
             if($sync){
-                return ['message' => 'Save Kompetensi Successfull'];
+                return ['message' => 'Update Kompetensi Successfull'];
             }else{
-                return ['message' => 'Save Kompetensi Successfull but Kemampuan Failed'];
+                return ['message' => 'Save Kompetensi Successfull'];
             }
         }else{
             return ['message' => 'Save Kompetensi Failed'];
@@ -102,6 +112,20 @@ class Kompetensi extends Model
             }
         }else{
             return ['message' => 'Delete Kompetensi Failed'];
+        }
+    }
+
+    public function changeValidation($id){
+        $kompetensi = self::find($id);
+        if($kompetensi->active == 1){
+            $kompetensi->active = 0;
+        }else{
+            $kompetensi->active = 1;
+        }
+        if($kompetensi->save()){
+            return ['message' => 'Change Validation Successfull'];
+        }else{
+            return ['message' => 'Change Validation Failed'];
         }
     }
 

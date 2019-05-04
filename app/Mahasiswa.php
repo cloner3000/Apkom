@@ -119,9 +119,9 @@ class Mahasiswa extends Model
         return $this->hasMany('Apkom\BuktiKompetensiWajib', 'id_mahasiswa');
     }
 
-    // public function skpi(){
-    //     return $this->hasOne('Apkom\Skpi', 'id_mahasiswa', 'id'));
-    // }
+    public function skpi(){
+        return $this->hasOne('Apkom\Skpi', 'id_mahasiswa', 'id');
+    }
 
     public function kompetensi(){
         return $this->hasMany('Apkom\Kompetensi', 'id_mahasiswa');

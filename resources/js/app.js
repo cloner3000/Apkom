@@ -15,8 +15,11 @@ Vue.prototype.$gate = new Gate(window.user);
 import DatePicker from 'vue2-datepicker';
 Vue.component(DatePicker.name, DatePicker);
 
-import Multiselect from 'vue-multiselect'
+import Multiselect from 'vue-multiselect';
 Vue.component('multiselect', Multiselect);
+
+import VueFormWizard from 'vue-form-wizard';
+Vue.use(VueFormWizard);
 
 import { Form, HasError, AlertError } from 'vform';
 window.Form = Form;
@@ -66,6 +69,11 @@ Vue.component(
 );
 
 Vue.component(
+    'data-kompetensi',
+    require('./components/frontoffice/Kompetensi/DataKompetensi').default
+);
+
+Vue.component(
     'bukti-kompetensi',
     require('./components/frontoffice/Kompetensi/BuktiKompetensiWajib').default
 );
@@ -77,6 +85,7 @@ Vue.use(VueRouter);
 const routes = [
     { path: '/dashboard', component: require('./components/backoffice/Dashboard').default },
     { path: '/skpi', component: require('./components/backoffice/skpi/Skpi').default },
+    { path: '/skpi-kompetensi', name:'skpi-kompetensi', props:true, component: require('./components/backoffice/skpi/SkpiKompetensi').default },
     { path: '/mahasiswa-achievement', component: require('./components/backoffice/mahasiswa/MahasiswaAchievement').default },
     { path: '/kompetensi-wajib', component: require('./components/backoffice/kompetensiwajib/KompetensiWajib').default },
     { path: '/mahasiswa', component: require('./components/backoffice/mahasiswa/Mahasiswa').default },
@@ -85,8 +94,9 @@ const routes = [
     { path: '/account', component: require('./components/backoffice/account/Account').default },
     { path: '/profile', component: require('./components/Profile').default },
     { path: '/backup', component: require('./components/backoffice/backup/Backup').default },
-    { path: '/mahasiswa-profile', component: require('./components/frontoffice/MahasiswaProfile').default },
-    { path: '/kompetensi', component: require('./components/frontoffice/Kompetensi/Kompetensi').default },
+    { path: '/skpi-submission', component: require('./components/frontoffice/skpi/Skpi').default },
+    { path: '/mahasiswa-profile', component: require('./components/frontoffice/mahasiswaprofile/MahasiswaProfile').default },
+    { path: '/kompetensi', component: require('./components/frontoffice/kompetensi/Kompetensi').default },
     { path: '*', component: require('./components/NotFound.vue').default }
   ];
 
@@ -100,6 +110,9 @@ const routes = [
   Vue.filter('date',function(date){
         return moment(date).format('lll');
   });
+  Vue.filter('dateSkpi',function(date){
+    return moment(date).format('LL');
+});
 
 
   let cusEvent = new Vue();

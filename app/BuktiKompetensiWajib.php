@@ -43,7 +43,7 @@ class BuktiKompetensiWajib extends Model
                 if(substr($buktiKompetensiWajib->bukti_wajib, strpos($buktiKompetensiWajib->bukti_wajib, '.')+1) == 'pdf'){
                     $fileTemp = public_path('storage/data/kompetensi/pdf/').$buktiKompetensiWajib->bukti_wajib;
                 }else{
-                    $fileTemp = public_path('storage/data/kompetensi/img/').$$buktiKompetensiWajib->bukti_wajib;
+                    $fileTemp = public_path('storage/data/kompetensi/img/').$buktiKompetensiWajib->bukti_wajib;
                 }
                 if(file_exists($fileTemp)){
                     @unlink($fileTemp);
@@ -53,6 +53,13 @@ class BuktiKompetensiWajib extends Model
             $buktiKompetensiWajib->save();
             return $buktiKompetensiWajib;
         }
+    }
+
+    public function searchData($search){
+        $buktiKompetensiWajib = self::where('id_mahasiswa',auth('api')->user()->mahasiswa()->id)
+            ->where('nama_kompetensi_wajib','LIKE',"%$search%")
+            ->paginate(8);
+        return BuktiKompetensiWajibResource::collection($buktiKompetensiWajib);
     }
     
 }

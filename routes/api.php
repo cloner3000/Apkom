@@ -44,9 +44,19 @@ Route::get('mahasiswa/find', 'API\MahasiswaController@search');
 //Kompetensi Route Custom
 Route::get('kompetensi/export', 'API\KompetensiController@export');
 Route::get('kompetensi/find', 'API\KompetensiController@search');
+Route::put('kompetensi/skpi/validation/{id}', 'API\KompetensiController@changeValidation');
+Route::get('kompetensi/skpi/{id}', 'API\KompetensiController@skpiKompetensi');
+Route::get('kompetensi/skpi/{id}/find', 'API\KompetensiController@skpiSearchKompetensi');
 
 //Bukti Kompetensi Wajib Route Custom
 Route::get('bukti-kompetensi-wajib/find', 'API\BuktiKompetensiWajibController@search');
+
+//Skpi Route Custom
+Route::get('skpi/export', 'API\SkpiController@export');
+Route::get('skpi/find', 'API\SkpiController@search');
+Route::get('skpi/cek', 'API\SkpiController@checkStatus');
+Route::get('skpi/preview', 'API\SkpiController@preview');
+Route::get('skpi/publish/{id}', 'API\SkpiController@publish');
 
 //Profile Route
 Route::get('profile', 'API\UserController@profile');
@@ -60,4 +70,5 @@ Route::apiResources([
     'mahasiswa' => 'API\MahasiswaController',
     'kompetensi' => 'API\KompetensiController',
     'bukti-kompetensi-wajib' => 'API\BuktiKompetensiWajibController',
+    'skpi' => 'API\SkpiCOntroller'
     ]);

@@ -36,4 +36,12 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+    protected function redirectTo()
+    {
+        if (auth()->user()->role == 'Mahasiswa') {
+            return '/skpi-submission';
+        }
+        return '/dashboard';
+    }
 }
