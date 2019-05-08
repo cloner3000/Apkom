@@ -21,4 +21,3 @@
   </div>
   <p class="text-center text-white">Copyright &copy; 2019 <a href="http://ukdc.ac.id/">UKDC</a>. All rights reserved</p>
 @endsection
-      

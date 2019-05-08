@@ -4,9 +4,11 @@ namespace Apkom;
 
 use Apkom\Mahasiswa;
 use Apkom\Kompetensi;
+use Apkom\BidangKompetensi;
 use Apkom\BuktiKompetensiWajib;
 use Illuminate\Database\Eloquent\Model;
 use Apkom\Http\Resources\SkpiResource;
+use Jenssegers\Date\Date;
 
 class Skpi extends Model
 {
@@ -29,7 +31,6 @@ class Skpi extends Model
         ->orderByRaw("FIELD(status, 'progress', 'published') ASC")
         ->paginate(8);
         return SkpiResource::collection($skpi);
-        
     }
 
     public function getDataReport(){
@@ -87,6 +88,7 @@ class Skpi extends Model
 
     public function publish($id){
         $skpi = self::find($id);
+        $this->generatedSkpi($skpi->id_mahasiswa);
         $skpi->status = 'published';
         if($skpi->save()){
             return ['message' => 'Publish Skpi successfully'];
@@ -122,5 +124,28 @@ class Skpi extends Model
 
     public function mahasiswa(){
         return $this->hasOne('Apkom\Mahasiswa', 'id', 'id_mahasiswa');
+    }
+
+    public function generatedSkpi($id_mahasiswa){
+        $kompetensi = Kompetensi::join('bidang_kompetensi', function($join){
+            $join->on('kompetensi.id_bidang','=','bidang_kompetensi.id')
+            ->select('nama_bidang');
+        })
+        ->where('id_mahasiswa', $id_mahasiswa)
+        ->where('active', 1)
+        ->get()
+        ->groupBy('nama_bidang');
+
+        $mahasiswa = Mahasiswa::where('id', $id_mahasiswa)->with('jurusan')->first();
+        Date::setLocale('id');
+        $tgl_masuk = new Date($mahasiswa->tgl_masuk);
+        $tgl_lulus = new Date($mahasiswa->tgl_lulus);
+        $mahasiswa->tgl_masuk = $tgl_masuk->format('j F Y');
+        $mahasiswa->tgl_lulus = $tgl_lulus->format('j F Y');
+
+        $kompetensiWajib = BuktiKompetensiWajib::where('id_mahasiswa', $id_mahasiswa)
+        ->select('nama_kompetensi_wajib')
+        ->get();
+        return ['kompetensi' => $kompetensi, 'mahasiswa' => $mahasiswa, 'kompetensiWajib' => $kompetensiWajib];
     }
 }

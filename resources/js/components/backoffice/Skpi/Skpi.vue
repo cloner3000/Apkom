@@ -129,7 +129,7 @@
                   });
                 });
               }
-            });
+            });   
           },
           exportSkpi(fileType){
             this.$Progress.start();

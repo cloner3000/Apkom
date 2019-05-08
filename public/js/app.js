@@ -2821,6 +2821,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2835,7 +2849,9 @@ __webpack_require__.r(__webpack_exports__);
         jenis_pendidikan: '',
         program: '',
         fakultas: '',
-        gelar: ''
+        gelar: '',
+        persyaratan: '',
+        penilaian: ''
       })
     };
   },
@@ -68511,6 +68527,108 @@ var render = function() {
                               _vm._v(" "),
                               _c("has-error", {
                                 attrs: { form: _vm.form, field: "gelar" }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            { staticClass: "form-group" },
+                            [
+                              _c(
+                                "label",
+                                { attrs: { for: "inputPersyaratan" } },
+                                [_vm._v("Persyaratan")]
+                              ),
+                              _vm._v(" "),
+                              _c("textarea", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.form.persyaratan,
+                                    expression: "form.persyaratan"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                class: {
+                                  "is-invalid": _vm.form.errors.has(
+                                    "persyaratan"
+                                  )
+                                },
+                                attrs: {
+                                  name: "persyaratan",
+                                  placeholder: "Persyaratan Penerimaan",
+                                  id: "inputPersyaratan"
+                                },
+                                domProps: { value: _vm.form.persyaratan },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.form,
+                                      "persyaratan",
+                                      $event.target.value
+                                    )
+                                  }
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("has-error", {
+                                attrs: { form: _vm.form, field: "persyaratan" }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            { staticClass: "form-group" },
+                            [
+                              _c(
+                                "label",
+                                { attrs: { for: "inputPenilaian" } },
+                                [_vm._v("Penilaian")]
+                              ),
+                              _vm._v(" "),
+                              _c("textarea", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.form.penilaian,
+                                    expression: "form.penilaian"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                class: {
+                                  "is-invalid": _vm.form.errors.has("penilaian")
+                                },
+                                attrs: {
+                                  name: "penilaian",
+                                  placeholder: "Sistem Penilaian",
+                                  id: "inputPenilaian"
+                                },
+                                domProps: { value: _vm.form.penilaian },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.form,
+                                      "penilaian",
+                                      $event.target.value
+                                    )
+                                  }
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("has-error", {
+                                attrs: { form: _vm.form, field: "penilaian" }
                               })
                             ],
                             1

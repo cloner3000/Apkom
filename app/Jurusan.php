@@ -48,6 +48,8 @@ class Jurusan extends Model
         $jurusan->jenis_pendidikan = $request->jenis_pendidikan;
         $jurusan->fakultas = $request->fakultas;
         $jurusan->gelar = $request->gelar;
+        $jurusan->persyaratan = $request->persyaratan;
+        $jurusan->penilaian = $request->penilaian;
         if($jurusan->save()){
             return ['message' => 'Save Jurusan Successfull'];
         }else{

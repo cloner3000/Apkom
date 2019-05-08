@@ -91,9 +91,9 @@ class SkpiController extends Controller
         $this->authorize('isWarek');
         if($request->type == 'Skpi.xlsx'){
             return Excel::download(new SkpiExport, 'Skpi.xlsx');
-        }else{
-            $skpi =  $this->skpi->getDataReport();
-            $pdf = PDF::loadView('print.dataSkpi', ['skpi' => $skpi]);
+        }else{    
+            $skpi = $this->skpi->generatedSkpi(1);
+            $pdf = PDF::loadView('print.skpi', ['skpi' => $skpi]);
             return $pdf->output();
         }
 
@@ -103,6 +103,13 @@ class SkpiController extends Controller
         $this->authorize('isWarek');
         $skpi = $this->skpi->publish($id);
         return $skpi;
+    }
+
+    public function generate(){
+        $this->authorize('isWarek');
+        $skpi =  $this->skpi->getDataReport();
+            $pdf = PDF::loadView('print.dataSkpi', ['skpi' => $skpi]);
+            return $pdf->output();
     }
 
     public function checkStatus()

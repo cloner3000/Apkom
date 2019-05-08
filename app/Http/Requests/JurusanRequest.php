@@ -36,6 +36,8 @@ class JurusanRequest extends FormRequest
                     'jenis_pendidikan' => 'required|string|max:191',
                     'fakultas' => 'required|string|max:191',
                     'gelar' => 'required|string|max:191',
+                    'persyaratan' => 'required|string|max:191',
+                    'penilaian' => 'required|string|max:191',
                 ];
             }
             case 'PUT':
@@ -48,6 +50,8 @@ class JurusanRequest extends FormRequest
                     'jenis_pendidikan' => 'required|string|max:191',
                     'fakultas' => 'required|string|max:191',
                     'gelar' => 'required|string|max:191',
+                    'persyaratan' => 'required|string|max:191',
+                    'penilaian' => 'required|string|max:191',
                 ];
             }
             default:break;

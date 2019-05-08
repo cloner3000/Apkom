@@ -112,7 +112,7 @@ class Mahasiswa extends Model
     }
 
     public function jurusan(){
-        return $this->belongsTo('Apkom\Jurusan', 'id_jurusan')->select('id','nama_jurusan', 'fakultas');
+        return $this->belongsTo('Apkom\Jurusan', 'id_jurusan');
     }
 
     public function buktiKompetensiWajib(){

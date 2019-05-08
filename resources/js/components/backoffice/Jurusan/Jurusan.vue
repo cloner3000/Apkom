@@ -119,6 +119,20 @@
                             class="form-control" placeholder="Gelar yang diberikan" :class="{ 'is-invalid': form.errors.has('gelar') }" id="inputGelar">
                           <has-error :form="form" field="gelar"></has-error>
                         </div>
+                        <div class="form-group">
+                          <label for="inputPersyaratan">Persyaratan</label>
+                          <textarea v-model="form.persyaratan" name="persyaratan"
+                            class="form-control" placeholder="Persyaratan Penerimaan" :class="{ 'is-invalid': form.errors.has('persyaratan') }" id="inputPersyaratan">
+                          </textarea>
+                          <has-error :form="form" field="persyaratan"></has-error>
+                        </div>
+                        <div class="form-group">
+                          <label for="inputPenilaian">Penilaian</label>
+                          <textarea v-model="form.penilaian" name="penilaian"
+                            class="form-control" placeholder="Sistem Penilaian" :class="{ 'is-invalid': form.errors.has('penilaian') }" id="inputPenilaian">
+                          </textarea>  
+                          <has-error :form="form" field="penilaian"></has-error>
+                        </div>
                     </div>
                     <div class="modal-footer">
                       <button v-show="!editMode" type="submit" class="btn btn-primary">Add</button>
@@ -151,7 +165,9 @@
               jenis_pendidikan:'',
               program:'',
               fakultas:'',
-              gelar:''
+              gelar:'',
+              persyaratan:'',
+              penilaian:''
             })
           }
         },

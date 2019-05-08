@@ -21,6 +21,8 @@ class CreateJurusanTable extends Migration
             $table->string('jenis_pendidikan');
             $table->string('fakultas');
             $table->string('gelar');
+            $table->string('persyaratan');
+            $table->string('penilaian');
             $table->timestamps();
             $table->foreign('id_account')
             ->references('id')->on('users')
