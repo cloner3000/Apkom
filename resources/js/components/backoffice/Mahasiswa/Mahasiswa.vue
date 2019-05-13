@@ -21,8 +21,8 @@
                     <th>Jurusan</th>
                     <th>No Ijazah</th>
                     <th>Ipk</th>
-                    <th>Total Point</th>
-                    <th>Action</th>
+                    <th width="10%" class="text-center">Total Point</th>
+                    <th width="15%" class="text-center">Action</th>
                   </tr>
                   <tr v-for="(data, index) in mahasiswa.data" :key="index">
                     <td>{{mahasiswa.meta.from+index}}</td>
@@ -31,14 +31,14 @@
                     <td>{{data.jurusan.nama_jurusan}}</td>
                     <td>{{data.no_ijazah}}</td>
                     <td>{{data.ipk}}</td>
-                    <td>{{data.total_point}}</td>
-                    <td>
-                        <a href="#" @click="viewModal(data)"><i  class="fas fa-eye"></i></a>
-                        <a href="#" @click="deleteMahasiswa(data.id)"><i  class="fas fa-trash text-red"></i></a>
+                    <td class="text-center">{{data.total_point}}</td>
+                    <td class="text-center">
+                        <button @click="viewModal(data)" class="btn btn-link"><i  class="fas fa-eye"></i></button>
+                        <button @click="deleteMahasiswa(data.id)" class="btn btn-link"><i  class="fas fa-trash text-red"></i></button>
                     </td>
                   </tr>
-
-                </tbody></table>
+                  </tbody>
+                </table>
               </div>
               <!-- /.card-body -->
               <div class="card-footer">

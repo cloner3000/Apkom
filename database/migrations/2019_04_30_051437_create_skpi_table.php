@@ -18,7 +18,7 @@ class CreateSkpiTable extends Migration
             $table->bigInteger('id_mahasiswa')->unsigned();
             $table->string('status', 10)->default('progress');
             $table->float('point_skpi')->default(0);
-            $table->string('qr_code');
+            $table->string('file');
             $table->timestamps();
             $table->foreign('id_mahasiswa')
             ->references('id')->on('mahasiswa')

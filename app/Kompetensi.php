@@ -227,11 +227,11 @@ class Kompetensi extends Model
     }
 
     public function kemampuan(){
-        return $this->hasMany('Apkom\Kemampuan', 'id_kompetensi');
+        return $this->hasMany('Apkom\Kemampuan', 'id_kompetensi', 'id');
     }
 
     public function mahasiswa(){
-        return $this->belongsTo('Apkom\Mahasiswa','id_mahasiswa');
+        return $this->belongsTo('Apkom\Mahasiswa', 'id', 'id_mahasiswa');
     }
 
 }

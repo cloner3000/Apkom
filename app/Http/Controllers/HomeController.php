@@ -3,6 +3,7 @@
 namespace Apkom\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Apkom\Skpi;
 
 class HomeController extends Controller
 {
@@ -24,5 +25,21 @@ class HomeController extends Controller
     public function index()
     {
         return view('home');
+    }
+
+    public function chart(Request $request)
+    {   
+        $this->authorize('isKaprodi');
+        $this->skpi = new Skpi;
+        $skpi = $this->skpi->chart($request->id);
+        return $skpi;
+    }
+
+    public function saveChart(Request $request)
+    {   
+        $this->authorize('isKaprodi');
+        $this->skpi = new Skpi;
+        $skpi = $this->skpi->saveChart($request);
+        return $skpi;
     }
 }

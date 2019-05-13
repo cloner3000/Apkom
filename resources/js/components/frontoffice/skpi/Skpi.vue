@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div v-if="this.$gate.isMahasiswa()" class="row justify-content-center">
-            <div v-if="status != 'uncompleted'" class="col-md-8 mt-5">
+            <div v-if="status != 'unregister' && status != 'uncompleted'" class="col-md-8 mt-5">
                 <div class="card">
                     <form-wizard @on-complete="onComplete" :hide-buttons="status != 'null' ? true : false"  ref="wizard" title="SKPI SUBMISSION" subtitle="Please check preview your data submission"   finishButtonText="Submit" color="#3490DC">
                         <tab-content title="Mahasiswa Profile" icon="fas fa-user">
@@ -88,7 +88,12 @@
                                 <tr v-for="(data, index) in kompetensiWajib.data" :key="index">
                                     <td>{{kompetensiWajib.meta.from+index}}</td>
                                     <td>{{data.nama_kompetensi_wajib}}</td>
-                                    <td class="text-center"><span class="badge bg-success"><i class="fas fa-check"></i></span></td>
+                                    <td v-if="data.bukti_wajib != null" class="text-center">
+                                        <span class="badge bg-success"><i class="fas fa-check"></i></span>
+                                    </td>
+                                    <td v-else class="text-center">
+                                        <span class="badge bg-danger"><i class="fas fa-times"></i></span>
+                                    </td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -133,8 +138,10 @@ export default {
                 jurusan:{}
             },
             kompetensi:{},
-            kompetensiWajib:{},
-            status:'',
+            kompetensiWajib:{
+                data:''
+            },
+            status:'unregister',
         }
     },
     methods:{
@@ -185,8 +192,10 @@ export default {
                 axios.get('api/skpi/cek')
                 .then(response => {
                     this.status = response.data.status;
-                    if(this.status != 'null'){
-                        this.$refs.wizard.changeTab(0,3);
+                    if(this.status != 'uncompleted' && this.status != 'unregister'){                
+                        this.getMahasiswa();
+                        this.getKompetensi();
+                        this.getKompetensiWajib();     
                     }
                 })
                 .catch(() => {
@@ -217,12 +226,14 @@ export default {
             });
         }
     },
+    updated(){
+        if(this.status != 'null'){
+            this.$refs.wizard.changeTab(0,3);   
+        }
+    },
     created(){
         this.$root.search = '';
         this.getStatus();
-        this.getMahasiswa();
-        this.getKompetensi();
-        this.getKompetensiWajib();
         cusEvent.$on('ReloadData', this.getStatus);
     },
     beforeDestroy(){

@@ -23,7 +23,7 @@
                     <th>Program</th>
                     <th>Fakultas</th>
                     <th>Gelar</th>
-                    <th>Action</th>
+                    <th width="12%" class="text-center">Action</th>
                   </tr>
                   <tr v-for="(data, index) in jurusan.data" :key="index">
                     <td>{{jurusan.meta.from+index}}</td>
@@ -33,9 +33,9 @@
                     <td>{{data.program}}</td>
                     <td>{{data.fakultas}}</td>
                     <td>{{data.gelar}}</td>
-                    <td>
-                        <a href="#" @click="editModal(data)"><i  class="fas fa-edit"></i></a>
-                        <a href="#" @click="deleteJurusan(data.id)"><i  class="fas fa-trash text-red"></i></a>
+                    <td class="text-center">
+                        <button @click="editModal(data)" class="btn btn-link"><i  class="fas fa-edit"></i></button>
+                        <button @click="deleteJurusan(data.id)" class="btn btn-link"><i  class="fas fa-trash text-red"></i></button>
                     </td>
                   </tr>
 

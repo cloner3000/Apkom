@@ -18,14 +18,14 @@
                   <tbody><tr>
                     <th>No</th>
                     <th>Nama Kompetensi</th>
-                    <th>Action</th>
+                    <th width="15%" class="text-center">Action</th>
                   </tr>
                   <tr v-for="(data, index) in kompetensiWajib.data" :key="index">
                     <td>{{kompetensiWajib.meta.from+index}}</td>
                     <td>{{data.nama_kompetensi_wajib}}</td>
-                    <td>
-                        <a href="#" @click="editModal(data)"><i  class="fas fa-edit"></i></a>
-                        <a href="#" @click="deleteKompetensiWajib(data.id)"><i  class="fas fa-trash text-red"></i></a>
+                    <td class="text-center">
+                        <button @click="editModal(data)" class="btn btn-link"><i  class="fas fa-edit"></i></button>
+                        <button @click="deleteKompetensiWajib(data.id)" class="btn btn-link"><i  class="fas fa-trash text-red"></i></button>
                     </td>
                   </tr>
                 </tbody></table>

@@ -29535,6 +29535,10 @@ readers do not read off random characters that represent icons */
   border-top: 4px solid #3490DC;
 }
 
+.qr-validation {
+  width: 200px;
+}
+
 .user-profile-photo {
   width: 2rem;
   height: 2rem;
@@ -29676,5 +29680,9 @@ readers do not read off random characters that represent icons */
   border-width: 0 3px 3px 0;
   -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
+}
+
+.cursor-default {
+  cursor: default;
 }
 

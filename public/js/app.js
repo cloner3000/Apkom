@@ -3711,12 +3711,27 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       searching: false,
       skpi: {},
-      kompetensi: {}
+      kompetensi: {},
+      file: ''
     };
   },
   methods: {
@@ -3744,34 +3759,36 @@ __webpack_require__.r(__webpack_exports__);
     deleteSkpi: function deleteSkpi(id) {
       var _this2 = this;
 
-      swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
-      }).then(function (result) {
-        if (result.value) {
-          _this2.form["delete"]('api/skpi/' + id).then(function () {
-            _this2.$Progress.start();
+      if (this.$gate.isWarek()) {
+        swal.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!'
+        }).then(function (result) {
+          if (result.value) {
+            axios["delete"]('api/skpi/' + id).then(function () {
+              _this2.$Progress.start();
 
-            swal.fire('Deleted!', 'Skpi has been deleted.', 'success');
-            cusEvent.$emit('ReloadData');
+              swal.fire('Deleted!', 'Skpi has been deleted.', 'success');
+              cusEvent.$emit('ReloadData');
 
-            _this2.$Progress.finish();
-          })["catch"](function () {
-            _this2.$Progress.fail();
+              _this2.$Progress.finish();
+            })["catch"](function () {
+              _this2.$Progress.fail();
 
-            swal.fire({
-              type: 'error',
-              title: 'Oops...',
-              text: 'Skpi delete failed'
+              swal.fire({
+                type: 'error',
+                title: 'Oops...',
+                text: 'Skpi delete failed'
+              });
             });
-          });
-        }
-      });
+          }
+        });
+      }
     },
     exportSkpi: function exportSkpi(fileType) {
       var _this3 = this;
@@ -3827,23 +3844,29 @@ __webpack_require__.r(__webpack_exports__);
     publishSkpi: function publishSkpi(id) {
       var _this5 = this;
 
-      this.$Progress.start();
-      axios.get('api/skpi/publish/' + id).then(function () {
-        cusEvent.$emit('ReloadData');
-        toast.fire({
-          type: 'success',
-          title: 'Skpi publish successfull'
-        });
+      if (this.$gate.isKaprodi()) {
+        this.$Progress.start();
+        axios.get('api/skpi/publish/' + id).then(function () {
+          cusEvent.$emit('ReloadData');
+          toast.fire({
+            type: 'success',
+            title: 'Skpi publish successfull'
+          });
 
-        _this5.$Progress.finish();
-      })["catch"](function () {
-        _this5.$Progress.fail();
+          _this5.$Progress.finish();
+        })["catch"](function () {
+          _this5.$Progress.fail();
 
-        toast.fire({
-          type: 'error',
-          title: 'Skpi publish failed'
+          toast.fire({
+            type: 'error',
+            title: 'Skpi publish failed'
+          });
         });
-      });
+      }
+    },
+    viewSkpi: function viewSkpi(file) {
+      this.file = file;
+      $('#previewSkpi').modal('show');
     }
   },
   created: function created() {
@@ -3869,6 +3892,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
 //
 //
 //
@@ -4002,17 +4026,19 @@ __webpack_require__.r(__webpack_exports__);
     changeValidation: function changeValidation(id) {
       var _this2 = this;
 
-      this.$Progress.start();
-      axios.put('api/kompetensi/skpi/validation/' + id).then(function () {
-        _this2.$Progress.finish();
-      })["catch"](function () {
-        _this2.$Progress.fail();
+      if (this.$gate.isKaprodi()) {
+        this.$Progress.start();
+        axios.put('api/kompetensi/skpi/validation/' + id).then(function () {
+          _this2.$Progress.finish();
+        })["catch"](function () {
+          _this2.$Progress.fail();
 
-        toast.fire({
-          type: 'error',
-          title: 'Unvalidation kompetensi failed'
+          toast.fire({
+            type: 'error',
+            title: 'Unvalidation kompetensi failed'
+          });
         });
-      });
+      }
     },
     searchKompetensi: function searchKompetensi() {
       var _this3 = this;
@@ -4114,6 +4140,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       kompetensiWajib: {},
+      status: 'unregister',
       searching: false,
       form: new Form({
         id: '',
@@ -4224,11 +4251,29 @@ __webpack_require__.r(__webpack_exports__);
     previewBukti: function previewBukti(buktiKompetensiWajib) {
       this.form.fill(buktiKompetensiWajib);
       $('#previewBukti').modal('show');
+    },
+    getStatus: function getStatus() {
+      var _this5 = this;
+
+      if (this.$gate.isMahasiswa()) {
+        axios.get('api/skpi/cek').then(function (response) {
+          _this5.status = response.data.status;
+
+          if (_this5.status != 'unregister') {
+            _this5.getKompetensiWajib();
+          }
+        })["catch"](function () {
+          toast.fire({
+            type: 'error',
+            title: 'Get status skpi failed'
+          });
+        });
+      }
     }
   },
   mounted: function mounted() {
     this.$root.search = '';
-    this.getKompetensiWajib();
+    this.getStatus();
     cusEvent.$on('Searching', this.searchKompetensiWajib);
     cusEvent.$on('ReloadData', this.getKompetensiWajib);
   },
@@ -4426,6 +4471,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       kompetensi: {},
       bidang: {},
+      status: 'unregister',
       nama_file: 'Choose File',
       searching: false,
       editMode: false,
@@ -4527,14 +4573,9 @@ __webpack_require__.r(__webpack_exports__);
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
 
       if (this.$gate.isMahasiswa()) {
-        this.$Progress.start();
         axios.get('api/kompetensi?page=' + page).then(function (response) {
           _this2.kompetensi = response.data;
-
-          _this2.$Progress.finish();
         })["catch"](function () {
-          _this2.$Progress.fail();
-
           toast.fire({
             type: 'error',
             title: 'Load data kompetensi failed'
@@ -4703,11 +4744,30 @@ __webpack_require__.r(__webpack_exports__);
           text: 'You are uploading a large file! maximum is 2 MB'
         });
       }
+    },
+    getStatus: function getStatus() {
+      var _this9 = this;
+
+      if (this.$gate.isMahasiswa()) {
+        axios.get('api/skpi/cek').then(function (response) {
+          _this9.status = response.data.status;
+
+          if (_this9.status != 'uncompleted' && _this9.status != 'unregister') {
+            _this9.getKompetensi();
+          }
+        })["catch"](function () {
+          toast.fire({
+            type: 'error',
+            title: 'Get status skpi failed'
+          });
+        });
+      }
     }
   },
+  beforeUpdate: function beforeUpdate() {},
   mounted: function mounted() {
     this.$root.search = '';
-    this.getKompetensi();
+    this.getStatus();
     this.getBidang();
     cusEvent.$on('Searching', this.searchKompetensi);
     cusEvent.$on('ReloadData', this.getKompetensi, this.getBidang);
@@ -4901,6 +4961,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       mahasiswa: {},
       jurusan: {},
+      status: 'unregister',
       form: new Form({
         id: '',
         id_jurusan: '',
@@ -4939,13 +5000,10 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       if (this.$gate.isMahasiswa()) {
-        this.$Progress.start();
         axios.get('api/mahasiswa/profile').then(function (response) {
           _this2.mahasiswa = response.data;
 
           _this2.form.fill(_this2.mahasiswa);
-
-          _this2.$Progress.finish();
         })["catch"](function () {
           _this2.mahasiswa = false;
         });
@@ -4992,14 +5050,29 @@ __webpack_require__.r(__webpack_exports__);
           title: 'Mahasiswa profile update failed'
         });
       });
+    },
+    getStatus: function getStatus() {
+      var _this5 = this;
+
+      if (this.$gate.isMahasiswa()) {
+        axios.get('api/skpi/cek').then(function (response) {
+          _this5.status = response.data.status;
+
+          if (_this5.status != 'unregister') {
+            _this5.getMahasiswa();
+          }
+        })["catch"](function () {
+          toast.fire({
+            type: 'error',
+            title: 'Get status skpi failed'
+          });
+        });
+      }
     }
-  },
-  mounted: function mounted() {
-    console.log('Component mounted.');
   },
   created: function created() {
     this.$parent.search = '';
-    this.getMahasiswa();
+    this.getStatus();
     this.getJurusan();
     cusEvent.$on('ReloadData', this.getMahasiswa, this.getJurusan);
   },
@@ -5145,6 +5218,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -5153,8 +5231,10 @@ __webpack_require__.r(__webpack_exports__);
         jurusan: {}
       },
       kompetensi: {},
-      kompetensiWajib: {},
-      status: ''
+      kompetensiWajib: {
+        data: ''
+      },
+      status: 'unregister'
     };
   },
   methods: {
@@ -5211,8 +5291,12 @@ __webpack_require__.r(__webpack_exports__);
         axios.get('api/skpi/cek').then(function (response) {
           _this4.status = response.data.status;
 
-          if (_this4.status != 'null') {
-            _this4.$refs.wizard.changeTab(0, 3);
+          if (_this4.status != 'uncompleted' && _this4.status != 'unregister') {
+            _this4.getMahasiswa();
+
+            _this4.getKompetensi();
+
+            _this4.getKompetensiWajib();
           }
         })["catch"](function () {
           toast.fire({
@@ -5244,12 +5328,14 @@ __webpack_require__.r(__webpack_exports__);
       });
     }
   },
+  updated: function updated() {
+    if (this.status != 'null') {
+      this.$refs.wizard.changeTab(0, 3);
+    }
+  },
   created: function created() {
     this.$root.search = '';
     this.getStatus();
-    this.getMahasiswa();
-    this.getKompetensi();
-    this.getKompetensiWajib();
     cusEvent.$on('ReloadData', this.getStatus);
   },
   beforeDestroy: function beforeDestroy() {
@@ -65920,11 +66006,11 @@ var render = function() {
                               _vm._v(_vm._s(_vm._f("date")(data.created_at)))
                             ]),
                             _vm._v(" "),
-                            _c("td", [
+                            _c("td", { staticClass: "text-center" }, [
                               _c(
-                                "a",
+                                "button",
                                 {
-                                  attrs: { href: "#" },
+                                  staticClass: "btn btn-link",
                                   on: {
                                     click: function($event) {
                                       return _vm.editModal(data)
@@ -65935,9 +66021,9 @@ var render = function() {
                               ),
                               _vm._v(" "),
                               _c(
-                                "a",
+                                "button",
                                 {
-                                  attrs: { href: "#" },
+                                  staticClass: "btn btn-link",
                                   on: {
                                     click: function($event) {
                                       return _vm.deleteUser(data.id)
@@ -66348,7 +66434,9 @@ var staticRenderFns = [
       _vm._v(" "),
       _c("th", [_vm._v("Created")]),
       _vm._v(" "),
-      _c("th", [_vm._v("Action")])
+      _c("th", { staticClass: "text-center", attrs: { width: "12%" } }, [
+        _vm._v("Action")
+      ])
     ])
   },
   function() {
@@ -67581,11 +67669,11 @@ var render = function() {
                             _vm._v(" "),
                             _c("td", [_vm._v(_vm._s(data.nama_bidang))]),
                             _vm._v(" "),
-                            _c("td", [
+                            _c("td", { staticClass: "text-center" }, [
                               _c(
-                                "a",
+                                "button",
                                 {
-                                  attrs: { href: "#" },
+                                  staticClass: "btn btn-link",
                                   on: {
                                     click: function($event) {
                                       return _vm.editModal(data)
@@ -67596,9 +67684,9 @@ var render = function() {
                               ),
                               _vm._v(" "),
                               _c(
-                                "a",
+                                "button",
                                 {
-                                  attrs: { href: "#" },
+                                  staticClass: "btn btn-link",
                                   on: {
                                     click: function($event) {
                                       return _vm.deleteBidangKompetensi(data.id)
@@ -67834,7 +67922,9 @@ var staticRenderFns = [
       _vm._v(" "),
       _c("th", [_vm._v("Nama Bidang")]),
       _vm._v(" "),
-      _c("th", [_vm._v("Action")])
+      _c("th", { staticClass: "text-center", attrs: { width: "12%" } }, [
+        _vm._v("Action")
+      ])
     ])
   },
   function() {
@@ -67953,11 +68043,11 @@ var render = function() {
                             _vm._v(" "),
                             _c("td", [_vm._v(_vm._s(data.gelar))]),
                             _vm._v(" "),
-                            _c("td", [
+                            _c("td", { staticClass: "text-center" }, [
                               _c(
-                                "a",
+                                "button",
                                 {
-                                  attrs: { href: "#" },
+                                  staticClass: "btn btn-link",
                                   on: {
                                     click: function($event) {
                                       return _vm.editModal(data)
@@ -67968,9 +68058,9 @@ var render = function() {
                               ),
                               _vm._v(" "),
                               _c(
-                                "a",
+                                "button",
                                 {
-                                  attrs: { href: "#" },
+                                  staticClass: "btn btn-link",
                                   on: {
                                     click: function($event) {
                                       return _vm.deleteJurusan(data.id)
@@ -68710,7 +68800,9 @@ var staticRenderFns = [
       _vm._v(" "),
       _c("th", [_vm._v("Gelar")]),
       _vm._v(" "),
-      _c("th", [_vm._v("Action")])
+      _c("th", { staticClass: "text-center", attrs: { width: "12%" } }, [
+        _vm._v("Action")
+      ])
     ])
   },
   function() {
@@ -68827,11 +68919,11 @@ var render = function() {
                               _vm._v(_vm._s(data.nama_kompetensi_wajib))
                             ]),
                             _vm._v(" "),
-                            _c("td", [
+                            _c("td", { staticClass: "text-center" }, [
                               _c(
-                                "a",
+                                "button",
                                 {
-                                  attrs: { href: "#" },
+                                  staticClass: "btn btn-link",
                                   on: {
                                     click: function($event) {
                                       return _vm.editModal(data)
@@ -68842,9 +68934,9 @@ var render = function() {
                               ),
                               _vm._v(" "),
                               _c(
-                                "a",
+                                "button",
                                 {
-                                  attrs: { href: "#" },
+                                  staticClass: "btn btn-link",
                                   on: {
                                     click: function($event) {
                                       return _vm.deleteKompetensiWajib(data.id)
@@ -69079,7 +69171,9 @@ var staticRenderFns = [
       _vm._v(" "),
       _c("th", [_vm._v("Nama Kompetensi")]),
       _vm._v(" "),
-      _c("th", [_vm._v("Action")])
+      _c("th", { staticClass: "text-center", attrs: { width: "15%" } }, [
+        _vm._v("Action")
+      ])
     ])
   },
   function() {
@@ -69186,13 +69280,15 @@ var render = function() {
                             _vm._v(" "),
                             _c("td", [_vm._v(_vm._s(data.ipk))]),
                             _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(data.total_point))]),
+                            _c("td", { staticClass: "text-center" }, [
+                              _vm._v(_vm._s(data.total_point))
+                            ]),
                             _vm._v(" "),
-                            _c("td", [
+                            _c("td", { staticClass: "text-center" }, [
                               _c(
-                                "a",
+                                "button",
                                 {
-                                  attrs: { href: "#" },
+                                  staticClass: "btn btn-link",
                                   on: {
                                     click: function($event) {
                                       return _vm.viewModal(data)
@@ -69203,9 +69299,9 @@ var render = function() {
                               ),
                               _vm._v(" "),
                               _c(
-                                "a",
+                                "button",
                                 {
-                                  attrs: { href: "#" },
+                                  staticClass: "btn btn-link",
                                   on: {
                                     click: function($event) {
                                       return _vm.deleteMahasiswa(data.id)
@@ -69398,9 +69494,13 @@ var staticRenderFns = [
       _vm._v(" "),
       _c("th", [_vm._v("Ipk")]),
       _vm._v(" "),
-      _c("th", [_vm._v("Total Point")]),
+      _c("th", { staticClass: "text-center", attrs: { width: "10%" } }, [
+        _vm._v("Total Point")
+      ]),
       _vm._v(" "),
-      _c("th", [_vm._v("Action")])
+      _c("th", { staticClass: "text-center", attrs: { width: "15%" } }, [
+        _vm._v("Action")
+      ])
     ])
   },
   function() {
@@ -70434,7 +70534,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
-    this.$gate.isWarek() || this.$gate.isKaprodi() || this.$gate.isAkademik()
+    _vm.$gate.isWarek() || _vm.$gate.isKaprodi() || _vm.$gate.isAkademik()
       ? _c("div", [
           _c("div", { staticClass: "row mt-4" }, [
             _c("div", { staticClass: "col-md-12" }, [
@@ -70478,7 +70578,35 @@ var render = function() {
                     _c(
                       "tbody",
                       [
-                        _vm._m(0),
+                        _c("tr", [
+                          _c("th", [_vm._v("No")]),
+                          _vm._v(" "),
+                          _c("th", [_vm._v("Nama")]),
+                          _vm._v(" "),
+                          _c("th", [_vm._v("Npm")]),
+                          _vm._v(" "),
+                          _c("th", [_vm._v("Jurusan")]),
+                          _vm._v(" "),
+                          _c("th", { staticClass: "text-center" }, [
+                            _vm._v("Point Skpi")
+                          ]),
+                          _vm._v(" "),
+                          _c("th", { staticClass: "text-center" }, [
+                            _vm._v("Status")
+                          ]),
+                          _vm._v(" "),
+                          _c("th", { staticClass: "text-center" }, [
+                            _vm._v("Preview")
+                          ]),
+                          _vm._v(" "),
+                          !_vm.$gate.isAkademik()
+                            ? _c("th", [_vm._v("Kompetensi")])
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _vm.$gate.isWarek()
+                            ? _c("th", [_vm._v("Action")])
+                            : _vm._e()
+                        ]),
                         _vm._v(" "),
                         _vm._l(_vm.skpi.data, function(data, index) {
                           return _c("tr", { key: index }, [
@@ -70498,122 +70626,162 @@ var render = function() {
                               _vm._v(_vm._s(data.nama_jurusan))
                             ]),
                             _vm._v(" "),
-                            _c("td", { staticClass: "text-center" }, [
-                              _vm._v(_vm._s(data.point_skpi))
-                            ]),
-                            _vm._v(" "),
-                            _c("td", { staticClass: "align-middle" }, [
-                              data.status == "progress"
-                                ? _c(
-                                    "span",
-                                    {
-                                      staticClass:
-                                        "badge bg-orange text-white p-1"
-                                    },
-                                    [_vm._v(_vm._s(data.status))]
-                                  )
-                                : _c(
-                                    "span",
-                                    {
-                                      staticClass:
-                                        "badge bg-success text-white p-1"
-                                    },
-                                    [_vm._v(_vm._s(data.status))]
-                                  )
-                            ]),
+                            _c(
+                              "td",
+                              { staticClass: "align-middle text-center" },
+                              [_vm._v(_vm._s(data.point_skpi))]
+                            ),
                             _vm._v(" "),
                             _c(
                               "td",
                               { staticClass: "text-center align-middle" },
                               [
-                                data.status == "published"
+                                data.status == "progress"
                                   ? _c(
-                                      "button",
+                                      "span",
+                                      {
+                                        staticClass:
+                                          "badge bg-orange text-white p-1"
+                                      },
+                                      [_vm._v(_vm._s(data.status))]
+                                    )
+                                  : _c(
+                                      "span",
+                                      {
+                                        staticClass:
+                                          "badge bg-success text-white p-1"
+                                      },
+                                      [_vm._v(_vm._s(data.status))]
+                                    )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "td",
+                              { staticClass: "text-center align-middle" },
+                              [
+                                _vm.$gate.isKaprodi()
+                                  ? _c("div", [
+                                      data.status == "published"
+                                        ? _c(
+                                            "button",
+                                            {
+                                              staticClass:
+                                                "btn btn-link btn-lg",
+                                              on: {
+                                                click: function($event) {
+                                                  return _vm.viewSkpi(data.file)
+                                                }
+                                              }
+                                            },
+                                            [
+                                              _c("i", {
+                                                staticClass: "fas fa-file-pdf"
+                                              })
+                                            ]
+                                          )
+                                        : _c(
+                                            "button",
+                                            {
+                                              staticClass:
+                                                "btn btn-sm btn-outline-success",
+                                              on: {
+                                                click: function($event) {
+                                                  return _vm.publishSkpi(
+                                                    data.id
+                                                  )
+                                                }
+                                              }
+                                            },
+                                            [
+                                              _vm._v(
+                                                "\n                                  Publish\n                                "
+                                              )
+                                            ]
+                                          )
+                                    ])
+                                  : _c("div", [
+                                      data.status == "published"
+                                        ? _c(
+                                            "button",
+                                            {
+                                              staticClass:
+                                                "btn btn-link btn-lg",
+                                              on: {
+                                                click: function($event) {
+                                                  return _vm.viewSkpi(data.file)
+                                                }
+                                              }
+                                            },
+                                            [
+                                              _c("i", {
+                                                staticClass: "fas fa-file-pdf"
+                                              })
+                                            ]
+                                          )
+                                        : _c("i", {
+                                            staticClass: "fas fa-eye-slash"
+                                          })
+                                    ])
+                              ]
+                            ),
+                            _vm._v(" "),
+                            !_vm.$gate.isAkademik()
+                              ? _c(
+                                  "td",
+                                  { staticClass: "text-center align-middle" },
+                                  [
+                                    _c(
+                                      "router-link",
                                       {
                                         staticClass: "btn btn-link btn-lg",
-                                        on: {
-                                          click: function($event) {
-                                            return _vm.viewModal(data)
+                                        attrs: {
+                                          to: {
+                                            name: "skpi-kompetensi",
+                                            params: {
+                                              id: data.id_mahasiswa,
+                                              nama: data.nama,
+                                              status: data.status
+                                            }
                                           }
                                         }
                                       },
                                       [
                                         _c("i", {
-                                          staticClass: "fas fa-file-pdf"
+                                          staticClass:
+                                            "fas fa-sign-in-alt text-teal"
                                         })
                                       ]
                                     )
-                                  : _c(
+                                  ],
+                                  1
+                                )
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.$gate.isWarek()
+                              ? _c(
+                                  "td",
+                                  { staticClass: "text-center align-middle" },
+                                  [
+                                    _c(
                                       "button",
                                       {
-                                        staticClass:
-                                          "btn btn-sm btn-outline-success",
+                                        staticClass: "btn btn-link btn-sm",
                                         on: {
                                           click: function($event) {
-                                            return _vm.publishSkpi(data.id)
+                                            return _vm.deleteSkpi(data.id)
                                           }
                                         }
                                       },
                                       [
-                                        _vm._v(
-                                          "\n                                Publish\n                              "
-                                        )
+                                        _c("i", {
+                                          staticClass: "fas fa-trash text-red"
+                                        })
                                       ]
                                     )
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "td",
-                              { staticClass: "text-center align-middle" },
-                              [
-                                _c(
-                                  "router-link",
-                                  {
-                                    staticClass: "btn btn-link btn-lg",
-                                    attrs: {
-                                      to: {
-                                        name: "skpi-kompetensi",
-                                        params: {
-                                          id: data.id_mahasiswa,
-                                          nama: data.nama
-                                        }
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _c("i", {
-                                      staticClass:
-                                        "fas fa-sign-in-alt text-teal"
-                                    })
                                   ]
                                 )
-                              ],
-                              1
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "td",
-                              { staticClass: "text-center align-middle" },
-                              [
-                                _c(
-                                  "button",
-                                  {
-                                    staticClass: "btn btn-link btn-sm",
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.deleteSkpi(data.id)
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _c("i", {
-                                      staticClass: "fas fa-trash text-red"
-                                    })
-                                  ]
-                                )
-                              ]
-                            )
+                              : _vm._e()
                           ])
                         })
                       ],
@@ -70640,37 +70808,43 @@ var render = function() {
                 )
               ])
             ])
-          ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "modal fade",
+              attrs: { id: "previewSkpi", tabindex: "-1", role: "dialog" }
+            },
+            [
+              _c(
+                "div",
+                {
+                  staticClass: "modal-dialog modal-dialog-centered",
+                  attrs: { role: "document" }
+                },
+                [
+                  _c("div", { staticClass: "modal-content" }, [
+                    _vm.file != ""
+                      ? _c("embed", {
+                          attrs: {
+                            src: "storage/data/skpi/" + _vm.file,
+                            width: "100%",
+                            height: "600",
+                            type: "application/pdf"
+                          }
+                        })
+                      : _vm._e()
+                  ])
+                ]
+              )
+            ]
+          )
         ])
       : _c("div", { staticClass: "row" }, [_c("not-found")], 1)
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("tr", [
-      _c("th", [_vm._v("No")]),
-      _vm._v(" "),
-      _c("th", [_vm._v("Nama")]),
-      _vm._v(" "),
-      _c("th", [_vm._v("Npm")]),
-      _vm._v(" "),
-      _c("th", [_vm._v("Jurusan")]),
-      _vm._v(" "),
-      _c("th", [_vm._v("Point Skpi")]),
-      _vm._v(" "),
-      _c("th", [_vm._v("Status")]),
-      _vm._v(" "),
-      _c("th", [_vm._v("Preview")]),
-      _vm._v(" "),
-      _c("th", [_vm._v("Kompetensi")]),
-      _vm._v(" "),
-      _c("th", [_vm._v("Action")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -70703,7 +70877,7 @@ var render = function() {
                     _vm._m(0),
                     _vm._v(
                       "    \n                        " +
-                        _vm._s(this.$route.params.nama) +
+                        _vm._s(_vm.$route.params.nama) +
                         "\n                    "
                     )
                   ])
@@ -70804,7 +70978,13 @@ var render = function() {
                               [
                                 _c("label", { staticClass: "checkwrap" }, [
                                   _c("input", {
-                                    attrs: { type: "checkbox" },
+                                    attrs: {
+                                      type: "checkbox",
+                                      disabled:
+                                        _vm.$route.params.status !=
+                                          "progress" || !_vm.$gate.isKaprodi(),
+                                      hidden: ""
+                                    },
                                     domProps: { checked: data.active == 1 },
                                     on: {
                                       change: function($event) {
@@ -70813,7 +70993,13 @@ var render = function() {
                                     }
                                   }),
                                   _vm._v(" "),
-                                  _c("span", { staticClass: "checkmark" })
+                                  _vm.$route.params.status == "progress" &&
+                                  _vm.$gate.isKaprodi()
+                                    ? _c("span", { staticClass: "checkmark" })
+                                    : _c("span", {
+                                        staticClass:
+                                          "checkmark bg-dark cursor-default"
+                                      })
                                 ])
                               ]
                             )
@@ -71078,9 +71264,9 @@ var render = function() {
                 _c("td", [
                   data.bukti_wajib
                     ? _c(
-                        "a",
+                        "button",
                         {
-                          attrs: { href: "#" },
+                          staticClass: "btn btn-link",
                           on: {
                             click: function($event) {
                               return _vm.previewBukti(data)
@@ -71089,7 +71275,7 @@ var render = function() {
                         },
                         [_c("i", { staticClass: "fas fa-eye text-darkblue" })]
                       )
-                    : _c("a", { attrs: { href: "#" } }, [
+                    : _c("button", { staticClass: "btn btn-link" }, [
                         _c("i", { staticClass: "fas fa-times text-red" })
                       ])
                 ])
@@ -71277,13 +71463,15 @@ var render = function() {
                 _vm._v(" "),
                 _c("td", [_vm._v(_vm._s(data.peran))]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(data.point_kompetensi))]),
+                _c("td", { staticClass: "text-center" }, [
+                  _vm._v(_vm._s(data.point_kompetensi))
+                ]),
                 _vm._v(" "),
-                _c("td", [
+                _c("td", { staticClass: "text-center" }, [
                   _c(
-                    "a",
+                    "button",
                     {
-                      attrs: { href: "#" },
+                      staticClass: "btn btn-link",
                       on: {
                         click: function($event) {
                           return _vm.previewKompetensi(data)
@@ -71294,9 +71482,9 @@ var render = function() {
                   ),
                   _vm._v(" "),
                   _c(
-                    "a",
+                    "button",
                     {
-                      attrs: { href: "#" },
+                      staticClass: "btn btn-link",
                       on: {
                         click: function($event) {
                           return _vm.editModal(data)
@@ -71307,9 +71495,9 @@ var render = function() {
                   ),
                   _vm._v(" "),
                   _c(
-                    "a",
+                    "button",
                     {
-                      attrs: { href: "#" },
+                      staticClass: "btn btn-link",
                       on: {
                         click: function($event) {
                           return _vm.deleteKompetensi(data.id)
@@ -71978,7 +72166,7 @@ var staticRenderFns = [
     return _c("tr", [
       _c("th", [_vm._v("No")]),
       _vm._v(" "),
-      _c("th", [_vm._v("Nama Kompetensi")]),
+      _c("th", { attrs: { width: "25%" } }, [_vm._v("Nama Kompetensi")]),
       _vm._v(" "),
       _c("th", [_vm._v("Bidang")]),
       _vm._v(" "),
@@ -71988,9 +72176,13 @@ var staticRenderFns = [
       _vm._v(" "),
       _c("th", [_vm._v("Peran")]),
       _vm._v(" "),
-      _c("th", [_vm._v("Point")]),
+      _c("th", { staticClass: "text-center", attrs: { width: "5%" } }, [
+        _vm._v("Point")
+      ]),
       _vm._v(" "),
-      _c("th", [_vm._v("Action")])
+      _c("th", { staticClass: "text-center", attrs: { width: "20%" } }, [
+        _vm._v("Action")
+      ])
     ])
   },
   function() {
@@ -72677,7 +72869,7 @@ var render = function() {
   return _c("div", { staticClass: "container" }, [
     this.$gate.isMahasiswa()
       ? _c("div", { staticClass: "row justify-content-center" }, [
-          _vm.status != "uncompleted"
+          _vm.status != "unregister" && _vm.status != "uncompleted"
             ? _c("div", { staticClass: "col-md-8 mt-5" }, [
                 _c(
                   "div",
@@ -73031,23 +73223,45 @@ var render = function() {
                                           )
                                         ]),
                                         _vm._v(" "),
-                                        _c(
-                                          "td",
-                                          { staticClass: "text-center" },
-                                          [
-                                            _c(
-                                              "span",
-                                              {
-                                                staticClass: "badge bg-success"
-                                              },
+                                        data.bukti_wajib != null
+                                          ? _c(
+                                              "td",
+                                              { staticClass: "text-center" },
                                               [
-                                                _c("i", {
-                                                  staticClass: "fas fa-check"
-                                                })
+                                                _c(
+                                                  "span",
+                                                  {
+                                                    staticClass:
+                                                      "badge bg-success"
+                                                  },
+                                                  [
+                                                    _c("i", {
+                                                      staticClass:
+                                                        "fas fa-check"
+                                                    })
+                                                  ]
+                                                )
                                               ]
                                             )
-                                          ]
-                                        )
+                                          : _c(
+                                              "td",
+                                              { staticClass: "text-center" },
+                                              [
+                                                _c(
+                                                  "span",
+                                                  {
+                                                    staticClass:
+                                                      "badge bg-danger"
+                                                  },
+                                                  [
+                                                    _c("i", {
+                                                      staticClass:
+                                                        "fas fa-times"
+                                                    })
+                                                  ]
+                                                )
+                                              ]
+                                            )
                                       ])
                                     })
                                   ],

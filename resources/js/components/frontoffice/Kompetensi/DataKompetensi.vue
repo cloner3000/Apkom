@@ -12,13 +12,13 @@
           <table class="table table-hover">
               <tbody><tr>
                 <th>No</th>
-                <th>Nama Kompetensi</th>
+                <th width="25%">Nama Kompetensi</th>
                 <th>Bidang</th>
                 <th>Tanggal Kegiatan</th>
                 <th>Tingkat</th>
                 <th>Peran</th>
-                <th>Point</th>
-                <th>Action</th>
+                <th width="5%" class="text-center">Point</th>
+                <th width="20%" class="text-center">Action</th>
                 </tr>
                 <tr v-for="(data, index) in kompetensi.data" :key="index">
                 <td>{{kompetensi.meta.from+index}}</td>
@@ -27,11 +27,11 @@
                 <td>{{data.tgl_mulai}} - {{data.tgl_selesai}}</td>
                 <td>{{data.tingkat}}</td>
                 <td>{{data.peran}}</td>
-                <td>{{data.point_kompetensi}}</td>
-                <td>
-                    <a href="#" @click="previewKompetensi(data)"><i  class="fas fa-eye text-darkblue"></i></a>
-                    <a href="#" @click="editModal(data)"><i  class="fas fa-edit"></i></a>
-                    <a href="#" @click="deleteKompetensi(data.id)"><i  class="fas fa-trash text-red"></i></a>
+                <td class="text-center">{{data.point_kompetensi}}</td>
+                <td class="text-center">
+                    <button  @click="previewKompetensi(data)" class="btn btn-link"><i  class="fas fa-eye text-darkblue"></i></button>
+                    <button  @click="editModal(data)" class="btn btn-link"><i  class="fas fa-edit"></i></button>
+                    <button  @click="deleteKompetensi(data.id)" class="btn btn-link"><i  class="fas fa-trash text-red"></i></button>
                 </td>
                 </tr>
               </tbody>
@@ -175,6 +175,7 @@ export default {
           return{
             kompetensi : {},
             bidang : {},
+            status: 'unregister',
             nama_file :'Choose File',
             searching :false,
             editMode :false,
@@ -256,14 +257,11 @@ export default {
           },
           getKompetensi(page = 1) {
             if(this.$gate.isMahasiswa()){
-              this.$Progress.start();
               axios.get('api/kompetensi?page=' + page)
               .then(response => {
                 this.kompetensi = response.data;
-                this.$Progress.finish();
               })
               .catch(() => {
-              this.$Progress.fail();
               toast.fire({
                 type: 'error',
                 title: 'Load data kompetensi failed'
@@ -415,11 +413,31 @@ export default {
                 text: 'You are uploading a large file! maximum is 2 MB'
               });
             }
-          }
+          },
+          getStatus(){
+            if(this.$gate.isMahasiswa()){
+                axios.get('api/skpi/cek')
+                .then(response => {
+                    this.status = response.data.status;
+                    if (this.status != 'uncompleted' && this.status != 'unregister') {
+                      this.getKompetensi();
+                    }
+                })
+                .catch(() => {
+                    toast.fire({
+                        type: 'error',
+                        title: 'Get status skpi failed'
+                    });
+                });
+            }
+          },
+        },
+        beforeUpdate(){
+          
         },
         mounted(){
           this.$root.search = '';
-          this.getKompetensi();
+          this.getStatus();
           this.getBidang();
           cusEvent.$on('Searching', this.searchKompetensi);
           cusEvent.$on('ReloadData', this.getKompetensi, this.getBidang);

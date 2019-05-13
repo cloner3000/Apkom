@@ -12,4 +12,8 @@ class kemampuan extends Model
         'id_kompetensi',
         'nama_kemampuan'
     ];
+
+    public function kompetensi(){
+        return $this->belongsTo('Apkom\Kompetensi','id_kompetensi');
+    }
 }

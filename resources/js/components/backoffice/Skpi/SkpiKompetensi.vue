@@ -7,7 +7,7 @@
                     <div class="card-header">
                         <h5 class="card-title">
                         <a href="javascript:history.go(-1)" class="btn btn-white"><i class="fas fa-arrow-left"></i></a>    
-                            {{this.$route.params.nama}}
+                            {{$route.params.nama}}
                         </h5>
                     </div>
                     <div class="card-body table-responsive p-0">
@@ -40,8 +40,9 @@
                                 </td>
                                 <td class="text-center align-middle">
                                     <label class="checkwrap">
-                                      <input type="checkbox" :checked="data.active == 1" v-on:change="changeValidation(data.id)">
-                                        <span class="checkmark"></span>
+                                      <input type="checkbox" :checked="data.active == 1" v-on:change="changeValidation(data.id)" v-bind:disabled="$route.params.status != 'progress' || !$gate.isKaprodi()" hidden>
+                                        <span v-if="$route.params.status == 'progress' && $gate.isKaprodi()" class="checkmark"></span>
+                                        <span v-else class="checkmark bg-dark cursor-default"></span>
                                     </label>
                                 </td>
                                 </tr>
@@ -127,18 +128,20 @@ export default {
             });
         },
         changeValidation(id){
-            this.$Progress.start();
-            axios.put('api/kompetensi/skpi/validation/'+ id)
-            .then( () => {
-                this.$Progress.finish();
-            })
-            .catch(() => {
-                this.$Progress.fail();
-                toast.fire({
-                    type: 'error',
-                    title: 'Unvalidation kompetensi failed'
+            if(this.$gate.isKaprodi()){
+                this.$Progress.start();
+                axios.put('api/kompetensi/skpi/validation/'+ id)
+                .then( () => {
+                    this.$Progress.finish();
+                })
+                .catch(() => {
+                    this.$Progress.fail();
+                    toast.fire({
+                        type: 'error',
+                        title: 'Unvalidation kompetensi failed'
+                    });
                 });
-            });
+            }    
         },
         searchKompetensi(page = 1){
             let query = this.$root.search;

@@ -14,7 +14,11 @@
 Route::get('/', function () {
     return view('welcome');
 });
-
+Route::get('/validation', function () {
+    return view('validation');
+})->name('validation');
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
+Route::post('/chart/save', 'HomeController@saveChart');
+Route::get('/chart/{id}', 'HomeController@chart');
 Route::get('{path}',"HomeController@index")->where( 'path', '([A-z\/_.\d-]+)?' );

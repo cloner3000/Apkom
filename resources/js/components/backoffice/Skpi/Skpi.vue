@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div v-if="this.$gate.isWarek() || this.$gate.isKaprodi() || this.$gate.isAkademik()">
+        <div v-if="$gate.isWarek() || $gate.isKaprodi() || $gate.isAkademik()">
             <div class="row mt-4">
                 <div class="col-md-12">
                     <div class="card">
@@ -12,49 +12,57 @@
                             </div>
                         </div>
                         <div class="card-body table-responsive p-0">
-                            <table class="table table-hover">
+                          <table class="table table-hover">
                             <tbody><tr>
                                 <th>No</th>
                                 <th>Nama</th>
                                 <th>Npm</th>
                                 <th>Jurusan</th>
-                                <th>Point Skpi</th>
-                                <th>Status</th>
-                                <th>Preview</th>
-                                <th>Kompetensi</th>
-                                <th>Action</th>
+                                <th class="text-center">Point Skpi</th>
+                                <th class="text-center">Status</th>
+                                <th class="text-center">Preview</th>
+                                <th v-if="!$gate.isAkademik()">Kompetensi</th>
+                                <th v-if="$gate.isWarek()">Action</th>
                             </tr>
                             <tr v-for="(data, index) in skpi.data" :key="index">
                                 <td class="align-middle">{{skpi.meta.from+index}}</td>
                                 <td class="align-middle">{{data.nama}}</td>
                                 <td class="align-middle">{{data.npm}}</td>
                                 <td class="align-middle">{{data.nama_jurusan}}</td>
-                                <td class="text-center">{{data.point_skpi}}</td>
-                                <td class="align-middle">
+                                <td class="align-middle text-center">{{data.point_skpi}}</td>
+                                <td class="text-center align-middle">
                                   <span v-if="data.status == 'progress'" class="badge bg-orange text-white p-1">{{data.status}}</span>
                                   <span v-else class="badge bg-success text-white p-1">{{data.status}}</span>
                                 </td>
                                 <td class="text-center align-middle">
-                                  <button v-if="data.status == 'published'" @click="viewModal(data)" class="btn btn-link btn-lg">
-                                    <i  class="fas fa-file-pdf"></i>
-                                  </button>
-                                  <button v-else @click="publishSkpi(data.id)" class="btn btn-sm btn-outline-success">
-                                    Publish
-                                  </button>
+                                  <div v-if="$gate.isKaprodi()">  
+                                    <button v-if="data.status == 'published'" @click="viewSkpi(data.file)" class="btn btn-link btn-lg">
+                                      <i  class="fas fa-file-pdf"></i>
+                                    </button>
+                                    <button v-else @click="publishSkpi(data.id)" class="btn btn-sm btn-outline-success">
+                                      Publish
+                                    </button>
+                                  </div>
+                                  <div v-else>
+                                    <button v-if="data.status == 'published'" @click="viewSkpi(data.file)" class="btn btn-link btn-lg">
+                                      <i  class="fas fa-file-pdf"></i>
+                                    </button>
+                                    <i v-else class="fas fa-eye-slash"></i>
+                                  </div>
                                 </td>
-                                <td class="text-center align-middle">
-                                  <router-link :to="{name:'skpi-kompetensi', params:{ id:data.id_mahasiswa, nama:data.nama}}" class="btn btn-link btn-lg">
+                                <td v-if="!$gate.isAkademik()" class="text-center align-middle">
+                                  <router-link :to="{name:'skpi-kompetensi', params:{ id:data.id_mahasiswa, nama:data.nama, status:data.status}}" class="btn btn-link btn-lg">
                                     <i class="fas fa-sign-in-alt text-teal"></i>
                                   </router-link>
                                 </td>
-                                <td class="text-center align-middle">
+                                <td v-if="$gate.isWarek()" class="text-center align-middle">
                                   <button class="btn btn-link btn-sm" @click="deleteSkpi(data.id)">
                                     <i  class="fas fa-trash text-red"></i>
                                   </button>
                                 </td>
                             </tr>
-
-                            </tbody></table>
+                            </tbody>
+                          </table>
                         </div>
                         <div class="card-footer">
                             <pagination v-if="!searching"  :data="skpi" align="center" @pagination-change-page="getSkpi"></pagination>
@@ -63,7 +71,13 @@
                     </div>
                 </div>
             </div>
-            
+            <div id="previewSkpi" class="modal fade" tabindex="-1" role="dialog">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <embed v-if="file != ''"  :src="'storage/data/skpi/'+file" width="100%" height="600" type="application/pdf">
+                </div>
+              </div>  
+            </div>  
         </div>
         <div v-else class="row">
             <not-found></not-found>
@@ -77,7 +91,8 @@
             return{
                 searching: false,
                 skpi:{},
-                kompetensi:{}
+                kompetensi:{},
+                file:'',
             }
         },
          methods:{
@@ -99,37 +114,39 @@
             }
           },
           deleteSkpi(id){
-            swal.fire({
-              title: 'Are you sure?',
-              text: "You won't be able to revert this!",
-              type: 'warning',
-              showCancelButton: true,
-              confirmButtonColor: '#3085d6',
-              cancelButtonColor: '#d33',
-              confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-              if (result.value){
-                this.form.delete('api/skpi/'+id)
-                .then(() => {
-                  this.$Progress.start();
-                  swal.fire(
-                    'Deleted!',
-                    'Skpi has been deleted.',
-                    'success'
-                  );
-                  cusEvent.$emit('ReloadData');
-                  this.$Progress.finish();
-                })
-                .catch(() => {
-                  this.$Progress.fail();
-                  swal.fire({
-                    type: 'error',
-                    title: 'Oops...',
-                    text: 'Skpi delete failed'
+            if(this.$gate.isWarek()){
+              swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+              }).then((result) => {
+                if (result.value){
+                  axios.delete('api/skpi/'+id)
+                  .then(() => {
+                    this.$Progress.start();
+                    swal.fire(
+                      'Deleted!',
+                      'Skpi has been deleted.',
+                      'success'
+                    );
+                    cusEvent.$emit('ReloadData');
+                    this.$Progress.finish();
+                  })
+                  .catch(() => {
+                    this.$Progress.fail();
+                    swal.fire({
+                      type: 'error',
+                      title: 'Oops...',
+                      text: 'Skpi delete failed'
+                    });
                   });
-                });
-              }
-            });   
+                }
+              });
+            }     
           },
           exportSkpi(fileType){
             this.$Progress.start();
@@ -175,23 +192,29 @@
             }
           },
           publishSkpi(id){
-            this.$Progress.start();
-            axios.get('api/skpi/publish/'+ id)
-            .then( () => {
-              cusEvent.$emit('ReloadData');
-              toast.fire({
-                  type: 'success',
-                  title: 'Skpi publish successfull'
-              });
-              this.$Progress.finish();
-            })
-            .catch(() => {
-                this.$Progress.fail();
+            if(this.$gate.isKaprodi()){
+              this.$Progress.start();
+              axios.get('api/skpi/publish/'+ id)
+              .then( () => {
+                cusEvent.$emit('ReloadData');
                 toast.fire({
-                    type: 'error',
-                    title: 'Skpi publish failed'
+                    type: 'success',
+                    title: 'Skpi publish successfull'
                 });
-            });
+                this.$Progress.finish();
+              })
+              .catch(() => {
+                  this.$Progress.fail();
+                  toast.fire({
+                      type: 'error',
+                      title: 'Skpi publish failed'
+                  });
+              });
+            }  
+          },
+          viewSkpi(file){
+            this.file = file;
+            $('#previewSkpi').modal('show');
           }
         },
         created() {

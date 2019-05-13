@@ -21,7 +21,7 @@
                     <th>Email</th>
                     <th>Role</th>
                     <th>Created</th>
-                    <th>Action</th>
+                    <th width="12%" class="text-center">Action</th>
                   </tr>
                   <tr v-for="(data, index) in users.data" :key="index">
                     <td>{{users.meta.from+index}}</td>
@@ -29,9 +29,9 @@
                     <td>{{data.email}}</td>
                     <td>{{data.role}}</td>
                     <td>{{data.created_at | date }}</td>
-                    <td>
-                        <a href="#" @click="editModal(data)"><i  class="fas fa-edit"></i></a>
-                        <a href="#" @click="deleteUser(data.id)"><i  class="fas fa-trash text-red"></i></a>
+                    <td class="text-center">
+                        <button @click="editModal(data)" class="btn btn-link"><i  class="fas fa-edit"></i></button>
+                        <button @click="deleteUser(data.id)" class="btn btn-link"><i  class="fas fa-trash text-red"></i></button>
                     </td>
                   </tr>
 

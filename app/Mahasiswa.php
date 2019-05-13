@@ -130,4 +130,9 @@ class Mahasiswa extends Model
     public function user(){
         return $this->hasOne('Apkom\User', 'id', 'id_account');
     }
+
+    public function kemampuan(){
+        return $this->hasManyThrough('Apkom\Kemampuan', 'Apkom\Kompetensi', 'id_mahasiswa', 'id_kompetensi', 'id', 'id');
+    }
+
 }

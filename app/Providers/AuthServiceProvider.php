@@ -38,6 +38,10 @@ class AuthServiceProvider extends ServiceProvider
             return $user->role === 'Bagian Akademik';
         });
 
+        Gate::define('isAdmin', function($user){
+            return $user->role === 'Bagian Akademik' || $user->role === 'Kaprodi' || $user->role === 'Wakil Rektor';
+        });
+
         Gate::define('isMahasiswa', function($user){
             return $user->role === 'Mahasiswa';
         });

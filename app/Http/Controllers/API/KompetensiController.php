@@ -103,13 +103,13 @@ class KompetensiController extends Controller
     }
 
     public function skpiKompetensi($id){
-        $this->authorize('isWarek');
+        $this->authorize('isAdmin');
         $kompetensi = $this->kompetensi->getData($id);
         return $kompetensi;
     }
 
     public function skpiSearchKompetensi(Request $request, $id){
-        $this->authorize('isWarek');
+        $this->authorize('isAdmin');
         if ($search = $request->q) {
             $kompetensi = $this->kompetensi->searchData($request->q, $id);
         }else{
@@ -119,7 +119,7 @@ class KompetensiController extends Controller
     }
 
     public function changeValidation($id){
-        $this->authorize('isWarek');
+        $this->authorize('isKaprodi');
         $kompetensi = $this->kompetensi->changeValidation($id);
         return $kompetensi;
     }

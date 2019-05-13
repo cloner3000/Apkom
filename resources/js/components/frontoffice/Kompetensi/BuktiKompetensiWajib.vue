@@ -18,8 +18,8 @@
                         <input type="file" v-on:input="updateFile($event,data)" accept="image/*,application/pdf">    
                     </td>
                     <td>
-                        <a v-if="data.bukti_wajib" href="#" @click="previewBukti(data)"><i  class="fas fa-eye text-darkblue"></i></a>
-                        <a v-else href="#"><i class="fas fa-times text-red"></i></a>
+                        <button v-if="data.bukti_wajib" @click="previewBukti(data)" class="btn btn-link"><i  class="fas fa-eye text-darkblue"></i></button>
+                        <button v-else class="btn btn-link"><i class="fas fa-times text-red"></i></button>
                     </td>
                 </tr>
                 </tbody>
@@ -46,6 +46,7 @@
         data(){
             return{
                 kompetensiWajib: {},
+                status: 'unregister',
                 searching :false,
                 form : new Form({
                     id:'',
@@ -140,11 +141,28 @@
             previewBukti(buktiKompetensiWajib){
                 this.form.fill(buktiKompetensiWajib);
                 $('#previewBukti').modal('show');
-            }
+            },
+            getStatus(){
+                if(this.$gate.isMahasiswa()){
+                    axios.get('api/skpi/cek')
+                    .then(response => {
+                        this.status = response.data.status;
+                        if(this.status != 'unregister'){
+                            this.getKompetensiWajib();
+                        }
+                    })
+                    .catch(() => {
+                        toast.fire({
+                            type: 'error',
+                            title: 'Get status skpi failed'
+                        });
+                    });
+                }
+            },
         },
         mounted(){
           this.$root.search = '';
-          this.getKompetensiWajib();
+          this.getStatus();
           cusEvent.$on('Searching', this.searchKompetensiWajib);
           cusEvent.$on('ReloadData', this.getKompetensiWajib);
         },

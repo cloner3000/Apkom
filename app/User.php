@@ -89,6 +89,10 @@ class User extends Authenticatable
     public function deleteData($id){
         $user = self::find($id);
         if($user->delete()){
+            $imageTemp = public_path('storage/data/profile/').$user->photo;
+            if($user->photo != 'user.png' && file_exists($imageTemp)){
+                @unlink($imageTemp);
+            }
             return ['message' => 'Delete User Successfull'];
         }else{
             return ['message' => 'Delete User Failed'];

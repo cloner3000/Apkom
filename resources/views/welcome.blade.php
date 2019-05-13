@@ -6,17 +6,24 @@
         <div class="card-body login-card-body">
           <img class="mx-auto d-block mb-3" src="{{asset('img/logo.png')}}" alt="Logo UKDC">
           <h3 class="login-box-msg">Aplikasi <b>Kompetensi</b></h3>
-        </div>
-        <div class="container">
-            <div class="row">
-              <div class="col-md-6">
-                  <button class="btn btn-primary">Validation</button>
+          <div class="row">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-6">
+                  <a class="btn btn-outline-primary btn-block" href="{{ route('login') }}">Login</a>
+                  </div>
+                  <div class="col-md-6">
+                  <a class="btn btn-outline-primary btn-block" href="{{ route('register') }}">Register</a>
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class="col-md-12">
+                  <a class="btn btn-outline-success btn-block" href="{{ route('validation') }}">Validation</a>
+                  </div>
+                </div>
               </div>
-              <div class="col-md-6">
-                  <button class="btn btn-primary">Validation</button>
-              </div>
-            </div>
           </div>
+        </div>
       </div>
   </div>
   <p class="text-center text-white">Copyright &copy; 2019 <a href="http://ukdc.ac.id/">UKDC</a>. All rights reserved</p>

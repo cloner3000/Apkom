@@ -43,6 +43,11 @@ return [
 
     'disks' => [
 
+        'skpi' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/data/skpi'),
+        ],
+
         'kompetensi' => [
             'driver' => 'local',
             'root' => storage_path('app/public/data/kompetensi/pdf'),

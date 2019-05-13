@@ -10,7 +10,7 @@
             font-family: sans-serif;
         }
         @page{
-            margin-top: 200px;
+            margin-top: 220px;
         }
         label{
             font-size: 10px;
@@ -154,17 +154,26 @@
         .kompetensiWajib{
             page-break-before: always;
         }
-        .ttd{
+        .wrapttd{
             text-align: center;
-            width: 30%;
-            float: right;
-            margin-top: 100px;
+            width: 100%;
+            margin-top: 50px;
+        }
+        .toRight{
+            margin-left: 130px;
+        }
+        .toLeft{
+            margin-top: 38px;
+        }
+        .ttd{
+            width: 45%;
+            float: left;
         }
         .title-ttd{
             margin-top: 10px;
             margin-bottom: 80px;
         }
-	</style>
+    </style>
 </head>
 <body>
         <div class="firstpage">
@@ -527,6 +536,7 @@
                 </div>
             </div>
         </div>
+        @php $total = 0 @endphp
         @foreach($skpi['kompetensi'] as $bidang => $kompetensi)
         <div class="section">
             <h4 class="">{{$bidang}}</h4>
@@ -562,42 +572,74 @@
                 </tfoot>
             </table>
         </div>
+        @php $total+= $subTotal @endphp
         @endforeach  
+        <h4 class="text-bold">Total Point : {{$total}}</h4>
         <div class="section kompetensiWajib">
             <h3 class="text-bold">Kompetensi Wajib</h3>
             <table class="table text-center">
                 <thead>
                     <tr class="header">
-                        <th width="90%">Kegiatan/Activity </th>
-                        <th width="10%">Done </th>
+                        <th>Kemampuan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($skpi['kemampuan'] as $data)
+                    <tr>
+                        <td class="text-left">{{$data->nama_kemampuan}}</td>
+                    </tr>    
+                    @endforeach  
+                </tbody>
+            </table>
+            <h3 class="text-bold">Kompetensi Wajib</h3>
+            <table class="table text-center">
+                <thead>
+                    <tr class="header">
+                        <th>Kegiatan/Activity </th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($skpi['kompetensiWajib'] as $data)
                     <tr>
                         <td class="text-left">{{$data->nama_kompetensi_wajib}}</td>
-                        <td>v</td>
                     </tr>    
                 @endforeach  
                 </tbody>
             </table>
+        </td>
+        <div class="wrapttd">
             <div class="ttd">
-                {!! 
-                    Date::setLocale('id');
-                    $tgl = Date::now()->format('j F Y');
-                !!}
-                <p>
-                    {{'Surabaya, '.$tgl}}
-                </p>
-                <p class="title-ttd">
-                    Wakil Rektor II /<br>
-                    Vice Rector for Students, Alumni, and<br>
-                     Partnership Affairs
-                </p>
-                <p>
-                    Rifardi Taufiq Yufananda<br>
-                    NP. 123.456.23
-                </p>
+                <div class="toLeft">
+                    <p class="title-ttd">
+                        Wakil Rektor II /<br>
+                        Vice Rector for Students, Alumni, and<br>
+                        Partnership Affairs
+                    </p>
+                    <p>
+                        Albertus Daru D, S.T., M.T.<br>
+                        NP. 123.456.23
+                    </p>
+                </div>    
+            </div>
+            <div class="ttd">
+                <div class="toRight">
+                    {!! 
+                        Date::setLocale('id');
+                        $tgl = Date::now()->format('j F Y');
+                    !!}
+                    <p>
+                        {{'Surabaya, '.$tgl}}
+                    </p>
+                    <p class="title-ttd">
+                        Kepala Kantor KACM /<br>
+                        Head of Student Affairs, Alumni, and<br>
+                        Campus Ministry
+                    </p>
+                    <p>
+                        Albertus Daru D, S.T., M.T.<br>
+                        NP. 123.456.23
+                    </p>
+                </div>    
             </div>
         </div>
         <script type="text/php">
@@ -605,6 +647,6 @@
                 $font = $fontMetrics->get_font("helvetica");
                 $pdf->page_text($pdf->get_width() - 75, $pdf->get_height() - 50, "Page: {PAGE_NUM} of {PAGE_COUNT}", $font, 8, array(0,0,0));
             }
-        </script>         
+        </script>        
 </body>
 </html>

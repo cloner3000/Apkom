@@ -7,6 +7,7 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
+use Illuminate\Support\Facades\Gate;
 
 class SkpiExport implements FromCollection, WithMapping, WithHeadings, WithStrictNullComparison
 {
@@ -16,13 +17,24 @@ class SkpiExport implements FromCollection, WithMapping, WithHeadings, WithStric
     */
     public function collection()
     {
-        return Skpi::join('mahasiswa', function($join){
-            $join->on('skpi.id_mahasiswa', '=', 'mahasiswa.id')
-            ->join('jurusan', 'mahasiswa.id_jurusan', '=', 'jurusan.id')
-            ->select('jurusan.nama_jurusan');
-        })
-        ->select('skpi.status','skpi.point_skpi','mahasiswa.nama','mahasiswa.npm','jurusan.nama_jurusan')
-        ->get();
+        if(Gate::check('isKaprodi')){
+            return Skpi::join('mahasiswa', function($join){
+                $join->on('skpi.id_mahasiswa', '=', 'mahasiswa.id')
+                ->join('jurusan', 'mahasiswa.id_jurusan', '=', 'jurusan.id')
+                ->where('jurusan.id_account', auth('api')->user()->id)
+                ->select('jurusan.nama_jurusan');
+            })
+            ->select('skpi.status','skpi.point_skpi','mahasiswa.nama','mahasiswa.npm','jurusan.nama_jurusan')
+            ->get();
+        }else{
+            return Skpi::join('mahasiswa', function($join){
+                $join->on('skpi.id_mahasiswa', '=', 'mahasiswa.id')
+                ->join('jurusan', 'mahasiswa.id_jurusan', '=', 'jurusan.id')
+                ->select('jurusan.nama_jurusan');
+            })
+            ->select('skpi.status','skpi.point_skpi','mahasiswa.nama','mahasiswa.npm','jurusan.nama_jurusan')
+            ->get();
+        }
     }
 
     public function map($skpi): array

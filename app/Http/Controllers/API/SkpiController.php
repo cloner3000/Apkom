@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Apkom\Http\Controllers\Controller;
 use Apkom\Exports\SkpiExport;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Gate;
 use PDF;
 
 class SkpiController extends Controller
@@ -22,8 +23,12 @@ class SkpiController extends Controller
      */
     public function index()
     {
-        $this->authorize('isWarek');
-        $skpi = $this->skpi->getData();
+        $this->authorize('isAdmin');
+        if(Gate::check('isKaprodi')){
+            $skpi = $this->skpi->getData(auth('api')->user()->id);
+        }else{
+            $skpi = $this->skpi->getData();    
+        }
         return $skpi;
     }
 
@@ -33,7 +38,7 @@ class SkpiController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store()
     {
         $this->authorize('isMahasiswa');
         $skpi = $this->skpi->saveData();
@@ -77,39 +82,44 @@ class SkpiController extends Controller
     }
 
     public function search(Request $request){
-        $this->authorize('isWarek');
-        if ($search = $request->q) {
-            $skpi = $this->skpi->searchData($request->q);
+        $this->authorize('isAdmin');
+        if(Gate::check('isKaprodi')){
+            if ($search = $request->q) {
+                $skpi = $this->skpi->searchData($request->q, auth('api')->user()->id);
+            }else{
+                $skpi = $this->skpi->getData(auth('api')->user()->id);
+            }
         }else{
-            $skpi = $this->skpi->getData();
+            if ($search = $request->q) {
+                $skpi = $this->skpi->searchData($request->q);
+            }else{
+                $skpi = $this->skpi->getData();
+            }
         }
         return $skpi;
     }
 
     public function export(Request $request)
     {
-        $this->authorize('isWarek');
+        $this->authorize('isAdmin');
         if($request->type == 'Skpi.xlsx'){
             return Excel::download(new SkpiExport, 'Skpi.xlsx');
-        }else{    
-            $skpi = $this->skpi->generatedSkpi(1);
-            $pdf = PDF::loadView('print.skpi', ['skpi' => $skpi]);
-            return $pdf->output();
-        }
-
-    }
-
-    public function publish($id){
-        $this->authorize('isWarek');
-        $skpi = $this->skpi->publish($id);
-        return $skpi;
-    }
-
-    public function generate(){
-        $this->authorize('isWarek');
-        $skpi =  $this->skpi->getDataReport();
+        }else{
+            if(Gate::check('isKaprodi')){
+                $skpi =  $this->skpi->getDataReport(auth('api')->user()->id);
+            }else{
+                $skpi =  $this->skpi->getDataReport();
+            }       
             $pdf = PDF::loadView('print.dataSkpi', ['skpi' => $skpi]);
             return $pdf->output();
+        }
+    }
+
+    public function publish($id)
+    {
+        $this->authorize('isKaprodi');
+        $skpi = $this->skpi->publish($id);
+        return $skpi;
     }
 
     public function checkStatus()

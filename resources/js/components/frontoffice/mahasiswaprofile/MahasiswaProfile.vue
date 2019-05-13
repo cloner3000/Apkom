@@ -112,6 +112,7 @@
             return {
               mahasiswa:{},
               jurusan: {},
+              status: 'unregister',
               form: new Form({
               id:'',
               id_jurusan:'',
@@ -146,12 +147,10 @@
             },
             getMahasiswa(){
                 if(this.$gate.isMahasiswa()){
-                    this.$Progress.start();
                     axios.get('api/mahasiswa/profile')
                     .then(response => {
                         this.mahasiswa = response.data;
                         this.form.fill(this.mahasiswa);
-                        this.$Progress.finish();
                     })
                     .catch(() => {
                         this.mahasiswa = false;
@@ -195,14 +194,28 @@
                         title: 'Mahasiswa profile update failed'
                     });
                 });
-            }
-        },
-        mounted() {
-            console.log('Component mounted.')
+            },
+            getStatus(){
+                if(this.$gate.isMahasiswa()){
+                    axios.get('api/skpi/cek')
+                    .then(response => {
+                        this.status = response.data.status;
+                        if(this.status != 'unregister'){
+                            this.getMahasiswa();
+                        }
+                    })
+                    .catch(() => {
+                        toast.fire({
+                            type: 'error',
+                            title: 'Get status skpi failed'
+                        });
+                    });
+                }
+            },
         },
         created() {
            this.$parent.search = '';
-           this.getMahasiswa();
+           this.getStatus();
            this.getJurusan();
            cusEvent.$on('ReloadData', this.getMahasiswa, this.getJurusan); 
         },

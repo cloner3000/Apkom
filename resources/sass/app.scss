@@ -23,6 +23,11 @@ $fa-font-path: "../webfonts";
   border-top: 4px solid #3490DC;
 }
 
+//Validation
+.qr-validation{
+  width: 200px;
+}
+
 // Navbar
 .user-profile-photo{
   width: 2rem;
@@ -154,4 +159,8 @@ $fa-font-path: "../webfonts";
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
+}
+
+.cursor-default{
+  cursor: default;
 }
