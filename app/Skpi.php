@@ -187,9 +187,11 @@ class Skpi extends Model
         ->groupBy('nama_bidang');
 
         $mahasiswa = Mahasiswa::where('id', $id_mahasiswa)->with('jurusan')->first();
-        Date::setLocale('id');
         $tgl_masuk = new Date($mahasiswa->tgl_masuk);
         $tgl_lulus = new Date($mahasiswa->tgl_lulus);
+        $mahasiswa->tgl_masuk_en = $tgl_masuk->format('F j Y');
+        $mahasiswa->tgl_lulus_en = $tgl_lulus->format('F j Y');
+        Date::setLocale('id');
         $mahasiswa->tgl_masuk = $tgl_masuk->format('j F Y');
         $mahasiswa->tgl_lulus = $tgl_lulus->format('j F Y');
 

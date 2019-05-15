@@ -12,10 +12,14 @@ class Jurusan extends Model
     protected $fillable = [
       'id_account',
       'nama_jurusan',
+      'nama_jurusan_en',
       'program',
       'jenis_pendidikan',
       'fakultas',
-      'gelar'
+      'gelar',
+      'persyaratan',
+      'persyaratan_en',
+      'penilaian'
     ];
 
     public function getData(){
@@ -44,11 +48,13 @@ class Jurusan extends Model
         if($id) $jurusan = self::find($id);
         $jurusan->id_account = $request->id_account;
         $jurusan->nama_jurusan = $request->nama_jurusan;
+        $jurusan->nama_jurusan_en = $request->nama_jurusan_en;
         $jurusan->program = $request->program;
         $jurusan->jenis_pendidikan = $request->jenis_pendidikan;
         $jurusan->fakultas = $request->fakultas;
         $jurusan->gelar = $request->gelar;
         $jurusan->persyaratan = $request->persyaratan;
+        $jurusan->persyaratan_en = $request->persyaratan_en;
         $jurusan->penilaian = $request->penilaian;
         if($jurusan->save()){
             return ['message' => 'Save Jurusan Successfull'];

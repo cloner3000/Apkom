@@ -57,7 +57,7 @@
             margin-bottom: 20px;
         }
         .section{
-            padding-top: 10px;
+            padding-top: 7px;
         }
         .section h4, h5{
             margin: 0;
@@ -65,7 +65,7 @@
         }
         .content{
             margin: 5px 0;
-            padding: 10px 0;
+            padding: 5px 0;
         }
         .wrapfield{
             position: relative;
@@ -123,6 +123,13 @@
         .field .input input{
             width: 99%;
             padding: 6px 3px;;
+        }
+        .double-input{
+            width: 99%;
+            padding: 3px 3px;
+            font-size: 11px;
+            margin-left: 2px;
+            border: 1px solid #999999;
         }
         .title-fix{
             position: fixed;
@@ -276,7 +283,10 @@
                                     <label class="sublabel bold italic">Date of Starting Study</label>
                                 </div>
                                 <div class="input">
-                                    <input type="text" value="{{$skpi['mahasiswa']->tgl_masuk}}">
+                                    <div class="double-input">
+                                        {{$skpi['mahasiswa']->tgl_masuk}}<br>
+                                        <span class="italic">{{$skpi['mahasiswa']->tgl_masuk_en}}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -286,8 +296,11 @@
                                     <label class="bold">Tanggal Kelulusan</label><br>
                                     <label class="sublabel bold italic">Date of Graduation</label>
                                 </div>
-                                <div class="input">
-                                    <input type="text" value="{{$skpi['mahasiswa']->tgl_lulus}}">
+                                <div class="input">    
+                                    <div class="double-input">
+                                        {{$skpi['mahasiswa']->tgl_lulus}}<br>
+                                        <span class="italic">{{$skpi['mahasiswa']->tgl_lulus_en}}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -300,7 +313,21 @@
                                     <label class="sublabel bold italic">Faculty of</label>
                                 </div>
                                 <div class="input">
-                                    <input type="text" value="{{$skpi['mahasiswa']->jurusan->fakultas}}">
+                                    <div class="double-input">
+                                            {{$skpi['mahasiswa']->jurusan->fakultas}}<br>
+                                            @switch($skpi['mahasiswa']->jurusan->fakultas)
+                                                @case('Fakultas Teknik')
+                                                    <span class="italic">Faculty of Engineering</span>    
+                                                    @break
+                                                @case('Fakultas Ekonomi')
+                                                    <span class="italic">Faculty of Economics</span>
+                                                    @break
+                                                @case('Fakultas Hukum')
+                                                    <span class="italic">Faculty of Law</span>
+                                                    @break    
+                                                @default
+                                            @endswitch
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -311,7 +338,10 @@
                                     <label class="sublabel bold italic">Department of</label>
                                 </div>
                                 <div class="input">
-                                    <input type="text" value="{{$skpi['mahasiswa']->jurusan->nama_jurusan}}">
+                                        <div class="double-input">
+                                            {{$skpi['mahasiswa']->jurusan->nama_jurusan}}<br>
+                                            <span class="italic">{{$skpi['mahasiswa']->jurusan->nama_jurusan_en}}</span>
+                                        </div>
                                 </div>
                             </div>
                         </div>
@@ -331,7 +361,10 @@
                             <label class="sublabel bold italic">Language of Instruction</label>
                         </div>
                         <div class="input">
-                            <input type="text" value="Indonesia">
+                            <div class="double-input">
+                                Indonesia<br>
+                                <span class="italic">Indonesian</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -348,7 +381,21 @@
                                     <label class="sublabel bold italic">Type of Education</label>
                                 </div>
                                 <div class="input">
-                                <input type="text" value="{{$skpi['mahasiswa']->jurusan->jenis_pendidikan}}">
+                                    <div class="double-input">
+                                        {{$skpi['mahasiswa']->jurusan->jenis_pendidikan}}<br>
+                                        @switch($skpi['mahasiswa']->jurusan->jenis_pendidikan)
+                                            @case('Akademik')
+                                                <span class="italic">Academic</span>
+                                                @break
+                                            @case('Vokasi')
+                                                <span class="italic">Vocational</span>
+                                                @break
+                                            @case('Profesi')
+                                                <span class="italic">Profession</span>
+                                                @break    
+                                            @default
+                                        @endswitch
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -393,7 +440,30 @@
                                     <label class="sublabel bold italic">Programme</label>
                                 </div>
                                 <div class="input">
-                                <input type="text" value="{{$skpi['mahasiswa']->jurusan->program}}">
+                                    <div class="double-input">
+                                        {{$skpi['mahasiswa']->jurusan->program}}<br>
+                                        @switch($skpi['mahasiswa']->jurusan->program)
+                                            @case('Diploma')
+                                                <span class="italic">Diploma</span>
+                                                @break
+                                            @case('Sarjana')
+                                                <span class="italic">Bachelor</span>
+                                                @break
+                                            @case('Magister')
+                                                <span class="italic">Master</span>
+                                                @break
+                                            @case('Doktor')
+                                                <span class="italic">Doctorate</span>
+                                                @break
+                                            @case('Profesi')
+                                                <span class="italic">Profession</span>
+                                                @break            
+                                            @case('Spesialis')
+                                                <span class="italic">Specialist</span>
+                                                @break            
+                                            @default
+                                        @endswitch
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -419,13 +489,22 @@
                                 <div class="input">
                                     @switch($skpi['mahasiswa']->jurusan->program)
                                         @case('Sarjana')
-                                            <input type="text" value="Program Master">
+                                            <div class="double-input">
+                                                Program Magister<br>
+                                                <span class="italic">Master Program</span>
+                                            </div>
                                             @break
                                         @case('Diploma')
-                                            <input type="text" value="Program Sarjana atau Master">
+                                            <div class="double-input">
+                                                Program Sarjana atau Master<br>
+                                                <span class="italic">Bachelor or Master Program</span>
+                                            </div>
                                             @break
                                         @case('Magister')
-                                            <input type="text" value="Program Doktoral">
+                                            <div class="double-input">
+                                                Program Doktoral<br>
+                                                <span class="italic">Doctorate Program</span>
+                                            </div>
                                             @break
                                         @case('Doktor')
                                             <input type="text" value="Belum Ditentukan">
@@ -437,7 +516,6 @@
                                             <input type="text" value="Belum Ditentukan">
                                             @break            
                                         @default
-                                            <input type="text" value="Belum Ditentukan">
                                     @endswitch
                                 </div>
                             </div>
@@ -451,25 +529,42 @@
                                 <div class="input">
                                     @switch($skpi['mahasiswa']->jurusan->program)
                                         @case('Sarjana')
-                                            <input type="text" value="Level Enam">
+                                            <div class="double-input">
+                                                Level Enam<br>
+                                                <span class="italic">Level Six</span>
+                                            </div>
                                             @break
                                         @case('Diploma')
-                                            <input type="text" value="Level Enam">
+                                            <div class="double-input">
+                                                Level Enam<br>
+                                                <span class="italic">Level Six</span>
+                                            </div>
                                             @break
                                         @case('Magister')
-                                            <input type="text" value="Level Delapan">
+                                            <div class="double-input">
+                                                Level Delapan<br>
+                                                <span class="italic">Level Eight</span>
+                                            </div>
                                             @break
                                         @case('Doktor')
-                                            <input type="text" value="Level Sembilan">
+                                            <div class="double-input">
+                                                Level Sembilan<br>
+                                                <span class="italic">Level Nine</span>
+                                            </div>
                                             @break
                                         @case('Profesi')
-                                            <input type="text" value="Level Tujuh / Delapan">
+                                            <div class="double-input">
+                                                Level Tujuh / Delapan<br>
+                                                <span class="italic">Level Seven / Eight</span>
+                                            </div>
                                             @break
                                         @case('Spesialis')
-                                            <input type="text" value="Level Delapan / Sembilan">
+                                            <div class="double-input">
+                                                Level Delapan / Sembilan<br>
+                                                <span class="italic">Level Eight / Nine</span>
+                                            </div>
                                             @break            
                                         @default
-                                            <input type="text" value="Belum Ditentukan">
                                     @endswitch
                                 </div>
                             </div>
@@ -481,7 +576,10 @@
                             <label class="sublabel bold italic">Entry Requirements</label>
                         </div>
                         <div class="input">
-                        <input type="text" value="{{$skpi['mahasiswa']->jurusan->persyaratan}}">
+                            <div class="double-input">
+                                {{$skpi['mahasiswa']->jurusan->persyaratan}}<br>
+                                <span class="italic">{{$skpi['mahasiswa']->jurusan->persyaratan_en}}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -576,7 +674,7 @@
         @endforeach  
         <h4 class="text-bold">Total Point : {{$total}}</h4>
         <div class="section kompetensiWajib">
-            <h3 class="text-bold">Kompetensi Wajib</h3>
+            <h3 class="text-bold">Kemampuan</h3>
             <table class="table text-center">
                 <thead>
                     <tr class="header">

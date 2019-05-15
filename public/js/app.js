@@ -2835,6 +2835,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2846,11 +2865,13 @@ __webpack_require__.r(__webpack_exports__);
         id: '',
         id_account: '',
         nama_jurusan: '',
+        nama_jurusan_en: '',
         jenis_pendidikan: '',
         program: '',
         fakultas: '',
         gelar: '',
         persyaratan: '',
+        persyaratan_en: '',
         penilaian: ''
       })
     };
@@ -68167,58 +68188,125 @@ var render = function() {
                       },
                       [
                         _c("div", { staticClass: "modal-body" }, [
-                          _c(
-                            "div",
-                            { staticClass: "form-group" },
-                            [
+                          _c("div", { staticClass: "row" }, [
+                            _c("div", { staticClass: "col-md-6" }, [
                               _c(
-                                "label",
-                                { attrs: { for: "inputNamaJurusan" } },
-                                [_vm._v("Nama Jurusan")]
-                              ),
-                              _vm._v(" "),
-                              _c("input", {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.form.nama_jurusan,
-                                    expression: "form.nama_jurusan"
-                                  }
-                                ],
-                                staticClass: "form-control",
-                                class: {
-                                  "is-invalid": _vm.form.errors.has(
-                                    "nama_jurusan"
-                                  )
-                                },
-                                attrs: {
-                                  type: "text",
-                                  name: "nama_jurusan",
-                                  placeholder: "Nama Jurusan",
-                                  id: "inputNamaJurusan"
-                                },
-                                domProps: { value: _vm.form.nama_jurusan },
-                                on: {
-                                  input: function($event) {
-                                    if ($event.target.composing) {
-                                      return
+                                "div",
+                                { staticClass: "form-group" },
+                                [
+                                  _c(
+                                    "label",
+                                    { attrs: { for: "inputNamaJurusan" } },
+                                    [_vm._v("Nama Jurusan")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.form.nama_jurusan,
+                                        expression: "form.nama_jurusan"
+                                      }
+                                    ],
+                                    staticClass: "form-control",
+                                    class: {
+                                      "is-invalid": _vm.form.errors.has(
+                                        "nama_jurusan"
+                                      )
+                                    },
+                                    attrs: {
+                                      type: "text",
+                                      name: "nama_jurusan",
+                                      placeholder: "Nama Jurusan",
+                                      id: "inputNamaJurusan"
+                                    },
+                                    domProps: { value: _vm.form.nama_jurusan },
+                                    on: {
+                                      input: function($event) {
+                                        if ($event.target.composing) {
+                                          return
+                                        }
+                                        _vm.$set(
+                                          _vm.form,
+                                          "nama_jurusan",
+                                          $event.target.value
+                                        )
+                                      }
                                     }
-                                    _vm.$set(
-                                      _vm.form,
-                                      "nama_jurusan",
-                                      $event.target.value
-                                    )
-                                  }
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c("has-error", {
-                                attrs: { form: _vm.form, field: "nama_jurusan" }
-                              })
-                            ],
-                            1
-                          ),
+                                  }),
+                                  _vm._v(" "),
+                                  _c("has-error", {
+                                    attrs: {
+                                      form: _vm.form,
+                                      field: "nama_jurusan"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "col-md-6" }, [
+                              _c(
+                                "div",
+                                { staticClass: "form-group" },
+                                [
+                                  _c(
+                                    "label",
+                                    { attrs: { for: "inputNamaJurusanEn" } },
+                                    [_vm._v("Nama Jurusan (En) ")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.form.nama_jurusan_en,
+                                        expression: "form.nama_jurusan_en"
+                                      }
+                                    ],
+                                    staticClass: "form-control",
+                                    class: {
+                                      "is-invalid": _vm.form.errors.has(
+                                        "nama_jurusan_en"
+                                      )
+                                    },
+                                    attrs: {
+                                      type: "text",
+                                      name: "nama_jurusan_en",
+                                      placeholder: "Nama Jurusan (En)",
+                                      id: "inputNamaJurusanEn"
+                                    },
+                                    domProps: {
+                                      value: _vm.form.nama_jurusan_en
+                                    },
+                                    on: {
+                                      input: function($event) {
+                                        if ($event.target.composing) {
+                                          return
+                                        }
+                                        _vm.$set(
+                                          _vm.form,
+                                          "nama_jurusan_en",
+                                          $event.target.value
+                                        )
+                                      }
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c("has-error", {
+                                    attrs: {
+                                      form: _vm.form,
+                                      field: "nama_jurusan_en"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ])
+                          ]),
                           _vm._v(" "),
                           _c(
                             "div",
@@ -68669,6 +68757,61 @@ var render = function() {
                               _vm._v(" "),
                               _c("has-error", {
                                 attrs: { form: _vm.form, field: "persyaratan" }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            { staticClass: "form-group" },
+                            [
+                              _c(
+                                "label",
+                                { attrs: { for: "inputPersyaratanEn" } },
+                                [_vm._v("Persyaratan (En)")]
+                              ),
+                              _vm._v(" "),
+                              _c("textarea", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.form.persyaratan_en,
+                                    expression: "form.persyaratan_en"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                class: {
+                                  "is-invalid": _vm.form.errors.has(
+                                    "persyaratan_en"
+                                  )
+                                },
+                                attrs: {
+                                  name: "persyaratan_en",
+                                  placeholder: "Persyaratan Penerimaan (En)",
+                                  id: "inputPersyaratanEn"
+                                },
+                                domProps: { value: _vm.form.persyaratan_en },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.form,
+                                      "persyaratan_en",
+                                      $event.target.value
+                                    )
+                                  }
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("has-error", {
+                                attrs: {
+                                  form: _vm.form,
+                                  field: "persyaratan_en"
+                                }
                               })
                             ],
                             1

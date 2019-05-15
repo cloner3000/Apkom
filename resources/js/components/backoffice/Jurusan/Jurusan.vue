@@ -62,11 +62,23 @@
                     </div>
                     <form @submit.prevent="editMode ? updateJurusan() : createJurusan()">
                     <div class="modal-body">
-                        <div class="form-group">
-                          <label for="inputNamaJurusan">Nama Jurusan</label>
-                          <input v-model="form.nama_jurusan" type="text" name="nama_jurusan"
-                            class="form-control" placeholder="Nama Jurusan" :class="{ 'is-invalid': form.errors.has('nama_jurusan') }" id="inputNamaJurusan">
-                          <has-error :form="form" field="nama_jurusan"></has-error>
+                        <div class="row">
+                          <div class="col-md-6">    
+                            <div class="form-group">
+                              <label for="inputNamaJurusan">Nama Jurusan</label>
+                              <input v-model="form.nama_jurusan" type="text" name="nama_jurusan"
+                                class="form-control" placeholder="Nama Jurusan" :class="{ 'is-invalid': form.errors.has('nama_jurusan') }" id="inputNamaJurusan">
+                              <has-error :form="form" field="nama_jurusan"></has-error>
+                            </div>
+                          </div>
+                          <div class="col-md-6">    
+                            <div class="form-group">
+                              <label for="inputNamaJurusanEn">Nama Jurusan (En) </label>
+                              <input v-model="form.nama_jurusan_en" type="text" name="nama_jurusan_en"
+                                class="form-control" placeholder="Nama Jurusan (En)" :class="{ 'is-invalid': form.errors.has('nama_jurusan_en') }" id="inputNamaJurusanEn">
+                              <has-error :form="form" field="nama_jurusan_en"></has-error>
+                            </div>
+                          </div>
                         </div>
                         <div class="form-group">
                           <label for="inputKaprodi">Kepala Program Studi</label>
@@ -127,6 +139,13 @@
                           <has-error :form="form" field="persyaratan"></has-error>
                         </div>
                         <div class="form-group">
+                          <label for="inputPersyaratanEn">Persyaratan (En)</label>
+                          <textarea v-model="form.persyaratan_en" name="persyaratan_en"
+                            class="form-control" placeholder="Persyaratan Penerimaan (En)" :class="{ 'is-invalid': form.errors.has('persyaratan_en') }" id="inputPersyaratanEn">
+                          </textarea>
+                          <has-error :form="form" field="persyaratan_en"></has-error>
+                        </div>
+                        <div class="form-group">
                           <label for="inputPenilaian">Penilaian</label>
                           <textarea v-model="form.penilaian" name="penilaian"
                             class="form-control" placeholder="Sistem Penilaian" :class="{ 'is-invalid': form.errors.has('penilaian') }" id="inputPenilaian">
@@ -162,11 +181,13 @@
               id:'',
               id_account:'',
               nama_jurusan:'',
+              nama_jurusan_en:'',
               jenis_pendidikan:'',
               program:'',
               fakultas:'',
               gelar:'',
               persyaratan:'',
+              persyaratan_en:'',
               penilaian:''
             })
           }

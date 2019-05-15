@@ -17,11 +17,13 @@ class CreateJurusanTable extends Migration
             $table->increments('id');
             $table->bigInteger('id_account')->unsigned()->unique();
             $table->string('nama_jurusan');
+            $table->string('nama_jurusan_en');
             $table->string('program');
             $table->string('jenis_pendidikan');
             $table->string('fakultas');
             $table->string('gelar');
             $table->string('persyaratan');
+            $table->string('persyaratan_en');
             $table->string('penilaian');
             $table->timestamps();
             $table->foreign('id_account')
