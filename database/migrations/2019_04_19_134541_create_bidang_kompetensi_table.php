@@ -16,6 +16,7 @@ class CreateBidangKompetensiTable extends Migration
         Schema::create('bidang_kompetensi', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('nama_bidang')->unique();
+            $table->string('nama_bidang_en');
             $table->timestamps();
         });
     }

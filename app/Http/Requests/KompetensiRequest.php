@@ -35,7 +35,7 @@ class KompetensiRequest extends FormRequest
                     'tingkat' => 'required|string|max:191',
                     'peran' => 'required|string|max:191',
                     'bukti' => 'required',
-                    'kemampuan' => 'required|array'
+                    'kemampuan' => 'sometimes|array'
                 ];
             }
             case 'PUT':
@@ -48,7 +48,7 @@ class KompetensiRequest extends FormRequest
                     'tingkat' => 'required|string|max:191',
                     'peran' => 'required|string|max:191',
                     'bukti' => 'sometimes',
-                    'kemampuan' => 'required|array'
+                    'kemampuan' => 'sometimes|array'
                 ];
             }
             default:break;

@@ -40,6 +40,7 @@
 			<tr>
 				<th>No</th>
 				<th>Nama Bidang</th>
+				<th>Nama Bidang English</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -48,6 +49,7 @@
 			<tr @if ($i%2 == 1) class="pure-table-odd" @endif>
 				<td>{{ $i++ }}</td>
 				<td>{{$data->nama_bidang}}</td>
+				<td>{{$data->nama_bidang_en}}</td>
 			</tr>
 			@endforeach
 		</tbody>

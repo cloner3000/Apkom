@@ -10,7 +10,8 @@ class BidangKompetensi extends Model
     protected $table = 'bidang_kompetensi';
 
     protected $fillable = [
-        'nama_bidang'
+        'nama_bidang',
+        'nama_bidang_en'
     ];
 
     public function getData(){
@@ -33,6 +34,7 @@ class BidangKompetensi extends Model
         $bidangKompetensi = new BidangKompetensi;
         if($id) $bidangKompetensi = self::find($id);
         $bidangKompetensi->nama_bidang = $request->nama_bidang;
+        $bidangKompetensi->nama_bidang_en = $request->nama_bidang_en;
         if($bidangKompetensi->save()){
             return ['message' => 'Save Bidang Kompetensi Successfull'];
         }else{

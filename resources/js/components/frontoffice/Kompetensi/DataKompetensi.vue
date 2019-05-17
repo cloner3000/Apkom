@@ -93,11 +93,11 @@
                               <select name="tingkat" v-model="form.tingkat" id="inputTingkat" class="form-control" :class="{
                                 'is-invalid': form.errors.has('tingkat')}">
                                 <option value="" selected>Choose Tingkat</option>
-                                <option value="Internasional">Internasional</option>
-                                <option value="Nasional">Nasional</option>
-                                <option value="Provinsi">Provinsi</option>
-                                <option value="Nasional">Kota</option>
-                                <option value="Provinsi">Universitas</option>
+                                <option v-if="form.id_bidang != 1" value="Internasional">Internasional</option>
+                                <option v-if="form.id_bidang != 1" value="Nasional">Nasional</option>
+                                <option v-if="form.id_bidang != 1" value="Provinsi">Provinsi</option>
+                                <option v-if="form.id_bidang != 1" value="Kota">Kota</option>
+                                <option value="Universitas">Universitas</option>
                               </select>
                               <has-error :form="form" field="tingkat"></has-error>
                             </div>
@@ -131,7 +131,7 @@
                               </div>
                           </div>
                         </div>
-                         <div class="form-group">
+                         <div v-if="form.id_bidang != 1" class="form-group">
                           <label for="inputKemampuan">Kemampuan</label>
                           <multiselect
                           class="form-control-file" 
@@ -431,9 +431,6 @@ export default {
                 });
             }
           },
-        },
-        beforeUpdate(){
-          
         },
         mounted(){
           this.$root.search = '';

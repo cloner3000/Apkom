@@ -2485,6 +2485,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2493,7 +2501,8 @@ __webpack_require__.r(__webpack_exports__);
       editMode: false,
       form: new Form({
         id: '',
-        nama_bidang: ''
+        nama_bidang: '',
+        nama_bidang_en: ''
       })
     };
   },
@@ -4785,7 +4794,6 @@ __webpack_require__.r(__webpack_exports__);
       }
     }
   },
-  beforeUpdate: function beforeUpdate() {},
   mounted: function mounted() {
     this.$root.search = '';
     this.getStatus();
@@ -67690,6 +67698,8 @@ var render = function() {
                             _vm._v(" "),
                             _c("td", [_vm._v(_vm._s(data.nama_bidang))]),
                             _vm._v(" "),
+                            _c("td", [_vm._v(_vm._s(data.nama_bidang_en))]),
+                            _vm._v(" "),
                             _c("td", { staticClass: "text-center" }, [
                               _c(
                                 "button",
@@ -67704,22 +67714,26 @@ var render = function() {
                                 [_c("i", { staticClass: "fas fa-edit" })]
                               ),
                               _vm._v(" "),
-                              _c(
-                                "button",
-                                {
-                                  staticClass: "btn btn-link",
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.deleteBidangKompetensi(data.id)
-                                    }
-                                  }
-                                },
-                                [
-                                  _c("i", {
-                                    staticClass: "fas fa-trash text-red"
-                                  })
-                                ]
-                              )
+                              data.id != 1
+                                ? _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-link",
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.deleteBidangKompetensi(
+                                            data.id
+                                          )
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _c("i", {
+                                        staticClass: "fas fa-trash text-red"
+                                      })
+                                    ]
+                                  )
+                                : _vm._e()
                             ])
                           ])
                         })
@@ -67875,6 +67889,62 @@ var render = function() {
                               })
                             ],
                             1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            { staticClass: "form-group" },
+                            [
+                              _c(
+                                "label",
+                                { attrs: { for: "inputNamaBidangEn" } },
+                                [_vm._v("Nama Bidang Kompetensi English")]
+                              ),
+                              _vm._v(" "),
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.form.nama_bidang_en,
+                                    expression: "form.nama_bidang_en"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                class: {
+                                  "is-invalid": _vm.form.errors.has(
+                                    "nama_bidang_en"
+                                  )
+                                },
+                                attrs: {
+                                  type: "text",
+                                  name: "nama_bidang_en",
+                                  placeholder: "Nama Bidang English",
+                                  id: "inputNamaBidangEn"
+                                },
+                                domProps: { value: _vm.form.nama_bidang_en },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.form,
+                                      "nama_bidang_en",
+                                      $event.target.value
+                                    )
+                                  }
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("has-error", {
+                                attrs: {
+                                  form: _vm.form,
+                                  field: "nama_bidang_en"
+                                }
+                              })
+                            ],
+                            1
                           )
                         ]),
                         _vm._v(" "),
@@ -67942,6 +68012,8 @@ var staticRenderFns = [
       _c("th", [_vm._v("No")]),
       _vm._v(" "),
       _c("th", [_vm._v("Nama Bidang")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Nama Bidang English")]),
       _vm._v(" "),
       _c("th", { staticClass: "text-center", attrs: { width: "12%" } }, [
         _vm._v("Action")
@@ -71990,27 +72062,41 @@ var render = function() {
                                   [_vm._v("Choose Tingkat")]
                                 ),
                                 _vm._v(" "),
+                                _vm.form.id_bidang != 1
+                                  ? _c(
+                                      "option",
+                                      { attrs: { value: "Internasional" } },
+                                      [_vm._v("Internasional")]
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                _vm.form.id_bidang != 1
+                                  ? _c(
+                                      "option",
+                                      { attrs: { value: "Nasional" } },
+                                      [_vm._v("Nasional")]
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                _vm.form.id_bidang != 1
+                                  ? _c(
+                                      "option",
+                                      { attrs: { value: "Provinsi" } },
+                                      [_vm._v("Provinsi")]
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                _vm.form.id_bidang != 1
+                                  ? _c("option", { attrs: { value: "Kota" } }, [
+                                      _vm._v("Kota")
+                                    ])
+                                  : _vm._e(),
+                                _vm._v(" "),
                                 _c(
                                   "option",
-                                  { attrs: { value: "Internasional" } },
-                                  [_vm._v("Internasional")]
-                                ),
-                                _vm._v(" "),
-                                _c("option", { attrs: { value: "Nasional" } }, [
-                                  _vm._v("Nasional")
-                                ]),
-                                _vm._v(" "),
-                                _c("option", { attrs: { value: "Provinsi" } }, [
-                                  _vm._v("Provinsi")
-                                ]),
-                                _vm._v(" "),
-                                _c("option", { attrs: { value: "Nasional" } }, [
-                                  _vm._v("Kota")
-                                ]),
-                                _vm._v(" "),
-                                _c("option", { attrs: { value: "Provinsi" } }, [
-                                  _vm._v("Universitas")
-                                ])
+                                  { attrs: { value: "Universitas" } },
+                                  [_vm._v("Universitas")]
+                                )
                               ]
                             ),
                             _vm._v(" "),
@@ -72167,46 +72253,48 @@ var render = function() {
                       ])
                     ]),
                     _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "form-group" },
-                      [
-                        _c("label", { attrs: { for: "inputKemampuan" } }, [
-                          _vm._v("Kemampuan")
-                        ]),
-                        _vm._v(" "),
-                        _c("multiselect", {
-                          staticClass: "form-control-file",
-                          class: {
-                            "is-invalid": _vm.form.errors.has("kemampuan")
-                          },
-                          attrs: {
-                            id: "inputKemampuan",
-                            name: "kemampuan",
-                            "tag-placeholder": "Add Kemampuan",
-                            placeholder: "Search or Add Kemampuan",
-                            label: "nama_kemampuan",
-                            "track-by": "nama_kemampuan",
-                            options: _vm.options,
-                            multiple: true,
-                            taggable: true
-                          },
-                          on: { tag: _vm.addKemampuan },
-                          model: {
-                            value: _vm.form.kemampuan,
-                            callback: function($$v) {
-                              _vm.$set(_vm.form, "kemampuan", $$v)
-                            },
-                            expression: "form.kemampuan"
-                          }
-                        }),
-                        _vm._v(" "),
-                        _c("has-error", {
-                          attrs: { form: _vm.form, field: "kemampuan" }
-                        })
-                      ],
-                      1
-                    )
+                    _vm.form.id_bidang != 1
+                      ? _c(
+                          "div",
+                          { staticClass: "form-group" },
+                          [
+                            _c("label", { attrs: { for: "inputKemampuan" } }, [
+                              _vm._v("Kemampuan")
+                            ]),
+                            _vm._v(" "),
+                            _c("multiselect", {
+                              staticClass: "form-control-file",
+                              class: {
+                                "is-invalid": _vm.form.errors.has("kemampuan")
+                              },
+                              attrs: {
+                                id: "inputKemampuan",
+                                name: "kemampuan",
+                                "tag-placeholder": "Add Kemampuan",
+                                placeholder: "Search or Add Kemampuan",
+                                label: "nama_kemampuan",
+                                "track-by": "nama_kemampuan",
+                                options: _vm.options,
+                                multiple: true,
+                                taggable: true
+                              },
+                              on: { tag: _vm.addKemampuan },
+                              model: {
+                                value: _vm.form.kemampuan,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.form, "kemampuan", $$v)
+                                },
+                                expression: "form.kemampuan"
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("has-error", {
+                              attrs: { form: _vm.form, field: "kemampuan" }
+                            })
+                          ],
+                          1
+                        )
+                      : _vm._e()
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "modal-footer" }, [

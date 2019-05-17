@@ -29,14 +29,16 @@ class BidangKompetensiRequest extends FormRequest
             case 'POST':
             {
                 return [
-                    'nama_bidang' => 'required|string|unique:bidang_kompetensi'
+                    'nama_bidang' => 'required|string|unique:bidang_kompetensi',
+                    'nama_bidang_en' => 'required|string'
                 ];
             }
             case 'PUT':
             {
                 $getBidangKompetensi = BidangKompetensi::find($this->id);
                 return [
-                    'nama_bidang' => 'required|string|unique:bidang_kompetensi,nama_bidang,'.$getBidangKompetensi['id']
+                    'nama_bidang' => 'required|string|unique:bidang_kompetensi,nama_bidang,'.$getBidangKompetensi['id'],
+                    'nama_bidang_en' => 'required|string'
                 ];
             }
             default:break;

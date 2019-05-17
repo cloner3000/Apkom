@@ -637,7 +637,7 @@
         @php $total = 0 @endphp
         @foreach($skpi['kompetensi'] as $bidang => $kompetensi)
         <div class="section">
-            <h4 class="">{{$bidang}}</h4>
+        <h4 class="">{{$bidang}} / {{$kompetensi[0]->nama_bidang_en}}</h4>
             <table class="table text-center">
                 <thead>
                     <tr class="header">

@@ -18,14 +18,16 @@
                   <tbody><tr>
                     <th>No</th>
                     <th>Nama Bidang</th>
+                    <th>Nama Bidang English</th>
                     <th width="12%" class="text-center">Action</th>
                   </tr>
                   <tr v-for="(data, index) in bidangKompetensi.data" :key="index">
                     <td>{{bidangKompetensi.meta.from+index}}</td>
                     <td>{{data.nama_bidang}}</td>
+                    <td>{{data.nama_bidang_en}}</td>
                     <td class="text-center">
                         <button @click="editModal(data)" class="btn btn-link"><i  class="fas fa-edit"></i></button>
-                        <button @click="deleteBidangKompetensi(data.id)" class="btn btn-link"><i  class="fas fa-trash text-red"></i></button>
+                        <button v-if="data.id != 1" @click="deleteBidangKompetensi(data.id)" class="btn btn-link"><i  class="fas fa-trash text-red"></i></button>
                     </td>
                   </tr>
 
@@ -58,6 +60,12 @@
                             class="form-control" placeholder="Nama Bidang" :class="{ 'is-invalid': form.errors.has('nama_bidang') }" id="inputNamaBidang">
                           <has-error :form="form" field="nama_bidang"></has-error>
                         </div>
+                        <div class="form-group">
+                          <label for="inputNamaBidangEn">Nama Bidang Kompetensi English</label>
+                          <input v-model="form.nama_bidang_en" type="text" name="nama_bidang_en"
+                            class="form-control" placeholder="Nama Bidang English" :class="{ 'is-invalid': form.errors.has('nama_bidang_en') }" id="inputNamaBidangEn">
+                          <has-error :form="form" field="nama_bidang_en"></has-error>
+                        </div>
                     </div>
                     <div class="modal-footer">
                       <button v-show="!editMode" type="submit" class="btn btn-primary">Add</button>
@@ -84,7 +92,8 @@
             editMode:false,
             form : new Form({
               id:'',  
-              nama_bidang:''
+              nama_bidang:'',
+              nama_bidang_en:''
             })
           }
         },

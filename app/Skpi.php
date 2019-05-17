@@ -48,7 +48,7 @@ class Skpi extends Model
             ->latest()
             ->paginate(8);
         }
-        return SkpiResource::collection($skpi);      
+        return SkpiResource::collection($skpi);     
     }
 
     public function getDataReport($id=false){
@@ -179,7 +179,7 @@ class Skpi extends Model
     public function generatedSkpi($id_mahasiswa){
         $kompetensi = Kompetensi::join('bidang_kompetensi', function($join){
             $join->on('kompetensi.id_bidang','=','bidang_kompetensi.id')
-            ->select('nama_bidang');
+            ->select('nama_bidang', 'nama_bidang_en');
         })
         ->where('id_mahasiswa', $id_mahasiswa)
         ->where('active', 1)

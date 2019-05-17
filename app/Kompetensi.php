@@ -73,19 +73,23 @@ class Kompetensi extends Model
         $kompetensi->tgl_selesai = $request->tgl_selesai;
         $kompetensi->tingkat = $request->tingkat;
         $kompetensi->peran = $request->peran;
-        $kompetensi->point_kompetensi = $this->getPointKompetensi($request->tingkat, $request->peran);
+        $kompetensi->point_kompetensi = $this->getPointKompetensi($request->tingkat, $request->peran, $request->id_bidang);
         if($kompetensi->save()){
-            $kemampuan_ids = array();
-            foreach($request->kemampuan as $dataKemampuan){
-                $kemampuan = new Kemampuan;
-                $kemampuan->id_kompetensi = $kompetensi->id;
-                $kemampuan->nama_kemampuan = $dataKemampuan['nama_kemampuan'];
-                $kemampuan->save();
-                $kemampuan_ids[] = $kemampuan->id;
-            }
-            $sync = Kemampuan::where('id_kompetensi', $kompetensi->id)->whereNotIn('id', $kemampuan_ids)->delete();
-            if($sync){
-                return ['message' => 'Update Kompetensi Successfull'];
+            if($request->id_bidang != 1){
+                $kemampuan_ids = array();    
+                foreach($request->kemampuan as $dataKemampuan){
+                    $kemampuan = new Kemampuan;
+                    $kemampuan->id_kompetensi = $kompetensi->id;
+                    $kemampuan->nama_kemampuan = $dataKemampuan['nama_kemampuan'];
+                    $kemampuan->save();
+                    $kemampuan_ids[] = $kemampuan->id;
+                }
+                $sync = Kemampuan::where('id_kompetensi', $kompetensi->id)->whereNotIn('id', $kemampuan_ids)->delete();
+                if($sync){
+                    return ['message' => 'Update Kompetensi Successfull'];
+                }else{
+                    return ['message' => 'Save Kompetensi Successfull'];
+                }
             }else{
                 return ['message' => 'Save Kompetensi Successfull'];
             }
@@ -129,7 +133,7 @@ class Kompetensi extends Model
         }
     }
 
-    public function getPointKompetensi($tingkat,$peran){
+    public function getPointKompetensi($tingkat,$peran, $id_bidang){
         switch($tingkat){
             case 'Internasional':
                 $nilaiTingkat = 5;
@@ -149,34 +153,65 @@ class Kompetensi extends Model
             default:
                 $nilaiTingkat = 0;
         }
-        switch($peran){
-            case 'Ketua':
-                $nilaiPeran = 4;
-                break;
-            case 'Ketua Divisi':
-                $nilaiPeran = 3;
-                break;
-            case 'Anggota Panitia':
-                $nilaiPeran = 2;
-                break;
-            case 'Peserta':
-                $nilaiPeran = 1;
-                break;
-            case 'Juara 1':
-                $nilaiPeran = 5;
-                break;
-            case 'Juara 2':
-                $nilaiPeran = 4;
-                break;   
-            case 'Juara 3':
-                $nilaiPeran = 3;
-                break;
-            case 'Juara Harapan':
-                $nilaiPeran = 2;
-                break;         
-            default:
-                $nilaiPeran = 0;
-        }
+        if($id_bidang != 1){
+            switch($peran){
+                case 'Ketua':
+                    $nilaiPeran = 4;
+                    break;
+                case 'Ketua Divisi':
+                    $nilaiPeran = 3;
+                    break;
+                case 'Anggota Panitia':
+                    $nilaiPeran = 2;
+                    break;
+                case 'Peserta':
+                    $nilaiPeran = 1;
+                    break;
+                case 'Juara 1':
+                    $nilaiPeran = 5;
+                    break;
+                case 'Juara 2':
+                    $nilaiPeran = 4;
+                    break;   
+                case 'Juara 3':
+                    $nilaiPeran = 3;
+                    break;
+                case 'Juara Harapan':
+                    $nilaiPeran = 2;
+                    break;         
+                default:
+                    $nilaiPeran = 0;
+            }
+        }else{
+            switch($peran){
+                case 'Ketua':
+                    $nilaiPeran = 4;
+                    break;
+                case 'Ketua Divisi':
+                    $nilaiPeran = 3;
+                    break;
+                case 'Anggota Panitia':
+                    $nilaiPeran = 2;
+                    break;
+                case 'Peserta':
+                    $nilaiPeran = 1;
+                    break;
+                case 'Juara 1':
+                    $nilaiPeran = 5;
+                    break;
+                case 'Juara 2':
+                    $nilaiPeran = 4;
+                    break;   
+                case 'Juara 3':
+                    $nilaiPeran = 3;
+                    break;
+                case 'Juara Harapan':
+                    $nilaiPeran = 2;
+                    break;         
+                default:
+                    $nilaiPeran = 0;
+            }
+        }    
         return $nilaiTingkat+$nilaiPeran;    
     }
 

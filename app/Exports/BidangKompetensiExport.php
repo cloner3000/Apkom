@@ -22,7 +22,8 @@ class BidangKompetensiExport implements FromCollection, WithMapping, WithHeading
     {
         return [
             $this->i++,
-            $bidangKompetensi->nama_bidang
+            $bidangKompetensi->nama_bidang,
+            $bidangKompetensi->nama_bidang_en
         ];
     }
 
@@ -30,7 +31,8 @@ class BidangKompetensiExport implements FromCollection, WithMapping, WithHeading
     {
         return [
             'NO',
-            'NAMA BIDANG'
+            'NAMA BIDANG',
+            'NAMA BIDANG ENGLISH'
         ];
     }
 }
