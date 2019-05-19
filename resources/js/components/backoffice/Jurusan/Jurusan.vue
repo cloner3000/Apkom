@@ -23,7 +23,7 @@
                     <th>Program</th>
                     <th>Fakultas</th>
                     <th>Gelar</th>
-                    <th width="12%" class="text-center">Action</th>
+                    <th width="17%" class="text-center">Action</th>
                   </tr>
                   <tr v-for="(data, index) in jurusan.data" :key="index">
                     <td>{{jurusan.meta.from+index}}</td>
@@ -34,8 +34,9 @@
                     <td>{{data.fakultas}}</td>
                     <td>{{data.gelar}}</td>
                     <td class="text-center">
-                        <button @click="editModal(data)" class="btn btn-link"><i  class="fas fa-edit"></i></button>
-                        <button @click="deleteJurusan(data.id)" class="btn btn-link"><i  class="fas fa-trash text-red"></i></button>
+                      <button  @click="previewTemplate(data)" class="btn btn-link"><i  class="fas fa-eye text-darkblue"></i></button>
+                      <button @click="editModal(data)" class="btn btn-link"><i  class="fas fa-edit"></i></button>
+                      <button @click="deleteJurusan(data.id)" class="btn btn-link"><i  class="fas fa-trash text-red"></i></button>
                     </td>
                   </tr>
 
@@ -152,6 +153,16 @@
                           </textarea>  
                           <has-error :form="form" field="penilaian"></has-error>
                         </div>
+                        <div class="form-group">
+                          <label for="inputTemplate">Template Pdf</label>
+                          <div class="input-group">
+                              <div class="custom-file">
+                                  <input type="file" class="custom-file-input" name="template" id="inputTemplate" @change="updateTemplate" placeholder="Template Pdf" :class="{ 'is-invalid': form.errors.has('template') }" accept="application/pdf">
+                                  <label class="custom-file-label" for="inputBukti">{{nama_file}}</label>
+                                  <has-error :form="form" field="template"></has-error>
+                              </div>
+                          </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                       <button v-show="!editMode" type="submit" class="btn btn-primary">Add</button>
@@ -162,6 +173,13 @@
                 </div>
             </div>
         </div>
+        <div id="previewTemplate" class="modal fade" tabindex="-1" role="dialog">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <embed  :src="'storage/data/template/'+form.template" width="100%" height="600" type="application/pdf">
+            </div>
+          </div>  
+        </div>  
       </div>
       <div v-else class="row">
         <not-found></not-found>
@@ -177,6 +195,7 @@
             kaprodi : {},
             searching: false,
             editMode:false,
+            nama_file:'Choose File',
             form : new Form({
               id:'',
               id_account:'',
@@ -188,7 +207,8 @@
               gelar:'',
               persyaratan:'',
               persyaratan_en:'',
-              penilaian:''
+              penilaian:'',
+              template:''
             })
           }
         },
@@ -197,6 +217,7 @@
             this.editMode = false;
             this.form.reset ();
             this.form.clear ();
+            this.nama_file = 'Choose File';
             $('#modalForm').modal('show');
           },
           editModal(jurusan){
@@ -205,6 +226,8 @@
             this.form.clear ();
             $('#modalForm').modal('show');
             this.form.fill(jurusan);
+            this.nama_file = 'Choose File';
+            this.form.template = '';
           },
           getKaprodi(){
             if(this.$gate.isWarek()){
@@ -354,7 +377,31 @@
               this.searching= false;
               cusEvent.$emit('ReloadData');
             }
-          }
+          },
+          updateTemplate(e){
+            let file = e.target.files[0];
+            let validFileTypes = ['application/pdf'];
+            this.nama_file = file['name'];
+            if(validFileTypes.includes(file['type'])){
+              let reader = new FileReader();
+              reader.onloadend = (file) => {
+              this.form.template = reader.result;
+              }
+              reader.readAsDataURL(file);
+            }else{
+              this.nama_file = 'Choose File';
+              e.target.value = ''
+                swal.fire({
+                type: 'error',
+                title: 'Oops...',
+                text: 'You are uploading file must be pdf'
+              });
+            }
+          },
+          previewTemplate(jurusan){
+            this.form.fill(jurusan);
+            $('#previewTemplate').modal('show');
+          },
         },
         created() {
           this.$parent.search = '';

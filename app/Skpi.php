@@ -12,6 +12,7 @@ use Apkom\Charts\KemampuanChart;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use Jenssegers\Date\Date;
+use Apkom\CustomPdf;
 use PDF;
 
 class Skpi extends Model
@@ -130,11 +131,32 @@ class Skpi extends Model
     public function publish($id){
         $skpi = self::find($id);
         if($skpi->mahasiswa()->first()->jurusan()->first()->user()->first()->id == auth('api')->user()->id){
+            $template = $skpi->mahasiswa()->first()->jurusan()->first()->template;
             $pdf = $this->generatedSkpi($skpi->id_mahasiswa);
             $filePdf = PDF::loadView('print.skpi', ['skpi' => $pdf]);
             $file = $filePdf->download()->getOriginalContent();
             $fileName = time().uniqid().'.pdf';
             Storage::disk('skpi')->put($fileName, $file);
+            $pdf= new CustomPdf();
+            $pdf->setPrintHeader(false);
+            $pdf->setSourceFile('storage/data/skpi/'.$fileName);
+            $importPage = $pdf->importPage(1);
+            $pdf->addPage();
+            $pdf->useTemplate($importPage);
+            $templateCount = $pdf->setSourceFile('storage/data/template/'.$template);
+            for ($templateNo = 1; $templateNo <= $templateCount; $templateNo++) {    
+                $importTemplate = $pdf->importPage($templateNo);
+                $pdf->addPage();
+                $template = $pdf->useTemplate($importTemplate);
+            }
+            $pageCount = $pdf->setSourceFile('storage/data/skpi/'.$fileName);
+            for ($pageNo = 2; $pageNo <= $pageCount; $pageNo++) {
+                $importPage = $pdf->importPage($pageNo);
+                $pdf->addPage();
+                $pdf->useTemplate($importPage);
+            }
+            $document = $pdf->Output('test.pdf','S');    
+            Storage::disk('skpi')->put($fileName, $document);
             $skpi->file = $fileName;
             $skpi->point_skpi = $this->calculateSkpiPoint($skpi->id_mahasiswa);
             $skpi->status = 'published';
@@ -145,7 +167,7 @@ class Skpi extends Model
             }
         }else{
             return ['message' => 'You dont have access to this skpi'];
-        }    
+        }
     }
 
     public function checkStatus(){
@@ -256,5 +278,15 @@ class Skpi extends Model
             '#990099'
             ]);    
         return view('print.kemampuanChart', compact('chart','id_mahasiswa'));
+    }
+
+    public function checkSkpi($id){
+        $npm = base64_decode(substr($id, 0, -1).'==');
+        $mahasiswa = Mahasiswa::where('npm', $npm)->first();
+        if($mahasiswa != null){
+            return ['data' => $mahasiswa];
+        }else{
+            return ['data' => null];
+        }
     }
 }

@@ -53,6 +53,11 @@ return [
             'root' => storage_path('app/public/data/kompetensi/pdf'),
         ],
 
+        'template' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/data/template'),
+        ],
+
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),

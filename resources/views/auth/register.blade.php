@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card mt-4">
-                <img class="mx-auto d-block mt-3 mb-3" src="{{asset('img/logo.png')}}" alt="Logo UKDC">
+                <a href="{{ route('welcome') }}"><img class="mx-auto d-block mb-3 mt-3" src="{{asset('img/logo.png')}}" alt="Logo UKDC"></a>
                 <h3 class="login-box-msg">Aplikasi <b>Kompetensi</b></h3>
                 <div class="card-body">
                     <form method="POST" action="{{ route('register') }}">

@@ -739,12 +739,6 @@
                     </p>
                 </div>    
             </div>
-        </div>
-        <script type="text/php">
-            if ( isset($pdf) ) {
-                $font = $fontMetrics->get_font("helvetica");
-                $pdf->page_text($pdf->get_width() - 75, $pdf->get_height() - 50, "Page: {PAGE_NUM} of {PAGE_COUNT}", $font, 8, array(0,0,0));
-            }
-        </script>        
+        </div>      
 </body>
 </html>

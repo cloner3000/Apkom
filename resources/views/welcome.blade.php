@@ -4,7 +4,7 @@
   <div class="login-box">
       <div class="card">
         <div class="card-body login-card-body">
-          <img class="mx-auto d-block mb-3" src="{{asset('img/logo.png')}}" alt="Logo UKDC">
+          <a href="{{ route('welcome') }}"><img class="mx-auto d-block mb-3" src="{{asset('img/logo.png')}}" alt="Logo UKDC"></a>
           <h3 class="login-box-msg">Aplikasi <b>Kompetensi</b></h3>
           <div class="row">
               <div class="col-md-12">

@@ -40,6 +40,7 @@ class JurusanRequest extends FormRequest
                     'persyaratan' => 'required|string|max:191',
                     'persyaratan_en' => 'required|string|max:191',
                     'penilaian' => 'required|string|max:191',
+                    'template' => 'required',
                 ];
             }
             case 'PUT':
@@ -56,6 +57,7 @@ class JurusanRequest extends FormRequest
                     'persyaratan' => 'required|string|max:191',
                     'persyaratan_en' => 'required|string|max:191',
                     'penilaian' => 'required|string|max:191',
+                    'template' => 'sometimes',
                 ];
             }
             default:break;

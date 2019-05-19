@@ -2863,6 +2863,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2870,6 +2888,7 @@ __webpack_require__.r(__webpack_exports__);
       kaprodi: {},
       searching: false,
       editMode: false,
+      nama_file: 'Choose File',
       form: new Form({
         id: '',
         id_account: '',
@@ -2881,7 +2900,8 @@ __webpack_require__.r(__webpack_exports__);
         gelar: '',
         persyaratan: '',
         persyaratan_en: '',
-        penilaian: ''
+        penilaian: '',
+        template: ''
       })
     };
   },
@@ -2890,6 +2910,7 @@ __webpack_require__.r(__webpack_exports__);
       this.editMode = false;
       this.form.reset();
       this.form.clear();
+      this.nama_file = 'Choose File';
       $('#modalForm').modal('show');
     },
     editModal: function editModal(jurusan) {
@@ -2898,6 +2919,8 @@ __webpack_require__.r(__webpack_exports__);
       this.form.clear();
       $('#modalForm').modal('show');
       this.form.fill(jurusan);
+      this.nama_file = 'Choose File';
+      this.form.template = '';
     },
     getKaprodi: function getKaprodi() {
       var _this = this;
@@ -3065,6 +3088,35 @@ __webpack_require__.r(__webpack_exports__);
         this.searching = false;
         cusEvent.$emit('ReloadData');
       }
+    },
+    updateTemplate: function updateTemplate(e) {
+      var _this8 = this;
+
+      var file = e.target.files[0];
+      var validFileTypes = ['application/pdf'];
+      this.nama_file = file['name'];
+
+      if (validFileTypes.includes(file['type'])) {
+        var reader = new FileReader();
+
+        reader.onloadend = function (file) {
+          _this8.form.template = reader.result;
+        };
+
+        reader.readAsDataURL(file);
+      } else {
+        this.nama_file = 'Choose File';
+        e.target.value = '';
+        swal.fire({
+          type: 'error',
+          title: 'Oops...',
+          text: 'You are uploading file must be pdf'
+        });
+      }
+    },
+    previewTemplate: function previewTemplate(jurusan) {
+      this.form.fill(jurusan);
+      $('#previewTemplate').modal('show');
     }
   },
   created: function created() {
@@ -68143,6 +68195,23 @@ var render = function() {
                                   staticClass: "btn btn-link",
                                   on: {
                                     click: function($event) {
+                                      return _vm.previewTemplate(data)
+                                    }
+                                  }
+                                },
+                                [
+                                  _c("i", {
+                                    staticClass: "fas fa-eye text-darkblue"
+                                  })
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-link",
+                                  on: {
+                                    click: function($event) {
                                       return _vm.editModal(data)
                                     }
                                   }
@@ -68937,7 +69006,52 @@ var render = function() {
                               })
                             ],
                             1
-                          )
+                          ),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "form-group" }, [
+                            _c("label", { attrs: { for: "inputTemplate" } }, [
+                              _vm._v("Template Pdf")
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "input-group" }, [
+                              _c(
+                                "div",
+                                { staticClass: "custom-file" },
+                                [
+                                  _c("input", {
+                                    staticClass: "custom-file-input",
+                                    class: {
+                                      "is-invalid": _vm.form.errors.has(
+                                        "template"
+                                      )
+                                    },
+                                    attrs: {
+                                      type: "file",
+                                      name: "template",
+                                      id: "inputTemplate",
+                                      placeholder: "Template Pdf",
+                                      accept: "application/pdf"
+                                    },
+                                    on: { change: _vm.updateTemplate }
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "label",
+                                    {
+                                      staticClass: "custom-file-label",
+                                      attrs: { for: "inputBukti" }
+                                    },
+                                    [_vm._v(_vm._s(_vm.nama_file))]
+                                  ),
+                                  _vm._v(" "),
+                                  _c("has-error", {
+                                    attrs: { form: _vm.form, field: "template" }
+                                  })
+                                ],
+                                1
+                              )
+                            ])
+                          ])
                         ]),
                         _vm._v(" "),
                         _c("div", { staticClass: "modal-footer" }, [
@@ -68990,6 +69104,35 @@ var render = function() {
                 ]
               )
             ]
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "modal fade",
+              attrs: { id: "previewTemplate", tabindex: "-1", role: "dialog" }
+            },
+            [
+              _c(
+                "div",
+                {
+                  staticClass: "modal-dialog modal-dialog-centered",
+                  attrs: { role: "document" }
+                },
+                [
+                  _c("div", { staticClass: "modal-content" }, [
+                    _c("embed", {
+                      attrs: {
+                        src: "storage/data/template/" + _vm.form.template,
+                        width: "100%",
+                        height: "600",
+                        type: "application/pdf"
+                      }
+                    })
+                  ])
+                ]
+              )
+            ]
           )
         ])
       : _c("div", { staticClass: "row" }, [_c("not-found")], 1)
@@ -69015,7 +69158,7 @@ var staticRenderFns = [
       _vm._v(" "),
       _c("th", [_vm._v("Gelar")]),
       _vm._v(" "),
-      _c("th", { staticClass: "text-center", attrs: { width: "12%" } }, [
+      _c("th", { staticClass: "text-center", attrs: { width: "17%" } }, [
         _vm._v("Action")
       ])
     ])

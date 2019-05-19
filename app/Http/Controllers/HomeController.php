@@ -42,4 +42,5 @@ class HomeController extends Controller
         $skpi = $this->skpi->saveChart($request);
         return $skpi;
     }
+
 }

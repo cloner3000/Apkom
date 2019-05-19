@@ -25,6 +25,7 @@ class CreateJurusanTable extends Migration
             $table->string('persyaratan');
             $table->string('persyaratan_en');
             $table->string('penilaian');
+            $table->string('template');
             $table->timestamps();
             $table->foreign('id_account')
             ->references('id')->on('users')

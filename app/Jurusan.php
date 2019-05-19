@@ -4,6 +4,7 @@ namespace Apkom;
 
 use Illuminate\Database\Eloquent\Model;
 use Apkom\Http\Resources\JurusanResource;
+use Illuminate\Support\Facades\Storage;
 
 class Jurusan extends Model
 {
@@ -19,7 +20,8 @@ class Jurusan extends Model
       'gelar',
       'persyaratan',
       'persyaratan_en',
-      'penilaian'
+      'penilaian',
+      'template'
     ];
 
     public function getData(){
@@ -56,6 +58,10 @@ class Jurusan extends Model
         $jurusan->persyaratan = $request->persyaratan;
         $jurusan->persyaratan_en = $request->persyaratan_en;
         $jurusan->penilaian = $request->penilaian;
+        $explode = explode(",", $request->template);
+        $decoded_file = base64_decode($explode['1']);
+        Storage::disk('template')->put($request->nama_jurusan.'.pdf', $decoded_file);
+        $jurusan->template = $request->nama_jurusan.'.pdf';
         if($jurusan->save()){
             return ['message' => 'Save Jurusan Successfull'];
         }else{
@@ -65,7 +71,11 @@ class Jurusan extends Model
 
     public function deleteData($id){
         $jurusan = self::find($id);
+        $fileTemp = public_path('storage/data/template/').$jurusan->nama_jurusan.'.pdf';
         if($jurusan->delete()){
+            if(file_exists($fileTemp)){
+                @unlink($fileTemp);
+            }
             return ['message' => 'Delete Jurusan Successfull'];
         }else{
             return ['message' => 'Delete Jurusan Failed'];
