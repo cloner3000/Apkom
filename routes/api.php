@@ -17,6 +17,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+//Dashboard Route Custom
+Route::get('dashboard', 'API\DashboardController@index');
+
 //User Route Custom
 Route::get('user/select/kaprodi', 'API\UserController@getKaprodiData');
 Route::get('user/export', 'API\UserController@export');
@@ -62,6 +65,10 @@ Route::get('skpi/publish/{id}', 'API\SkpiController@publish');
 Route::get('profile', 'API\UserController@profile');
 Route::put('profile', 'API\UserController@updateProfile');
 
+//Backup Route
+Route::get('backup/download/{name}', 'API\BackupController@download');
+Route::get('backup/restore/{name}', 'API\BackupController@restore');
+
 Route::apiResources([
     'user' => 'API\UserController',
     'jurusan' => 'API\JurusanController',
@@ -70,5 +77,6 @@ Route::apiResources([
     'mahasiswa' => 'API\MahasiswaController',
     'kompetensi' => 'API\KompetensiController',
     'bukti-kompetensi-wajib' => 'API\BuktiKompetensiWajibController',
-    'skpi' => 'API\SkpiCOntroller'
+    'skpi' => 'API\SkpiCOntroller',
+    'backup' => 'API\BackupController'
     ]);

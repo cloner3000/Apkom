@@ -136,19 +136,19 @@ class Kompetensi extends Model
     public function getPointKompetensi($tingkat,$peran, $id_bidang){
         switch($tingkat){
             case 'Internasional':
-                $nilaiTingkat = 5;
+                $nilaiTingkat = 50;
                 break;
             case 'Nasional':
-                $nilaiTingkat = 4;
+                $nilaiTingkat = 40;
                 break;
             case 'Provinsi':
-                $nilaiTingkat = 3;
+                $nilaiTingkat = 30;
                 break;
             case 'Kota':
-                $nilaiTingkat = 2;
+                $nilaiTingkat = 15;
                 break;
             case 'Universitas':
-                $nilaiTingkat = 1;
+                $nilaiTingkat = 4;
                 break;
             default:
                 $nilaiTingkat = 0;
@@ -156,28 +156,28 @@ class Kompetensi extends Model
         if($id_bidang != 1){
             switch($peran){
                 case 'Ketua':
-                    $nilaiPeran = 4;
+                    $nilaiPeran = 10;
                     break;
                 case 'Ketua Divisi':
-                    $nilaiPeran = 3;
+                    $nilaiPeran = 7;
                     break;
                 case 'Anggota Panitia':
-                    $nilaiPeran = 2;
+                    $nilaiPeran = 6;
                     break;
                 case 'Peserta':
-                    $nilaiPeran = 1;
-                    break;
-                case 'Juara 1':
                     $nilaiPeran = 5;
                     break;
+                case 'Juara 1':
+                    $nilaiPeran = 40;
+                    break;
                 case 'Juara 2':
-                    $nilaiPeran = 4;
+                    $nilaiPeran = 30;
                     break;   
                 case 'Juara 3':
-                    $nilaiPeran = 3;
+                    $nilaiPeran = 20;
                     break;
                 case 'Juara Harapan':
-                    $nilaiPeran = 2;
+                    $nilaiPeran = 10;
                     break;         
                 default:
                     $nilaiPeran = 0;
@@ -185,28 +185,28 @@ class Kompetensi extends Model
         }else{
             switch($peran){
                 case 'Ketua':
-                    $nilaiPeran = 4;
+                    $nilaiPeran = 50;
                     break;
                 case 'Ketua Divisi':
-                    $nilaiPeran = 3;
+                    $nilaiPeran = 35;
                     break;
                 case 'Anggota Panitia':
-                    $nilaiPeran = 2;
+                    $nilaiPeran = 30;
                     break;
                 case 'Peserta':
-                    $nilaiPeran = 1;
+                    $nilaiPeran = 25;
                     break;
                 case 'Juara 1':
-                    $nilaiPeran = 5;
+                    $nilaiPeran = 40;
                     break;
                 case 'Juara 2':
-                    $nilaiPeran = 4;
+                    $nilaiPeran = 30;
                     break;   
                 case 'Juara 3':
-                    $nilaiPeran = 3;
+                    $nilaiPeran = 20;
                     break;
                 case 'Juara Harapan':
-                    $nilaiPeran = 2;
+                    $nilaiPeran = 10;
                     break;         
                 default:
                     $nilaiPeran = 0;

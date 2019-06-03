@@ -56,6 +56,11 @@ class BidangKompetensi extends Model
         return BidangKompetensiResource::collection($bidangKompetensi);
     }
 
+    public function countData(){
+        $bidangKompetensi = self::count();
+        return $bidangKompetensi;
+    }
+
     public function kompetensi(){
         return $this->hasMany('Apkom\Kompetensi', 'id_bidang');
     }

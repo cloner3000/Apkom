@@ -111,6 +111,11 @@ class Mahasiswa extends Model
         return true;
     }
 
+    public function countData(){
+        $mahasiswa = self::count();
+        return $mahasiswa;
+    }
+
     public function jurusan(){
         return $this->belongsTo('Apkom\Jurusan', 'id_jurusan');
     }

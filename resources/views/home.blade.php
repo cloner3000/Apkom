@@ -53,7 +53,7 @@
       <router-link to="/dashboard" class="brand-link">
         <img src="{{asset('img/logo.png')}}" alt="Logo UKDC" class="brand-image img-circle"
             style="opacity: .8">
-        <span class="brand-text font-weight-light text-primary">Aplikasi SKPI</span>
+        <span class="brand-text font-weight-light text-primary">SKPI Application</span>
       </router-link>
       <div class="sidebar">
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">

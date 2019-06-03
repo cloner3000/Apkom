@@ -128,6 +128,12 @@ class Skpi extends Model
         }
     }
 
+    public function countData(){
+        $skpiProgress = self::where('status', 'progress')->count();
+        $skpiPublished = self::where('status', 'published')->count();
+        return[$skpiProgress, $skpiPublished];
+    }
+
     public function publish($id){
         $skpi = self::find($id);
         if($skpi->mahasiswa()->first()->jurusan()->first()->user()->first()->id == auth('api')->user()->id){
@@ -239,9 +245,10 @@ class Skpi extends Model
 
     public function calculateSkpiPoint($id_mahasiswa){
         $kompetensi = Kompetensi::where('id_mahasiswa', $id_mahasiswa)
-        ->selectRaw('sum(point_kompetensi) as total_point, count(id) as jumlah_kompetensi')
+        ->where('active', 1)
+        ->selectRaw('sum(point_kompetensi) as total_point')
         ->first();
-        return $kompetensi->total_point/$kompetensi->jumlah_kompetensi;
+        return $kompetensi->total_point;
 
     }
 

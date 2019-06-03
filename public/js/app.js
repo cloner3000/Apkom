@@ -2043,25 +2043,40 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  mounted: function mounted() {
-    console.log('Component mounted.');
+  data: function data() {
+    return {
+      mahasiswa: 0,
+      skpiPublished: 0,
+      skpiProgress: 0,
+      bidangKompetensi: 0
+    };
+  },
+  methods: {
+    getData: function getData() {
+      var _this = this;
+
+      this.$Progress.start();
+      axios.get('api/dashboard').then(function (response) {
+        _this.mahasiswa = response.data.mahasiswa;
+        _this.skpiPublished = response.data.skpiPublished;
+        _this.skpiProgress = response.data.skpiProgress;
+        _this.bidangKompetensi = response.data.bidangKompetensi;
+
+        _this.$Progress.finish();
+      })["catch"](function () {
+        _this.$Progress.fail();
+
+        toast.fire({
+          type: 'error',
+          title: 'Data load failed'
+        });
+      });
+    }
+  },
+  created: function created() {
+    this.$parent.search = '';
+    this.getData();
   }
 });
 
@@ -2391,9 +2406,205 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  mounted: function mounted() {
-    console.log('Component mounted.');
+  data: function data() {
+    return {
+      backups: {},
+      form: new Form({
+        name: ''
+      })
+    };
+  },
+  methods: {
+    getBackups: function getBackups() {
+      var _this = this;
+
+      if (this.$gate.isWarek()) {
+        this.$Progress.start();
+        axios.get('api/backup').then(function (response) {
+          _this.backups = response;
+
+          _this.$Progress.finish();
+        })["catch"](function () {
+          _this.$Progress.fail();
+
+          toast.fire({
+            type: 'error',
+            title: 'Load data backup failed'
+          });
+        });
+      }
+    },
+    createBackup: function createBackup() {
+      var _this2 = this;
+
+      this.$Progress.start();
+      this.form.post('api/backup').then(function () {
+        cusEvent.$emit('ReloadData');
+        toast.fire({
+          type: 'success',
+          title: 'Backup created successfully'
+        });
+
+        _this2.form.reset();
+
+        _this2.$Progress.finish();
+      })["catch"](function () {
+        _this2.$Progress.fail();
+
+        toast.fire({
+          type: 'error',
+          title: 'Backup create failed'
+        });
+      });
+    },
+    restoreBackup: function restoreBackup(name) {
+      var _this3 = this;
+
+      swal.fire({
+        title: 'Are you sure?',
+        text: "Your Database will be Restore",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#38C172',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, restore it!'
+      }).then(function (result) {
+        if (result.value) {
+          axios.get('api/backup/restore/' + name).then(function () {
+            _this3.$Progress.start();
+
+            swal.fire('Restored!', 'Database has been Restored', 'success');
+            cusEvent.$emit('ReloadData');
+
+            _this3.$Progress.finish();
+          })["catch"](function () {
+            _this3.$Progress.fail();
+
+            swal.fire({
+              type: 'error',
+              title: 'Oops...',
+              text: 'Database Restore Failed'
+            });
+          });
+        }
+      });
+    },
+    downloadBackup: function downloadBackup(name) {
+      var _this4 = this;
+
+      this.$Progress.start();
+      axios({
+        url: 'api/backup/download/' + name,
+        method: 'GET',
+        responseType: 'blob'
+      }).then(function (response) {
+        var url = window.URL.createObjectURL(new Blob([response.data]));
+        var link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', name);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        _this4.$Progress.finish();
+      })["catch"](function () {
+        _this4.$Progress.fail();
+
+        toast.fire({
+          type: 'error',
+          title: 'Download backup failed'
+        });
+      });
+    },
+    deleteBackup: function deleteBackup(name) {
+      var _this5 = this;
+
+      swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then(function (result) {
+        if (result.value) {
+          _this5.form["delete"]('api/backup/' + name).then(function () {
+            _this5.$Progress.start();
+
+            swal.fire('Deleted!', 'Backup has been deleted.', 'success');
+            cusEvent.$emit('ReloadData');
+
+            _this5.$Progress.finish();
+          })["catch"](function () {
+            _this5.$Progress.fail();
+
+            swal.fire({
+              type: 'error',
+              title: 'Oops...',
+              text: 'Backup delete failed'
+            });
+          });
+        }
+      });
+    }
+  },
+  created: function created() {
+    this.$parent.search = '';
+    this.getBackups();
+    cusEvent.$on('ReloadData', this.getBackups);
+  },
+  beforeDestroy: function beforeDestroy() {
+    cusEvent.$off('ReloadData', this.getBackups);
   }
 });
 
@@ -65886,13 +66097,1185 @@ var render = function() {
   return _c("div", { staticClass: "container" }, [
     this.$gate.isWarek() || this.$gate.isKaprodi() || this.$gate.isAkademik()
       ? _c("div", { staticClass: "row mt-4" }, [
-          _vm._m(0),
+          _c("div", { staticClass: "col-lg-12" }, [
+            _c("div", { staticClass: "card" }, [
+              _c("div", { staticClass: "card-body text-center" }, [
+                _c("h4", { staticClass: "mb-3" }, [
+                  _vm._v("Welcome to SKPI Application")
+                ]),
+                _vm._v(" "),
+                _c(
+                  "svg",
+                  {
+                    attrs: {
+                      id: "0b188637-16b1-4c40-a71f-ceebe5cfc5ec",
+                      "data-name": "Layer 1",
+                      xmlns: "http://www.w3.org/2000/svg",
+                      "xmlns:xlink": "http://www.w3.org/1999/xlink",
+                      width: "243.073",
+                      height: "248.71",
+                      viewBox: "0 0 729.22 746.14"
+                    }
+                  },
+                  [
+                    _c(
+                      "defs",
+                      [
+                        _c(
+                          "linearGradient",
+                          {
+                            attrs: {
+                              id: "161b0b7e-f39b-42f9-9ca9-e5f4182b27e7",
+                              x1: "459.12",
+                              y1: "621",
+                              x2: "459.12",
+                              y2: "193.38",
+                              gradientTransform: "translate(-9.77 -29.03)",
+                              gradientUnits: "userSpaceOnUse"
+                            }
+                          },
+                          [
+                            _c("stop", {
+                              attrs: {
+                                offset: "0",
+                                "stop-color": "gray",
+                                "stop-opacity": "0.25"
+                              }
+                            }),
+                            _c("stop", {
+                              attrs: {
+                                offset: "0.54",
+                                "stop-color": "gray",
+                                "stop-opacity": "0.12"
+                              }
+                            }),
+                            _c("stop", {
+                              attrs: {
+                                offset: "1",
+                                "stop-color": "gray",
+                                "stop-opacity": "0.1"
+                              }
+                            })
+                          ],
+                          1
+                        ),
+                        _c(
+                          "linearGradient",
+                          {
+                            attrs: {
+                              id: "0379165a-8b01-4db8-a9fd-a7f74912e5f9",
+                              x1: "459.12",
+                              y1: "355.96",
+                              x2: "459.12",
+                              y2: "192.97",
+                              gradientTransform: "translate(-44.96 -24.28)",
+                              gradientUnits: "userSpaceOnUse"
+                            }
+                          },
+                          [
+                            _c("stop", {
+                              attrs: {
+                                offset: "0",
+                                "stop-color": "#b3b3b3",
+                                "stop-opacity": "0.25"
+                              }
+                            }),
+                            _c("stop", {
+                              attrs: {
+                                offset: "0.54",
+                                "stop-color": "#b3b3b3",
+                                "stop-opacity": "0.1"
+                              }
+                            }),
+                            _c("stop", {
+                              attrs: {
+                                offset: "1",
+                                "stop-color": "#b3b3b3",
+                                "stop-opacity": "0.05"
+                              }
+                            })
+                          ],
+                          1
+                        ),
+                        _c(
+                          "linearGradient",
+                          {
+                            attrs: {
+                              id: "a5c94603-d688-4cb8-935e-8753937e09f1",
+                              x1: "890.03",
+                              y1: "384.1",
+                              x2: "893.49",
+                              y2: "466.67",
+                              gradientTransform:
+                                "matrix(-0.96, 0.28, -0.28, -0.96, 1290.21, 438.32)",
+                              gradientUnits: "userSpaceOnUse"
+                            }
+                          },
+                          [
+                            _c("stop", {
+                              attrs: { offset: "0", "stop-opacity": "0.12" }
+                            }),
+                            _c("stop", {
+                              attrs: { offset: "0.55", "stop-opacity": "0.09" }
+                            }),
+                            _c("stop", {
+                              attrs: { offset: "1", "stop-opacity": "0.02" }
+                            })
+                          ],
+                          1
+                        ),
+                        _c("linearGradient", {
+                          attrs: {
+                            id: "452544f9-f0e1-48f7-bf2a-2e6d32ceef9c",
+                            x1: "630.78",
+                            y1: "714.25",
+                            x2: "630.78",
+                            y2: "285.78",
+                            gradientTransform: "matrix(1, 0, 0, 1, 0, 0)",
+                            "xlink:href":
+                              "#161b0b7e-f39b-42f9-9ca9-e5f4182b27e7"
+                          }
+                        }),
+                        _c("linearGradient", {
+                          attrs: {
+                            id: "b357cf12-7038-49e2-a945-bede915bae9c",
+                            x1: "737.4",
+                            y1: "672.7",
+                            x2: "737.4",
+                            y2: "245.08",
+                            gradientTransform: "translate(15.96 0.36)",
+                            "xlink:href":
+                              "#161b0b7e-f39b-42f9-9ca9-e5f4182b27e7"
+                          }
+                        }),
+                        _c("linearGradient", {
+                          attrs: {
+                            id: "ea27b32b-d891-4df9-a7ed-488b1d56dfe9",
+                            x1: "737.4",
+                            y1: "407.66",
+                            x2: "737.4",
+                            y2: "244.68",
+                            gradientTransform: "translate(1.98 1.1)",
+                            "xlink:href":
+                              "#0379165a-8b01-4db8-a9fd-a7f74912e5f9"
+                          }
+                        }),
+                        _c("linearGradient", {
+                          attrs: {
+                            id: "e9a0bbc5-d046-4610-9b74-eda9798afd67",
+                            x1: "612.39",
+                            y1: "329.04",
+                            x2: "615.85",
+                            y2: "411.61",
+                            gradientTransform:
+                              "translate(1291.19 632.77) rotate(173.26)",
+                            "xlink:href":
+                              "#a5c94603-d688-4cb8-935e-8753937e09f1"
+                          }
+                        }),
+                        _c("linearGradient", {
+                          attrs: {
+                            id: "d89d3977-de30-46d1-ab57-98fa636459b9",
+                            x1: "382.92",
+                            y1: "428.03",
+                            x2: "382.92",
+                            y2: "0.4",
+                            gradientTransform: "matrix(1, 0, 0, 1, 0, 0)",
+                            "xlink:href":
+                              "#161b0b7e-f39b-42f9-9ca9-e5f4182b27e7"
+                          }
+                        }),
+                        _c("linearGradient", {
+                          attrs: {
+                            id: "1e925d76-3047-4c1e-82a0-04113f14e226",
+                            x1: "382.92",
+                            y1: "162.99",
+                            x2: "382.92",
+                            y2: "0",
+                            gradientTransform: "matrix(1, 0, 0, 1, 0, 0)",
+                            "xlink:href":
+                              "#0379165a-8b01-4db8-a9fd-a7f74912e5f9"
+                          }
+                        }),
+                        _c("linearGradient", {
+                          attrs: {
+                            id: "9a56d00c-164c-4fec-8f17-f5f893f4fff9",
+                            x1: "729.45",
+                            y1: "498.21",
+                            x2: "732.9",
+                            y2: "580.79",
+                            gradientTransform:
+                              "matrix(-1, 0.01, -0.01, -1, 1253.94, 688.13)",
+                            "xlink:href":
+                              "#a5c94603-d688-4cb8-935e-8753937e09f1"
+                          }
+                        }),
+                        _c("linearGradient", {
+                          attrs: {
+                            id: "595bce0a-5d70-43e8-a094-99f33f4517de",
+                            x1: "328.81",
+                            y1: "746.14",
+                            x2: "328.81",
+                            y2: "254.91",
+                            gradientTransform: "matrix(1, 0, 0, 1, 0, 0)",
+                            "xlink:href":
+                              "#161b0b7e-f39b-42f9-9ca9-e5f4182b27e7"
+                          }
+                        }),
+                        _c("linearGradient", {
+                          attrs: {
+                            id: "7d63bf16-77e8-4c09-b275-41a64fa57a97",
+                            x1: "329.34",
+                            y1: "675.01",
+                            x2: "329.34",
+                            y2: "373.01",
+                            gradientTransform: "matrix(1, 0, 0, 1, 0, 0)",
+                            "xlink:href":
+                              "#161b0b7e-f39b-42f9-9ca9-e5f4182b27e7"
+                          }
+                        }),
+                        _c("linearGradient", {
+                          attrs: {
+                            id: "cafffc46-2bab-4c9b-8a17-f57a9c7cb665",
+                            x1: "683.6",
+                            y1: "52.97",
+                            x2: "690.12",
+                            y2: "208.87",
+                            gradientTransform:
+                              "matrix(-1, 0.01, -0.01, -1, 1253.94, 688.13)",
+                            "xlink:href":
+                              "#a5c94603-d688-4cb8-935e-8753937e09f1"
+                          }
+                        })
+                      ],
+                      1
+                    ),
+                    _c("title", [_vm._v("resume folder_2")]),
+                    _c("rect", {
+                      attrs: {
+                        x: "286.73",
+                        y: "164.35",
+                        width: "325.25",
+                        height: "427.62",
+                        transform:
+                          "matrix(0.96, -0.27, 0.27, 0.96, -319.57, 55.74)",
+                        fill: "url(#161b0b7e-f39b-42f9-9ca9-e5f4182b27e7)"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "251.16",
+                        y: "168.7",
+                        width: "326",
+                        height: "162.99",
+                        transform: "translate(-286.9 41.83) rotate(-15.37)",
+                        fill: "url(#0379165a-8b01-4db8-a9fd-a7f74912e5f9)"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "290.45",
+                        y: "167.72",
+                        width: "316.93",
+                        height: "417.67",
+                        transform: "translate(-319.16 55.57) rotate(-15.37)",
+                        fill: "#eee"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "255.71",
+                        y: "171.97",
+                        width: "317.66",
+                        height: "159.19",
+                        transform: "translate(-287.25 41.98) rotate(-15.37)",
+                        fill: "#3490dc"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "358.16",
+                        y: "384.47",
+                        width: "86.17",
+                        height: "6.57",
+                        transform: "translate(-323.84 43.33) rotate(-15.37)",
+                        fill: "#bdbdbd"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "365.13",
+                        y: "409.82",
+                        width: "86.17",
+                        height: "6.57",
+                        transform: "translate(-330.31 46.09) rotate(-15.37)",
+                        fill: "#f5f5f5"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "359.16",
+                        y: "378.75",
+                        width: "224.92",
+                        height: "6.57",
+                        transform: "translate(-319.8 61.79) rotate(-15.37)",
+                        fill: "#69f0ae"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "375.45",
+                        y: "229.76",
+                        width: "86.17",
+                        height: "6.57",
+                        transform: "translate(-282.2 42.38) rotate(-15.37)",
+                        fill: "#fff"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "378.38",
+                        y: "236.87",
+                        width: "138.75",
+                        height: "6.57",
+                        transform: "translate(-283.04 50.38) rotate(-15.37)",
+                        fill: "#fff"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "409.8",
+                        y: "255.17",
+                        width: "86.17",
+                        height: "7.3",
+                        rx: "3.09",
+                        ry: "3.09",
+                        transform: "translate(-287.8 52.41) rotate(-15.37)",
+                        opacity: "0.2"
+                      }
+                    }),
+                    _c("circle", {
+                      attrs: {
+                        cx: "325.31",
+                        cy: "413.18",
+                        r: "15.34",
+                        transform: "translate(-333.29 24.11) rotate(-15.37)",
+                        fill: "#69f0ae"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "375.01",
+                        y: "445.73",
+                        width: "86.17",
+                        height: "6.57",
+                        transform: "translate(-339.47 49.99) rotate(-15.37)",
+                        fill: "#bdbdbd"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "381.98",
+                        y: "471.08",
+                        width: "86.17",
+                        height: "6.57",
+                        transform: "translate(-345.95 52.75) rotate(-15.37)",
+                        fill: "#f5f5f5"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "376.01",
+                        y: "440.01",
+                        width: "224.92",
+                        height: "6.57",
+                        transform: "translate(-335.44 68.45) rotate(-15.37)",
+                        fill: "#e0e0e0"
+                      }
+                    }),
+                    _c("circle", {
+                      attrs: {
+                        cx: "342.15",
+                        cy: "474.44",
+                        r: "15.34",
+                        transform: "translate(-348.93 30.77) rotate(-15.37)",
+                        fill: "#e0e0e0"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "391.85",
+                        y: "506.98",
+                        width: "86.17",
+                        height: "6.57",
+                        transform: "translate(-355.11 56.65) rotate(-15.37)",
+                        fill: "#bdbdbd"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "398.82",
+                        y: "532.33",
+                        width: "86.17",
+                        height: "6.57",
+                        transform: "translate(-361.58 59.4) rotate(-15.37)",
+                        fill: "#f5f5f5"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "392.85",
+                        y: "501.27",
+                        width: "224.92",
+                        height: "6.57",
+                        transform: "translate(-351.08 75.1) rotate(-15.37)",
+                        fill: "#e0e0e0"
+                      }
+                    }),
+                    _c("circle", {
+                      attrs: {
+                        cx: "359",
+                        cy: "535.7",
+                        r: "15.34",
+                        transform: "translate(-364.57 37.43) rotate(-15.37)",
+                        fill: "#e0e0e0"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M274.62,287.15A42.28,42.28,0,1,0,318,233.24l3,10.47a14.36,14.36,0,0,1-9.8,17.72h0a14.36,14.36,0,0,1-17.72-9.8l-3-10.47A42.3,42.3,0,0,0,274.62,287.15Z",
+                        transform: "translate(-235.39 -76.93)",
+                        fill: "url(#a5c94603-d688-4cb8-935e-8753937e09f1)"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M355,260.43a42.28,42.28,0,1,0-44,53.38l-2.89-10.5a14.36,14.36,0,0,1,10-17.6h0a14.36,14.36,0,0,1,17.6,10l2.89,10.5A42.3,42.3,0,0,0,355,260.43Z",
+                        transform: "translate(-235.39 -76.93)",
+                        fill: "#3490dc"
+                      }
+                    }),
+                    _c("circle", {
+                      attrs: {
+                        cx: "312.7",
+                        cy: "266.03",
+                        r: "16.25",
+                        transform: "translate(-294.73 15.5) rotate(-15.37)",
+                        fill: "#fff",
+                        stroke: "#fff",
+                        "stroke-miterlimit": "10"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M318.09,285.71h0a14.36,14.36,0,0,0-10,17.6l2.89,10.5a42.44,42.44,0,0,0,27.61-7.59l-2.89-10.5A14.36,14.36,0,0,0,318.09,285.71Z",
+                        transform: "translate(-235.39 -76.93)",
+                        fill: "#fff",
+                        stroke: "#fff",
+                        "stroke-miterlimit": "10"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M296.66,269.51a15.77,15.77,0,0,1-3.84-7.42,10.93,10.93,0,0,1,1.51-8.11c1.75-2.57,4.65-4.11,7.58-5.17s6-1.75,8.78-3.14a19.44,19.44,0,0,0,9.74-11.41,26.14,26.14,0,0,1,1.83,6.92,8.81,8.81,0,0,1-2,6.68c2.08-1.76,2.53.9,2.44,2.59,1.57,1.1,4.5.55,5.16,2.35a12,12,0,0,1,.9,5.61c-.25,1.9,1.34,4.68-.46,5.32",
+                        transform: "translate(-235.39 -76.93)",
+                        fill: "#fff",
+                        stroke: "#fff",
+                        "stroke-miterlimit": "10"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d: "M321,247.24s11.2-2.05,7.87,16.32",
+                        transform: "translate(-235.39 -76.93)",
+                        fill: "#fff"
+                      }
+                    }),
+                    _c("polygon", {
+                      attrs: {
+                        points:
+                          "637.77 714.25 532.34 714.25 532.34 285.78 729.22 285.78 637.77 714.25",
+                        fill: "url(#452544f9-f0e1-48f7-bf2a-2e6d32ceef9c)"
+                      }
+                    }),
+                    _c("polygon", {
+                      attrs: {
+                        points:
+                          "632.52 714.25 529.17 714.25 529.17 285.78 722.16 285.78 632.52 714.25",
+                        fill: "#bdbdbd"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "590.74",
+                        y: "245.44",
+                        width: "325.25",
+                        height: "427.62",
+                        transform: "translate(-279.59 5.03) rotate(-6.05)",
+                        fill: "url(#b357cf12-7038-49e2-a945-bede915bae9c)"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "576.38",
+                        y: "245.78",
+                        width: "326",
+                        height: "162.99",
+                        transform: "translate(-265.76 2.82) rotate(-6.05)",
+                        fill: "url(#ea27b32b-d891-4df9-a7ed-488b1d56dfe9)"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "594.73",
+                        y: "248.76",
+                        width: "316.93",
+                        height: "417.67",
+                        transform: "translate(-279.42 5) rotate(-6.05)",
+                        fill: "#f5f5f5"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "580.7",
+                        y: "249.09",
+                        width: "317.66",
+                        height: "159.19",
+                        transform: "translate(-265.91 2.84) rotate(-6.05)",
+                        fill: "#3490dc"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "661.26",
+                        y: "457.64",
+                        width: "86.17",
+                        height: "6.57",
+                        transform: "translate(-280.04 -0.13) rotate(-6.05)",
+                        fill: "#bdbdbd"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "664.03",
+                        y: "483.78",
+                        width: "86.17",
+                        height: "6.57",
+                        transform: "translate(-282.78 0.31) rotate(-6.05)",
+                        fill: "#f5f5f5"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "662.26",
+                        y: "463.4",
+                        width: "224.92",
+                        height: "6.57",
+                        transform: "translate(-280.26 7.32) rotate(-6.05)",
+                        fill: "#69f0ae"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "703.39",
+                        y: "307.77",
+                        width: "86.17",
+                        height: "6.57",
+                        transform: "translate(-264.01 3.48) rotate(-6.05)",
+                        fill: "#fff"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "704.78",
+                        y: "319.53",
+                        width: "138.75",
+                        height: "6.57",
+                        transform: "translate(-265.1 6.46) rotate(-6.05)",
+                        fill: "#fff"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "733.11",
+                        y: "338.4",
+                        width: "86.17",
+                        height: "7.3",
+                        rx: "3.09",
+                        ry: "3.09",
+                        transform: "translate(-267.12 6.78) rotate(-6.05)",
+                        opacity: "0.2"
+                      }
+                    }),
+                    _c("circle", {
+                      attrs: {
+                        cx: "625.29",
+                        cy: "473.71",
+                        r: "15.34",
+                        transform: "translate(-281.83 -8.39) rotate(-6.05)",
+                        fill: "#69f0ae"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "667.96",
+                        y: "520.81",
+                        width: "86.17",
+                        height: "6.57",
+                        transform: "translate(-286.66 0.93) rotate(-6.05)",
+                        fill: "#bdbdbd"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "670.73",
+                        y: "546.96",
+                        width: "86.17",
+                        height: "6.57",
+                        transform: "translate(-289.4 1.36) rotate(-6.05)",
+                        fill: "#f5f5f5"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "668.96",
+                        y: "526.57",
+                        width: "224.92",
+                        height: "6.57",
+                        transform: "translate(-286.88 8.38) rotate(-6.05)",
+                        fill: "#e0e0e0"
+                      }
+                    }),
+                    _c("circle", {
+                      attrs: {
+                        cx: "631.99",
+                        cy: "536.88",
+                        r: "15.34",
+                        transform: "translate(-288.45 -7.33) rotate(-6.05)",
+                        fill: "#e0e0e0"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "674.65",
+                        y: "583.99",
+                        width: "86.17",
+                        height: "6.57",
+                        transform: "translate(-293.28 1.98) rotate(-6.05)",
+                        fill: "#bdbdbd"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "677.42",
+                        y: "610.13",
+                        width: "86.17",
+                        height: "6.57",
+                        transform: "translate(-296.02 2.42) rotate(-6.05)",
+                        fill: "#f5f5f5"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "675.65",
+                        y: "589.75",
+                        width: "224.92",
+                        height: "6.57",
+                        transform: "translate(-293.5 9.43) rotate(-6.05)",
+                        fill: "#e0e0e0"
+                      }
+                    }),
+                    _c("circle", {
+                      attrs: {
+                        cx: "638.68",
+                        cy: "600.06",
+                        r: "15.34",
+                        transform: "translate(-295.07 -6.28) rotate(-6.05)",
+                        fill: "#e0e0e0"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M595.69,341.12A42.28,42.28,0,1,0,647.23,295l1.28,10.82A14.36,14.36,0,0,1,636,321.67h0a14.36,14.36,0,0,1-15.9-12.54l-1.28-10.82A42.3,42.3,0,0,0,595.69,341.12Z",
+                        transform: "translate(-235.39 -76.93)",
+                        fill: "url(#e9a0bbc5-d046-4610-9b74-eda9798afd67)"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M679.33,327.79a42.28,42.28,0,1,0-52.09,45.54l-1.15-10.83a14.36,14.36,0,0,1,12.73-15.75h0a14.36,14.36,0,0,1,15.75,12.73l1.15,10.83A42.3,42.3,0,0,0,679.33,327.79Z",
+                        transform: "translate(-235.39 -76.93)",
+                        fill: "#3490dc"
+                      }
+                    }),
+                    _c("circle", {
+                      attrs: {
+                        cx: "636.7",
+                        cy: "326.46",
+                        r: "16.25",
+                        transform: "translate(-266.25 -8.01) rotate(-6.05)",
+                        fill: "#fff",
+                        stroke: "#fff",
+                        "stroke-miterlimit": "10"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M638.82,346.75h0a14.36,14.36,0,0,0-12.73,15.75l1.15,10.83a42.44,42.44,0,0,0,28.48-3l-1.15-10.83A14.36,14.36,0,0,0,638.82,346.75Z",
+                        transform: "translate(-235.39 -76.93)",
+                        fill: "#fff",
+                        stroke: "#fff",
+                        "stroke-miterlimit": "10"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M620.3,327.29a15.77,15.77,0,0,1-2.59-7.95,10.93,10.93,0,0,1,2.8-7.75c2.14-2.26,5.26-3.31,8.32-3.88S635,307,638,306a19.44,19.44,0,0,0,11.46-9.68,26.14,26.14,0,0,1,.69,7.12,8.81,8.81,0,0,1-3.06,6.27c2.33-1.4,2.35,1.29,2,2.95,1.37,1.34,4.35,1.27,4.71,3.16a12,12,0,0,1,0,5.68c-.56,1.83.57,4.84-1.32,5.17",
+                        transform: "translate(-235.39 -76.93)",
+                        fill: "#fff",
+                        stroke: "#fff",
+                        "stroke-miterlimit": "10"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d: "M647.93,309.26s11.38-.21,5.13,17.38",
+                        transform: "translate(-235.39 -76.93)",
+                        fill: "#fff"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "220.3",
+                        y: "0.4",
+                        width: "325.25",
+                        height: "427.62",
+                        fill: "url(#d89d3977-de30-46d1-ab57-98fa636459b9)"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "219.92",
+                        width: "326",
+                        height: "162.99",
+                        fill: "url(#1e925d76-3047-4c1e-82a0-04113f14e226)"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "224.46",
+                        y: "3.71",
+                        width: "316.93",
+                        height: "417.67",
+                        fill: "#f5f5f5"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "224.1",
+                        y: "3.32",
+                        width: "317.66",
+                        height: "159.19",
+                        fill: "#3490dc"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "290.91",
+                        y: "207.42",
+                        width: "86.17",
+                        height: "6.57",
+                        fill: "#bdbdbd"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "290.91",
+                        y: "233.71",
+                        width: "86.17",
+                        height: "6.57",
+                        fill: "#f5f5f5"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "290.91",
+                        y: "220.57",
+                        width: "224.92",
+                        height: "6.57",
+                        fill: "#69f0ae"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "348.6",
+                        y: "62.84",
+                        width: "86.17",
+                        height: "6.57",
+                        fill: "#fff"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "348.6",
+                        y: "77.44",
+                        width: "138.75",
+                        height: "6.57",
+                        fill: "#fff"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "374.89",
+                        y: "96.43",
+                        width: "86.17",
+                        height: "7.3",
+                        rx: "3.09",
+                        ry: "3.09",
+                        opacity: "0.2"
+                      }
+                    }),
+                    _c("circle", {
+                      attrs: {
+                        cx: "254.04",
+                        cy: "215.09",
+                        r: "15.34",
+                        fill: "#69f0ae"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "290.91",
+                        y: "270.95",
+                        width: "86.17",
+                        height: "6.57",
+                        fill: "#bdbdbd"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "290.91",
+                        y: "297.24",
+                        width: "86.17",
+                        height: "6.57",
+                        fill: "#f5f5f5"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "290.91",
+                        y: "284.1",
+                        width: "224.92",
+                        height: "6.57",
+                        fill: "#e0e0e0"
+                      }
+                    }),
+                    _c("circle", {
+                      attrs: {
+                        cx: "254.04",
+                        cy: "278.62",
+                        r: "15.34",
+                        fill: "#e0e0e0"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "290.91",
+                        y: "334.49",
+                        width: "86.17",
+                        height: "6.57",
+                        fill: "#bdbdbd"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "290.91",
+                        y: "360.77",
+                        width: "86.17",
+                        height: "6.57",
+                        fill: "#f5f5f5"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "290.91",
+                        y: "347.63",
+                        width: "224.92",
+                        height: "6.57",
+                        fill: "#e0e0e0"
+                      }
+                    }),
+                    _c("circle", {
+                      attrs: {
+                        cx: "254.04",
+                        cy: "342.15",
+                        r: "15.34",
+                        fill: "#e0e0e0"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M474,157.06a42.28,42.28,0,1,0,56.12-40.48l.13,10.89A14.36,14.36,0,0,1,516.07,142h0a14.36,14.36,0,0,1-14.49-14.14l-.13-10.89A42.3,42.3,0,0,0,474,157.06Z",
+                        transform: "translate(-235.39 -76.93)",
+                        fill: "url(#9a56d00c-164c-4fec-8f17-f5f893f4fff9)"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M558.55,152.61a42.28,42.28,0,1,0-56.6,39.8V181.51a14.36,14.36,0,0,1,14.32-14.32h0a14.36,14.36,0,0,1,14.32,14.32v10.89A42.3,42.3,0,0,0,558.55,152.61Z",
+                        transform: "translate(-235.39 -76.93)",
+                        fill: "#3490dc"
+                      }
+                    }),
+                    _c("circle", {
+                      attrs: {
+                        cx: "280.9",
+                        cy: "69.87",
+                        r: "16.25",
+                        fill: "#fff",
+                        stroke: "#fff",
+                        "stroke-miterlimit": "10"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M516.26,167.19h0a14.36,14.36,0,0,0-14.32,14.32v10.89a42.44,42.44,0,0,0,28.64,0V181.51A14.36,14.36,0,0,0,516.26,167.19Z",
+                        transform: "translate(-235.39 -76.93)",
+                        fill: "#fff",
+                        stroke: "#fff",
+                        "stroke-miterlimit": "10"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M499.9,145.89a15.77,15.77,0,0,1-1.73-8.18,10.93,10.93,0,0,1,3.6-7.42c2.37-2,5.58-2.73,8.68-3s6.24-.1,9.3-.7a19.44,19.44,0,0,0,12.41-8.42,26.14,26.14,0,0,1-.07,7.15,8.81,8.81,0,0,1-3.7,5.91c2.47-1.14,2.2,1.53,1.67,3.14,1.22,1.48,4.2,1.72,4.35,3.64a12,12,0,0,1-.62,5.65c-.75,1.76.05,4.87-1.86,5",
+                        transform: "translate(-235.39 -76.93)",
+                        fill: "#fff",
+                        stroke: "#fff",
+                        "stroke-miterlimit": "10"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d: "M529.27,130.88s11.34,1,3.27,17.82",
+                        transform: "translate(-235.39 -76.93)",
+                        fill: "#fff"
+                      }
+                    }),
+                    _c("polygon", {
+                      attrs: {
+                        points:
+                          "190.59 304.74 119.42 254.91 20.88 254.91 20.88 304.74 20.88 329.15 20.88 746.14 636.74 746.14 636.74 304.74 190.59 304.74",
+                        fill: "url(#595bce0a-5d70-43e8-a094-99f33f4517de)"
+                      }
+                    }),
+                    _c("polyline", {
+                      attrs: {
+                        points:
+                          "26.15 309.78 26.15 333.48 26.15 738.25 632.52 738.25 632.52 309.78 193.25 309.78",
+                        fill: "#fff"
+                      }
+                    }),
+                    _c("polyline", {
+                      attrs: {
+                        points:
+                          "193.25 309.78 123.17 261.41 26.15 261.41 26.15 309.78",
+                        fill: "#bdbdbd"
+                      }
+                    }),
+                    _c("text", { attrs: { x: "-235.39", y: "-76.93" } }),
+                    _c("rect", {
+                      attrs: {
+                        x: "162.34",
+                        y: "373.01",
+                        width: "334",
+                        height: "302",
+                        fill: "url(#7d63bf16-77e8-4c09-b275-41a64fa57a97)"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "166.88",
+                        y: "375.21",
+                        width: "326.42",
+                        height: "294.31",
+                        fill: "#fff"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "268.19",
+                        y: "595.49",
+                        width: "128.34",
+                        height: "10.51",
+                        fill: "#bdbdbd"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "189.87",
+                        y: "616.52",
+                        width: "280.44",
+                        height: "10.51",
+                        fill: "#e0e0e0"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "189.87",
+                        y: "637.55",
+                        width: "280.44",
+                        height: "10.51",
+                        fill: "#e0e0e0"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M485.62,564.67a79.84,79.84,0,1,0,106-76.43l.25,20.57a27.11,27.11,0,0,1-26.7,27.36h0a27.11,27.11,0,0,1-27.36-26.7l-.25-20.57A79.87,79.87,0,0,0,485.62,564.67Z",
+                        transform: "translate(-235.39 -76.93)",
+                        fill: "url(#cafffc46-2bab-4c9b-8a17-f57a9c7cb665)"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M645.32,556.28a79.84,79.84,0,1,0-106.87,75.14V610.85a27.11,27.11,0,0,1,27-27h0a27.11,27.11,0,0,1,27,27v20.57A79.87,79.87,0,0,0,645.32,556.28Z",
+                        transform: "translate(-235.39 -76.93)",
+                        fill: "#bdbdbd"
+                      }
+                    }),
+                    _c("rect", {
+                      attrs: {
+                        x: "323.18",
+                        y: "488.01",
+                        width: "9.6",
+                        height: "33.85",
+                        rx: "4.8",
+                        ry: "4.8",
+                        fill: "#fff",
+                        stroke: "#fff",
+                        "stroke-miterlimit": "10"
+                      }
+                    }),
+                    _c("circle", {
+                      attrs: {
+                        cx: "328.03",
+                        cy: "461.87",
+                        r: "30.69",
+                        fill: "#fff",
+                        stroke: "#fff",
+                        "stroke-miterlimit": "10"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M563.37,577.31h0a27.11,27.11,0,0,0-27,27v20.57a80.13,80.13,0,0,0,54.07,0V604.35A27.11,27.11,0,0,0,563.37,577.31Z",
+                        transform: "translate(-235.39 -76.93)",
+                        fill: "#fff",
+                        stroke: "#fff",
+                        "stroke-miterlimit": "10"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M532.47,537.1a29.77,29.77,0,0,1-3.27-15.44,20.64,20.64,0,0,1,6.8-14c4.47-3.81,10.53-5.16,16.39-5.63s11.79-.19,17.55-1.32a36.69,36.69,0,0,0,23.43-15.89c.37,4.5.74,9.07-.13,13.51s-3.15,8.79-7,11.16c4.66-2.16,4.15,2.9,3.14,5.93,2.31,2.79,7.92,3.25,8.21,6.86s.24,7.34-1.17,10.67.1,9.19-3.5,9.45",
+                        transform: "translate(-235.39 -76.93)",
+                        fill: "#fff",
+                        stroke: "#fff",
+                        "stroke-miterlimit": "10"
+                      }
+                    }),
+                    _c("path", {
+                      attrs: {
+                        d: "M587.94,508.75s21.41,1.87,6.17,33.65",
+                        transform: "translate(-235.39 -76.93)",
+                        fill: "#fff"
+                      }
+                    })
+                  ]
+                )
+              ])
+            ])
+          ]),
           _vm._v(" "),
-          _vm._m(1),
+          _c("div", { staticClass: "col-md-3 col-sm-6 col-12" }, [
+            _c("div", { staticClass: "info-box" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c("div", { staticClass: "info-box-content" }, [
+                _c("span", { staticClass: "info-box-text" }, [
+                  _vm._v("Mahasiswa")
+                ]),
+                _vm._v(" "),
+                _c("span", { staticClass: "info-box-number" }, [
+                  _vm._v(_vm._s(_vm.mahasiswa))
+                ])
+              ])
+            ])
+          ]),
           _vm._v(" "),
-          _vm._m(2),
+          _c("div", { staticClass: "col-md-3 col-sm-6 col-12" }, [
+            _c("div", { staticClass: "info-box" }, [
+              _vm._m(1),
+              _vm._v(" "),
+              _c("div", { staticClass: "info-box-content" }, [
+                _c("span", { staticClass: "info-box-text" }, [
+                  _vm._v("SKPI Published")
+                ]),
+                _vm._v(" "),
+                _c("span", { staticClass: "info-box-number" }, [
+                  _vm._v(_vm._s(_vm.skpiPublished))
+                ])
+              ])
+            ])
+          ]),
           _vm._v(" "),
-          _vm._m(3)
+          _c("div", { staticClass: "col-md-3 col-sm-6 col-12" }, [
+            _c("div", { staticClass: "info-box" }, [
+              _vm._m(2),
+              _vm._v(" "),
+              _c("div", { staticClass: "info-box-content" }, [
+                _c("span", { staticClass: "info-box-text" }, [
+                  _vm._v("SKPI Progress")
+                ]),
+                _vm._v(" "),
+                _c("span", { staticClass: "info-box-number" }, [
+                  _vm._v(_vm._s(_vm.skpiProgress))
+                ])
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-md-3 col-sm-6 col-12" }, [
+            _c("div", { staticClass: "info-box" }, [
+              _vm._m(3),
+              _vm._v(" "),
+              _c("div", { staticClass: "info-box-content" }, [
+                _c("span", { staticClass: "info-box-text" }, [
+                  _vm._v("Bidang kompetensi")
+                ]),
+                _vm._v(" "),
+                _c("span", { staticClass: "info-box-number" }, [
+                  _vm._v(_vm._s(_vm.bidangKompetensi))
+                ])
+              ])
+            ])
+          ])
         ])
       : _c("div", { staticClass: "row" }, [_c("not-found")], 1)
   ])
@@ -65902,92 +67285,32 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-lg-3 col-6" }, [
-      _c("div", { staticClass: "small-box bg-dark" }, [
-        _c("div", { staticClass: "inner" }, [
-          _c("h3", [_vm._v("150")]),
-          _vm._v(" "),
-          _c("p", [_vm._v("Mahasiswa")])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "icon" }, [
-          _c("i", { staticClass: "fas fa-user-graduate" })
-        ]),
-        _vm._v(" "),
-        _c("a", { staticClass: "small-box-footer", attrs: { href: "#" } }, [
-          _vm._v("More info "),
-          _c("i", { staticClass: "fa fa-arrow-circle-right" })
-        ])
-      ])
+    return _c("span", { staticClass: "info-box-icon bg-danger" }, [
+      _c("i", { staticClass: "fas fa-user-graduate" })
     ])
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-lg-3 col-6" }, [
-      _c("div", { staticClass: "small-box bg-danger" }, [
-        _c("div", { staticClass: "inner" }, [
-          _c("h3", [_vm._v("123")]),
-          _vm._v(" "),
-          _c("p", [_vm._v("SKPI Published")])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "icon" }, [
-          _c("i", { staticClass: "fas fa-id-card" })
-        ]),
-        _vm._v(" "),
-        _c("a", { staticClass: "small-box-footer", attrs: { href: "#" } }, [
-          _vm._v("More info "),
-          _c("i", { staticClass: "fa fa-arrow-circle-right" })
-        ])
-      ])
+    return _c("span", { staticClass: "info-box-icon bg-success" }, [
+      _c("i", { staticClass: "fas fa-award" })
     ])
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-lg-3 col-6" }, [
-      _c("div", { staticClass: "small-box bg-primary" }, [
-        _c("div", { staticClass: "inner" }, [
-          _c("h3", [_vm._v("44")]),
-          _vm._v(" "),
-          _c("p", [_vm._v("Bidang Kompetensi")])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "icon" }, [
-          _c("i", { staticClass: "fas fa-atom" })
-        ]),
-        _vm._v(" "),
-        _c("a", { staticClass: "small-box-footer", attrs: { href: "#" } }, [
-          _vm._v("More info "),
-          _c("i", { staticClass: "fa fa-arrow-circle-right" })
-        ])
-      ])
+    return _c("span", { staticClass: "info-box-icon bg-orange text-white" }, [
+      _c("i", { staticClass: "fas fa-spinner" })
     ])
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-lg-3 col-6" }, [
-      _c("div", { staticClass: "small-box bg-orange text-light" }, [
-        _c("div", { staticClass: "inner" }, [
-          _c("h3", [_vm._v("65")]),
-          _vm._v(" "),
-          _c("p", [_vm._v("Unique Visitors")])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "icon" }, [
-          _c("i", { staticClass: "fas fa-award" })
-        ]),
-        _vm._v(" "),
-        _c("a", { staticClass: "small-box-footer", attrs: { href: "#" } }, [
-          _vm._v("More info "),
-          _c("i", { staticClass: "fa fa-arrow-circle-right" })
-        ])
-      ])
+    return _c("span", { staticClass: "info-box-icon bg-primary" }, [
+      _c("i", { staticClass: "fas fa-atom" })
     ])
   }
 ]
@@ -66559,1086 +67882,1283 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "col text-center mt-5" }, [
-    _c(
-      "svg",
-      {
-        attrs: {
-          id: "b4507652-300d-4dad-b4e7-3391f5529675",
-          "data-name": "Layer 1",
-          xmlns: "http://www.w3.org/2000/svg",
-          "xmlns:xlink": "http://www.w3.org/1999/xlink",
-          width: "331",
-          height: "381",
-          viewBox: "0 0 663.17 762"
-        }
-      },
-      [
-        _c(
-          "defs",
-          [
-            _c(
-              "linearGradient",
-              {
-                attrs: {
-                  id: "d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3",
-                  x1: "459.65",
-                  y1: "738.32",
-                  x2: "459.65",
-                  y2: "284.02",
-                  gradientUnits: "userSpaceOnUse"
-                }
-              },
-              [
-                _c("stop", {
-                  attrs: {
-                    offset: "0",
-                    "stop-color": "gray",
-                    "stop-opacity": "0.25"
-                  }
-                }),
-                _c("stop", {
-                  attrs: {
-                    offset: "0.54",
-                    "stop-color": "gray",
-                    "stop-opacity": "0.12"
-                  }
-                }),
-                _c("stop", {
-                  attrs: {
-                    offset: "1",
-                    "stop-color": "gray",
-                    "stop-opacity": "0.1"
-                  }
-                })
-              ],
-              1
-            ),
-            _c("linearGradient", {
-              attrs: {
-                id: "7e95541b-f23b-42af-96eb-14a53f85b88b",
-                x1: "600.72",
-                y1: "403",
-                x2: "600.72",
-                y2: "323.66",
-                "xlink:href": "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
-              }
-            }),
-            _c("linearGradient", {
-              attrs: {
-                id: "1f71154d-6f54-4122-a624-3174e1d145ed",
-                x1: "600.72",
-                y1: "550.56",
-                x2: "600.72",
-                y2: "471.22",
-                "xlink:href": "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
-              }
-            }),
-            _c("linearGradient", {
-              attrs: {
-                id: "bab1ef80-f439-400f-b75e-d481e1337c59",
-                x1: "600.72",
-                y1: "697.13",
-                x2: "600.72",
-                y2: "617.79",
-                "xlink:href": "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
-              }
-            }),
-            _c("linearGradient", {
-              attrs: {
-                id: "311d0c02-f227-4717-bb3e-7b76a48f76fd",
-                x1: "665.06",
-                y1: "369.67",
-                x2: "665.06",
-                y2: "351.79",
-                "xlink:href": "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
-              }
-            }),
-            _c("linearGradient", {
-              attrs: {
-                id: "f10401ff-75bf-4918-9522-41530bdcb224",
-                x1: "479.65",
-                y1: "365.1",
-                x2: "479.65",
-                y2: "234.63",
-                "xlink:href": "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
-              }
-            }),
-            _c("linearGradient", {
-              attrs: {
-                id: "634fc42e-a625-48bc-9b77-e9d0b023e72c",
-                x1: "614.02",
-                y1: "339.34",
-                x2: "614.02",
-                y2: "310.82",
-                "xlink:href": "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
-              }
-            }),
-            _c("linearGradient", {
-              attrs: {
-                id: "9b827108-e4f2-42b8-ba41-3c19060ad3f7",
-                x1: "87.62",
-                y1: "142.68",
-                x2: "87.62",
-                y2: "34.45",
-                "xlink:href": "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
-              }
-            }),
-            _c("linearGradient", {
-              attrs: {
-                id: "3586a682-5eec-4ced-91ba-6237bff26d97",
-                x1: "347.57",
-                y1: "491.51",
-                x2: "347.57",
-                y2: "211.68",
-                "xlink:href": "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
-              }
-            }),
-            _c("linearGradient", {
-              attrs: {
-                id: "dd5c4d5c-05f0-4f35-bbb4-fa512a8ce0cd",
-                x1: "116.39",
-                y1: "708.74",
-                x2: "116.39",
-                y2: "419.27",
-                "xlink:href": "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
-              }
-            }),
-            _c("linearGradient", {
-              attrs: {
-                id: "9de476d2-69e8-44f9-8bb3-c420f419b2ba",
-                x1: "499.2",
-                y1: "831",
-                x2: "499.2",
-                y2: "777.74",
-                "xlink:href": "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
-              }
-            }),
-            _c("linearGradient", {
-              attrs: {
-                id: "f7fb7603-20ad-4e52-86ea-1fa616cf7653",
-                x1: "347.16",
-                y1: "831",
-                x2: "347.16",
-                y2: "777.74",
-                "xlink:href": "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
-              }
-            }),
-            _c("linearGradient", {
-              attrs: {
-                id: "5066a889-a40f-4241-bcba-44ac6c04f611",
-                x1: "370.62",
-                y1: "206.37",
-                x2: "370.62",
-                y2: "102.59",
-                "xlink:href": "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
-              }
-            }),
-            _c("linearGradient", {
-              attrs: {
-                id: "371e619a-3c15-42e1-9941-bc21af164012",
-                x1: "351.42",
-                y1: "198.2",
-                x2: "351.42",
-                y2: "69",
-                "xlink:href": "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
-              }
-            }),
-            _c("linearGradient", {
-              attrs: {
-                id: "10f878d5-e316-4ded-aa19-5e1413fbf4fb",
-                x1: "355.36",
-                y1: "108.01",
-                x2: "355.36",
-                y2: "84.91",
-                "xlink:href": "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
-              }
-            }),
-            _c("linearGradient", {
-              attrs: {
-                id: "37ff1452-10ea-45a0-ad47-cadc68f3bfc5",
-                x1: "361.95",
-                y1: "198.2",
-                x2: "361.95",
-                y2: "69",
-                "xlink:href": "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
-              }
-            }),
-            _c("linearGradient", {
-              attrs: {
-                id: "18a85275-116d-4ad3-9bbd-6c78581ea078",
-                x1: "397.75",
-                y1: "491.51",
-                x2: "397.75",
-                y2: "211.68",
-                "xlink:href": "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
-              }
-            }),
-            _c("linearGradient", {
-              attrs: {
-                id: "eb6e6980-5e3c-4cc8-ba13-4b71197705e9",
-                x1: "449.38",
-                y1: "383.47",
-                x2: "449.38",
-                y2: "253.01",
-                "xlink:href": "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
-              }
-            }),
-            _c("linearGradient", {
-              attrs: {
-                id: "ca1af11e-721e-46b0-bf29-fc3abce4d291",
-                x1: "583.76",
-                y1: "357.71",
-                x2: "583.76",
-                y2: "329.2",
-                "xlink:href": "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
-              }
-            }),
-            _c("linearGradient", {
-              attrs: {
-                id: "87e6aff1-3600-405e-a0c9-f146cb0b14e5",
-                x1: "87.62",
-                y1: "165.87",
-                x2: "87.62",
-                y2: "119.49",
-                "xlink:href": "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
-              }
-            }),
-            _c("linearGradient", {
-              attrs: {
-                id: "9310cc51-8904-4231-ae2b-5557a287eec3",
-                x1: "96.33",
-                y1: "708.74",
-                x2: "96.33",
-                y2: "484.55",
-                "xlink:href": "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
-              }
-            }),
-            _c("linearGradient", {
-              attrs: {
-                id: "40a7ecb1-ccc7-469d-bfb2-8f2ca76aa016",
-                x1: "190.29",
-                y1: "708.74",
-                x2: "190.29",
-                y2: "419.27",
-                "xlink:href": "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
-              }
-            }),
-            _c("linearGradient", {
-              attrs: {
-                id: "9872a281-de8b-443e-8a22-8ab73fd8eecc",
-                x1: "522.82",
-                y1: "831",
-                x2: "522.82",
-                y2: "777.74",
-                "xlink:href": "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
-              }
-            }),
-            _c("linearGradient", {
-              attrs: {
-                id: "25814e7d-be9f-42ca-ba9f-5e4b50285847",
-                x1: "375.07",
-                y1: "831",
-                x2: "375.07",
-                y2: "777.74",
-                "xlink:href": "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
-              }
-            }),
-            _c("linearGradient", {
-              attrs: {
-                id: "f6db3ab5-77d3-4926-85e6-26558235763f",
-                x1: "259.45",
-                y1: "270.72",
-                x2: "259.45",
-                y2: "260.36",
-                "xlink:href": "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
-              }
-            }),
-            _c("linearGradient", {
-              attrs: {
-                id: "a12a6384-bcfe-49c1-a705-b61b36502b52",
-                x1: "82.08",
-                y1: "254.09",
-                x2: "82.08",
-                y2: "165.45",
-                "xlink:href": "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
-              }
-            }),
-            _c("linearGradient", {
-              attrs: {
-                id: "24987791-5317-4d6d-bf01-0dc3e5459aa4",
-                x1: "779.72",
-                y1: "363.2",
-                x2: "779.72",
-                y2: "235.39",
-                "xlink:href": "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
-              }
-            })
-          ],
-          1
-        ),
-        _c("title", [_vm._v("maintenance")]),
-        _c("rect", {
-          attrs: {
-            x: "333.04",
-            y: "279.64",
-            width: "9.46",
-            height: "6.31",
-            fill: "#b0bec5"
-          }
-        }),
-        _c("rect", {
-          attrs: {
-            x: "345.65",
-            y: "279.64",
-            width: "9.46",
-            height: "6.31",
-            fill: "#b0bec5"
-          }
-        }),
-        _c("rect", {
-          attrs: {
-            x: "358.27",
-            y: "279.64",
-            width: "9.46",
-            height: "6.31",
-            fill: "#b0bec5"
-          }
-        }),
-        _c("rect", {
-          attrs: {
-            x: "370.88",
-            y: "279.64",
-            width: "9.46",
-            height: "6.31",
-            fill: "#b0bec5"
-          }
-        }),
-        _c("rect", {
-          attrs: {
-            x: "383.5",
-            y: "279.64",
-            width: "9.46",
-            height: "6.31",
-            fill: "#b0bec5"
-          }
-        }),
-        _c("rect", {
-          attrs: {
-            x: "396.12",
-            y: "279.64",
-            width: "9.46",
-            height: "6.31",
-            fill: "#b0bec5"
-          }
-        }),
-        _c("rect", {
-          attrs: {
-            x: "408.73",
-            y: "279.64",
-            width: "9.46",
-            height: "6.31",
-            fill: "#b0bec5"
-          }
-        }),
-        _c("rect", {
-          attrs: {
-            x: "421.35",
-            y: "279.64",
-            width: "9.46",
-            height: "6.31",
-            fill: "#b0bec5"
-          }
-        }),
-        _c("rect", {
-          attrs: {
-            x: "433.96",
-            y: "279.64",
-            width: "9.46",
-            height: "6.31",
-            fill: "#b0bec5"
-          }
-        }),
-        _c("rect", {
-          attrs: {
-            x: "446.58",
-            y: "279.64",
-            width: "9.46",
-            height: "6.31",
-            fill: "#b0bec5"
-          }
-        }),
-        _c("rect", {
-          attrs: {
-            x: "256.14",
-            y: "284.02",
-            width: "407.03",
-            height: "454.29",
-            fill: "url(#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3)"
-          }
-        }),
-        _c("rect", {
-          attrs: {
-            x: "262.87",
-            y: "587.33",
-            width: "393.58",
-            height: "141.09",
-            fill: "#eceff1"
-          }
-        }),
-        _c("rect", {
-          attrs: {
-            x: "295.17",
-            y: "620.8",
-            width: "15.25",
-            height: "72.29",
-            fill: "#64ffda"
-          }
-        }),
-        _c("g", { attrs: { opacity: "0.7" } }, [
-          _c("rect", {
-            attrs: {
-              x: "325.28",
-              y: "620.8",
-              width: "15.25",
-              height: "72.29",
-              fill: "#64ffda"
-            }
-          })
-        ]),
-        _c("g", { attrs: { opacity: "0.6" } }, [
-          _c("rect", {
-            attrs: {
-              x: "355.39",
-              y: "620.8",
-              width: "15.25",
-              height: "72.29",
-              fill: "#64ffda"
-            }
-          })
-        ]),
-        _c("g", { attrs: { opacity: "0.5" } }, [
-          _c("rect", {
-            attrs: {
-              x: "385.5",
-              y: "620.8",
-              width: "15.25",
-              height: "72.29",
-              fill: "#64ffda"
-            }
-          })
-        ]),
-        _c("g", { attrs: { opacity: "0.5" } }, [
-          _c("rect", {
-            attrs: {
-              x: "415.61",
-              y: "620.8",
-              width: "15.25",
-              height: "72.29",
-              fill: "#64ffda"
-            }
-          })
-        ]),
-        _c("g", { attrs: { opacity: "0.4" } }, [
-          _c("rect", {
-            attrs: {
-              x: "445.72",
-              y: "620.8",
-              width: "15.25",
-              height: "72.29",
-              fill: "#64ffda"
-            }
-          })
-        ]),
-        _c("g", { attrs: { opacity: "0.3" } }, [
-          _c("rect", {
-            attrs: {
-              x: "475.82",
-              y: "620.8",
-              width: "15.25",
-              height: "72.29",
-              fill: "#64ffda"
-            }
-          })
-        ]),
-        _c("circle", {
-          attrs: { cx: "600.72", cy: "656.48", r: "36.8", fill: "#3490dc" }
-        }),
-        _c("rect", {
-          attrs: {
-            x: "262.87",
-            y: "440.75",
-            width: "393.58",
-            height: "141.09",
-            fill: "#eceff1"
-          }
-        }),
-        _c("rect", {
-          attrs: {
-            x: "295.17",
-            y: "474.22",
-            width: "15.25",
-            height: "72.29",
-            fill: "#64ffda"
-          }
-        }),
-        _c("g", { attrs: { opacity: "0.7" } }, [
-          _c("rect", {
-            attrs: {
-              x: "325.28",
-              y: "474.22",
-              width: "15.25",
-              height: "72.29",
-              fill: "#64ffda"
-            }
-          })
-        ]),
-        _c("g", { attrs: { opacity: "0.6" } }, [
-          _c("rect", {
-            attrs: {
-              x: "355.39",
-              y: "474.22",
-              width: "15.25",
-              height: "72.29",
-              fill: "#64ffda"
-            }
-          })
-        ]),
-        _c("g", { attrs: { opacity: "0.5" } }, [
-          _c("rect", {
-            attrs: {
-              x: "385.5",
-              y: "474.22",
-              width: "15.25",
-              height: "72.29",
-              fill: "#64ffda"
-            }
-          })
-        ]),
-        _c("g", { attrs: { opacity: "0.5" } }, [
-          _c("rect", {
-            attrs: {
-              x: "415.61",
-              y: "474.22",
-              width: "15.25",
-              height: "72.29",
-              fill: "#64ffda"
-            }
-          })
-        ]),
-        _c("g", { attrs: { opacity: "0.4" } }, [
-          _c("rect", {
-            attrs: {
-              x: "445.72",
-              y: "474.22",
-              width: "15.25",
-              height: "72.29",
-              fill: "#64ffda"
-            }
-          })
-        ]),
-        _c("g", { attrs: { opacity: "0.3" } }, [
-          _c("rect", {
-            attrs: {
-              x: "475.82",
-              y: "474.22",
-              width: "15.25",
-              height: "72.29",
-              fill: "#64ffda"
-            }
-          })
-        ]),
-        _c("circle", {
-          attrs: { cx: "600.72", cy: "509.91", r: "36.8", fill: "#3490dc" }
-        }),
-        _c("rect", {
-          attrs: {
-            x: "262.87",
-            y: "294.18",
-            width: "393.58",
-            height: "141.09",
-            fill: "#eceff1"
-          }
-        }),
-        _c("rect", {
-          attrs: {
-            x: "295.17",
-            y: "327.64",
-            width: "15.25",
-            height: "72.29",
-            fill: "#64ffda"
-          }
-        }),
-        _c("g", { attrs: { opacity: "0.7" } }, [
-          _c("rect", {
-            attrs: {
-              x: "325.28",
-              y: "327.64",
-              width: "15.25",
-              height: "72.29",
-              fill: "#64ffda"
-            }
-          })
-        ]),
-        _c("g", { attrs: { opacity: "0.6" } }, [
-          _c("rect", {
-            attrs: {
-              x: "355.39",
-              y: "327.64",
-              width: "15.25",
-              height: "72.29",
-              fill: "#64ffda"
-            }
-          })
-        ]),
-        _c("g", { attrs: { opacity: "0.5" } }, [
-          _c("rect", {
-            attrs: {
-              x: "385.5",
-              y: "327.64",
-              width: "15.25",
-              height: "72.29",
-              fill: "#64ffda"
-            }
-          })
-        ]),
-        _c("g", { attrs: { opacity: "0.5" } }, [
-          _c("rect", {
-            attrs: {
-              x: "415.61",
-              y: "327.64",
-              width: "15.25",
-              height: "72.29",
-              fill: "#64ffda"
-            }
-          })
-        ]),
-        _c("g", { attrs: { opacity: "0.4" } }, [
-          _c("rect", {
-            attrs: {
-              x: "445.72",
-              y: "327.64",
-              width: "15.25",
-              height: "72.29",
-              fill: "#64ffda"
-            }
-          })
-        ]),
-        _c("g", { attrs: { opacity: "0.3" } }, [
-          _c("rect", {
-            attrs: {
-              x: "475.82",
-              y: "327.64",
-              width: "15.25",
-              height: "72.29",
-              fill: "#64ffda"
-            }
-          })
-        ]),
-        _c("circle", {
-          attrs: {
-            cx: "600.72",
-            cy: "363.33",
-            r: "39.67",
-            fill: "url(#7e95541b-f23b-42af-96eb-14a53f85b88b)"
-          }
-        }),
-        _c("circle", {
-          attrs: {
-            cx: "600.72",
-            cy: "510.89",
-            r: "39.67",
-            fill: "url(#1f71154d-6f54-4122-a624-3174e1d145ed)"
-          }
-        }),
-        _c("circle", {
-          attrs: {
-            cx: "600.72",
-            cy: "657.46",
-            r: "39.67",
-            fill: "url(#bab1ef80-f439-400f-b75e-d481e1337c59)"
-          }
-        }),
-        _c("circle", {
-          attrs: { cx: "600.72", cy: "363.33", r: "36.8", fill: "#3490dc" }
-        }),
-        _c("path", {
-          attrs: {
-            d:
-              "M740.22,369.67H594.86a5,5,0,0,1-5-5v-7.92a5,5,0,0,1,5-5H740.22Z",
-            transform: "translate(-268.41 -69)",
-            fill: "url(#311d0c02-f227-4717-bb3e-7b76a48f76fd)"
-          }
-        }),
-        _c("path", {
-          attrs: {
-            d:
-              "M740.22,367.56H597.49a5,5,0,0,1-5-5v-4.77a5,5,0,0,1,5-5H740.22Z",
-            transform: "translate(-268.41 -69)",
-            fill: "#b0bec5"
-          }
-        }),
-        _c("path", {
-          attrs: {
-            d:
-              "M369.8,272.22l105,92.88,122-25.77-9.45-27.49L492.81,323l-94.59-83a21.49,21.49,0,0,0-31.72,3.74h0A21.49,21.49,0,0,0,369.8,272.22Z",
-            transform: "translate(-268.41 -69)",
-            fill: "url(#f10401ff-75bf-4918-9522-41530bdcb224)"
-          }
-        }),
-        _c("path", {
-          attrs: {
-            d: "M596.74,339.33s31.12.86,42.62-16.32-52.07-11.17-52.07-11.17Z",
-            transform: "translate(-268.41 -69)",
-            fill: "url(#634fc42e-a625-48bc-9b77-e9d0b023e72c)"
-          }
-        }),
-        _c("circle", {
-          attrs: {
-            cx: "87.62",
-            cy: "88.56",
-            r: "54.12",
-            fill: "url(#9b827108-e4f2-42b8-ba41-3c19060ad3f7)"
-          }
-        }),
-        _c("path", {
-          attrs: {
-            d:
-              "M333.7,216.83s-69.5,46.8-51.85,191.48a126.66,126.66,0,0,1-4.46,52.07l-9,29.6s152.9,3.44,157.19,0c2.66-2.13.59-56.65-6.87-132.28-4.57-46.33,9.76-110.78-39.51-146Z",
-            transform: "translate(-268.41 -69)",
-            fill: "url(#3586a682-5eec-4ced-91ba-6237bff26d97)"
-          }
-        }),
-        _c("polygon", {
-          attrs: {
-            points:
-              "157.19 419.27 225.05 562.72 232.78 708.74 184.68 708.74 164.06 557.56 122.83 484.55 81.6 708.74 33.5 708.74 48.1 542.1 0 420.99 157.19 419.27",
-            fill: "url(#dd5c4d5c-05f0-4f35-bbb4-fa512a8ce0cd)"
-          }
-        }),
-        _c("path", {
-          attrs: {
-            d: "M501.2,777.74l14.6,22.33s49,18.9,27.49,30.92H449.66V777.74Z",
-            transform: "translate(-268.41 -69)",
-            fill: "url(#9de476d2-69e8-44f9-8bb3-c420f419b2ba)"
-          }
-        }),
-        _c("path", {
-          attrs: {
-            d: "M349.16,777.74l14.6,22.33s49,18.9,27.49,30.92H297.62V777.74Z",
-            transform: "translate(-268.41 -69)",
-            fill: "url(#f7fb7603-20ad-4e52-86ea-1fa616cf7653)"
-          }
-        }),
-        _c("g", { attrs: { opacity: "0.2" } }, [
-          _c("path", {
-            attrs: {
-              d:
-                "M356.89,102.59a53.85,53.85,0,0,0-26.66,7,54.11,54.11,0,0,1,48.17,96.75,54.12,54.12,0,0,0-21.51-103.78Z",
-              transform: "translate(-268.41 -69)",
-              fill: "url(#5066a889-a40f-4241-bcba-44ac6c04f611)"
-            }
-          })
-        ]),
-        _c("path", {
-          attrs: {
-            d:
-              "M421.82,69,406.76,92c-5.41,8.27-13.27,17.66-23,15.74-4.52-.89-8.14-4.15-11.75-7-11.81-9.38-26.42-15.74-41.5-15.83s-30.51,6.7-39,19.15c-6.29,9.19-8.46,20.53-9.7,31.59-2.49,22.12,0,48.23,18.47,60.65a8.68,8.68,0,0,0,5.24,1.89c2-.13,3.62-1.4,5.12-2.66,23.12-19.37,36-50.87,63.84-64.17,12.29-5.86,30.17-5.91,40.08-15.87C429.16,100.85,413,82.47,421.82,69Z",
-            transform: "translate(-268.41 -69)",
-            fill: "url(#371e619a-3c15-42e1-9941-bc21af164012)"
-          }
-        }),
-        _c("g", { attrs: { opacity: "0.2" } }, [
-          _c("path", {
-            attrs: {
-              d:
-                "M366,100.74c3.61,2.87,7.22,6.13,11.75,7a13,13,0,0,0,5.56-.11c-4.31-1-7.8-4.15-11.29-6.91-11.81-9.38-26.42-15.74-41.5-15.83-1.06,0-2.11,0-3.17.09C341.45,85.81,355,92,366,100.74Z",
-              transform: "translate(-268.41 -69)",
-              fill: "url(#10f878d5-e316-4ded-aa19-5e1413fbf4fb)"
-            }
-          }),
-          _c("path", {
-            attrs: {
-              d:
-                "M421.82,69l-8.69,13.29c.83,10.93,5.63,23-4.55,33.2-9.92,10-27.8,10-40.08,15.87-27.87,13.3-40.73,44.81-63.84,64.17a16.5,16.5,0,0,1-2.56,1.84,6.71,6.71,0,0,0,3.45.82c2-.13,3.62-1.4,5.12-2.66,23.12-19.37,36-50.87,63.84-64.17,12.29-5.86,30.17-5.91,40.08-15.87C429.16,100.85,413,82.47,421.82,69Z",
-              transform: "translate(-268.41 -69)",
-              fill: "url(#37ff1452-10ea-45a0-ad47-cadc68f3bfc5)"
-            }
-          })
-        ]),
-        _c("g", { attrs: { opacity: "0.2" } }, [
-          _c("path", {
-            attrs: {
-              d:
-                "M418.74,357.71c-4.57-46.33,9.76-110.78-39.51-146l-10.43,1.18c47.35,35.48,33.4,99,37.92,144.84,7.46,75.63,9.54,130.15,6.87,132.28-1.31,1-16.44,1.46-36.83,1.52,26.23.07,47.3-.27,48.86-1.52C428.27,487.86,426.19,433.34,418.74,357.71Z",
-              transform: "translate(-268.41 -69)",
-              fill: "url(#18a85275-116d-4ad3-9bbd-6c78581ea078)"
-            }
-          })
-        ]),
-        _c("path", {
-          attrs: {
-            d:
-              "M339.54,290.59l105,92.88,122-25.77L557,330.22l-94.49,11.17-94.59-83a21.49,21.49,0,0,0-31.72,3.74h0A21.49,21.49,0,0,0,339.54,290.59Z",
-            transform: "translate(-268.41 -69)",
-            fill: "url(#eb6e6980-5e3c-4cc8-ba13-4b71197705e9)"
-          }
-        }),
-        _c("path", {
-          attrs: {
-            d: "M566.48,357.71s31.12.86,42.62-16.32S557,330.22,557,330.22Z",
-            transform: "translate(-268.41 -69)",
-            fill: "url(#ca1af11e-721e-46b0-bf29-fc3abce4d291)"
-          }
-        }),
-        _c("rect", {
-          attrs: {
-            x: "64.42",
-            y: "119.49",
-            width: "46.38",
-            height: "46.38",
-            rx: "20.47",
-            ry: "20.47",
-            fill: "url(#87e6aff1-3600-405e-a0c9-f146cb0b14e5)"
-          }
-        }),
-        _c("g", { attrs: { opacity: "0.2" } }, [
-          _c("polygon", {
-            attrs: {
-              points:
-                "113.38 484.55 72.15 708.74 81.6 708.74 120.51 497.17 113.38 484.55",
-              fill: "url(#9310cc51-8904-4231-ae2b-5557a287eec3)"
-            }
-          }),
-          _c("polygon", {
-            attrs: {
-              points:
-                "225.05 562.72 157.19 419.27 147.79 419.37 215.6 562.72 223.33 708.74 232.78 708.74 225.05 562.72",
-              fill: "url(#40a7ecb1-ccc7-469d-bfb2-8f2ca76aa016)"
-            }
-          })
-        ]),
-        _c("g", { attrs: { opacity: "0.2" } }, [
-          _c("path", {
-            attrs: {
-              d:
-                "M515.8,800.08l-14.6-22.33H496.9l14.6,22.33S560.47,819,539,831h4.29C564.76,819,515.8,800.08,515.8,800.08Z",
-              transform: "translate(-268.41 -69)",
-              fill: "url(#9872a281-de8b-443e-8a22-8ab73fd8eecc)"
-            }
-          })
-        ]),
-        _c("g", { attrs: { opacity: "0.2" } }, [
-          _c("path", {
-            attrs: {
-              d:
-                "M368.06,800.08l-14.6-22.33h-4.29l14.6,22.33s49,18.9,27.49,30.92h4.29C417,819,368.06,800.08,368.06,800.08Z",
-              transform: "translate(-268.41 -69)",
-              fill: "url(#25814e7d-be9f-42ca-ba9f-5e4b50285847)"
-            }
-          })
-        ]),
-        _c("g", { attrs: { opacity: "0.2" } }, [
-          _c("polygon", {
-            attrs: {
-              points: "304.19 265.68 302.36 260.36 214.71 270.72 304.19 265.68",
-              fill: "url(#f6db3ab5-77d3-4926-85e6-26558235763f)"
-            }
-          })
-        ]),
-        _c("polygon", {
-          attrs: {
-            points:
-              "43.17 220.58 72.36 165.45 121 183.83 72.36 254.09 43.17 220.58",
-            fill: "url(#a12a6384-bcfe-49c1-a705-b61b36502b52)"
-          }
-        }),
-        _c("path", {
-          attrs: {
-            d:
-              "M372.13,277.09l102.09,90.34,118.63-25.06-9.19-26.73-91.9,10.86-92-80.76a20.9,20.9,0,0,0-30.85,3.64h0A20.9,20.9,0,0,0,372.13,277.09Z",
-            transform: "translate(-268.41 -69)",
-            fill: "#ca7070"
-          }
-        }),
-        _c("path", {
-          attrs: {
-            d: "M592.85,342.36s30.27.84,41.45-15.87-50.64-10.86-50.64-10.86Z",
-            transform: "translate(-268.41 -69)",
-            fill: "#ca7070"
-          }
-        }),
-        _c("circle", {
-          attrs: { cx: "90.32", cy: "96.58", r: "52.63", fill: "#ca7070" }
-        }),
-        _c("path", {
-          attrs: {
-            d:
-              "M337,223.22s-67.6,45.52-50.43,186.24a123.19,123.19,0,0,1-4.34,50.65l-8.72,28.79s148.71,3.34,152.89,0c2.59-2.07.57-55.1-6.68-128.66-4.44-45.06,9.49-107.75-38.43-142Z",
-            transform: "translate(-268.41 -69)",
-            fill: "#263238"
-          }
-        }),
-        _c("polygon", {
-          attrs: {
-            points:
-              "157.99 418.22 223.99 557.74 231.5 699.76 184.72 699.76 164.67 552.73 124.57 481.71 84.47 699.76 37.68 699.76 51.88 537.69 5.1 419.89 157.99 418.22",
-            fill: "#5caade"
-          }
-        }),
-        _c("path", {
-          attrs: {
-            d:
-              "M499.92,768.76l14.2,21.72s47.62,18.38,26.73,30.08H449.79v-51.8Z",
-            transform: "translate(-268.41 -69)",
-            fill: "#263238"
-          }
-        }),
-        _c("path", {
-          attrs: {
-            d: "M352,768.76l14.2,21.72s47.62,18.38,26.73,30.08H301.92v-51.8Z",
-            transform: "translate(-268.41 -69)",
-            fill: "#263238"
-          }
-        }),
-        _c("path", {
-          attrs: {
-            d:
-              "M359.57,112.11a52.37,52.37,0,0,0-25.93,6.84A52.63,52.63,0,0,1,380.49,213a52.64,52.64,0,0,0-20.92-100.93Z",
-            transform: "translate(-268.41 -69)",
-            fill: "#fff",
-            opacity: "0.2"
-          }
-        }),
-        _c("path", {
-          attrs: {
-            d:
-              "M422.71,79.44l-14.64,22.39c-5.26,8-12.9,17.17-22.33,15.31-4.4-.87-7.91-4-11.42-6.83C362.82,101.19,348.62,95,334,94.91s-29.67,6.52-38,18.62c-6.11,8.93-8.22,20-9.44,30.73-2.42,21.51,0,46.91,18,59a8.45,8.45,0,0,0,5.09,1.83c1.9-.13,3.52-1.36,5-2.59,22.48-18.83,35-49.48,62.1-62.41,11.95-5.7,29.34-5.75,39-15.43C429.86,110.42,414.14,92.54,422.71,79.44Z",
-            transform: "translate(-268.41 -69)",
-            fill: "#263238"
-          }
-        }),
-        _c("g", { attrs: { opacity: "0.2" } }, [
-          _c("path", {
-            attrs: {
-              d:
-                "M368.46,110.31c3.51,2.79,7,6,11.42,6.83a12.69,12.69,0,0,0,5.41-.1c-4.19-1-7.59-4-11-6.72C362.82,101.19,348.62,95,334,94.91c-1,0-2.05,0-3.08.09C344.55,95.79,357.7,101.76,368.46,110.31Z",
-              transform: "translate(-268.41 -69)",
-              fill: "#fff"
-            }
-          }),
-          _c("path", {
-            attrs: {
-              d:
-                "M422.71,79.44l-8.46,12.93c.8,10.63,5.48,22.34-4.43,32.29-9.65,9.68-27,9.73-39,15.43-27.11,12.93-39.61,43.58-62.1,62.41a16,16,0,0,1-2.49,1.79,6.52,6.52,0,0,0,3.35.8c1.9-.13,3.52-1.36,5-2.59,22.48-18.83,35-49.48,62.1-62.41,11.95-5.7,29.34-5.75,39-15.43C429.86,110.42,414.14,92.54,422.71,79.44Z",
-              transform: "translate(-268.41 -69)",
-              fill: "#fff"
-            }
-          })
-        ]),
-        _c("path", {
-          attrs: {
-            d:
-              "M419.72,360.23c-4.44-45.06,9.49-107.75-38.43-142l-10.14,1.15c46.05,34.51,32.48,96.31,36.88,140.88,7.25,73.56,9.27,126.59,6.68,128.66-1.27,1-16,1.42-35.82,1.48,25.52.07,46-.27,47.52-1.48C429,486.82,427,433.8,419.72,360.23Z",
-            transform: "translate(-268.41 -69)",
-            fill: "#fff",
-            opacity: "0.2"
-          }
-        }),
-        _c("path", {
-          attrs: {
-            d:
-              "M342.69,295,444.78,385.3l118.63-25.06-9.19-26.73-91.9,10.86-92-80.76a20.9,20.9,0,0,0-30.85,3.64h0A20.9,20.9,0,0,0,342.69,295Z",
-            transform: "translate(-268.41 -69)",
-            fill: "#ca7070"
-          }
-        }),
-        _c("path", {
-          attrs: {
-            d: "M563.41,360.23s30.27.84,41.45-15.87-50.64-10.86-50.64-10.86Z",
-            transform: "translate(-268.41 -69)",
-            fill: "#ca7070"
-          }
-        }),
-        _c("rect", {
-          attrs: {
-            x: "67.76",
-            y: "126.65",
-            width: "45.11",
-            height: "45.11",
-            rx: "20.47",
-            ry: "20.47",
-            fill: "#ca7070"
-          }
-        }),
-        _c("g", { attrs: { opacity: "0.2" } }, [
-          _c("polygon", {
-            attrs: {
-              points:
-                "115.38 481.71 75.28 699.76 84.47 699.76 122.31 493.99 115.38 481.71",
-              fill: "#fff"
-            }
-          }),
-          _c("polygon", {
-            attrs: {
-              points:
-                "223.99 557.74 157.99 418.22 148.84 418.32 214.8 557.74 222.31 699.76 231.5 699.76 223.99 557.74",
-              fill: "#fff"
-            }
-          })
-        ]),
-        _c("path", {
-          attrs: {
-            d:
-              "M514.12,790.49l-14.2-21.72h-4.18l14.2,21.72s47.62,18.38,26.73,30.08h4.18C561.74,808.87,514.12,790.49,514.12,790.49Z",
-            transform: "translate(-268.41 -69)",
-            fill: "#fff",
-            opacity: "0.2"
-          }
-        }),
-        _c("path", {
-          attrs: {
-            d:
-              "M370.43,790.49l-14.2-21.72H352l14.2,21.72s47.62,18.38,26.73,30.08h4.18C418,808.87,370.43,790.49,370.43,790.49Z",
-            transform: "translate(-268.41 -69)",
-            fill: "#fff",
-            opacity: "0.2"
-          }
-        }),
-        _c("polygon", {
-          attrs: {
-            points: "300.95 268.84 299.18 263.67 213.93 273.74 300.95 268.84",
-            fill: "#fff",
-            opacity: "0.2"
-          }
-        }),
-        _c("polygon", {
-          attrs: {
-            points:
-              "47.09 224.97 75.47 171.36 122.78 189.23 75.47 257.56 47.09 224.97",
-            fill: "#263238"
-          }
-        }),
-        _c("path", {
-          attrs: {
-            d:
-              "M730.24,354.36l86-116.94a5,5,0,0,1,7-1.06l4,2.95a5,5,0,0,1,1.06,7l-86,116.94Z",
-            transform: "translate(-268.41 -69)",
-            fill: "url(#24987791-5317-4d6d-bf01-0dc3e5459aa4)"
-          }
-        }),
-        _c("path", {
-          attrs: {
-            d:
-              "M731.95,355.61l84.54-115a5,5,0,0,1,7-1.06l.41.3a5,5,0,0,1,1.06,7l-84.54,115Z",
-            transform: "translate(-268.41 -69)",
-            fill: "#b0bec5"
-          }
-        })
-      ]
-    ),
-    _vm._v(" "),
-    _vm._m(0)
+  return _c("div", { staticClass: "container" }, [
+    this.$gate.isWarek()
+      ? _c("div", { staticClass: "row mt-4" }, [
+          _c("div", { staticClass: "col-lg-12" }, [
+            _c("div", { staticClass: "card" }, [
+              _c("div", { staticClass: "card-body" }, [
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col-lg-2 text-center" }, [
+                    _c(
+                      "svg",
+                      {
+                        attrs: {
+                          id: "b4507652-300d-4dad-b4e7-3391f5529675",
+                          "data-name": "Layer 1",
+                          xmlns: "http://www.w3.org/2000/svg",
+                          "xmlns:xlink": "http://www.w3.org/1999/xlink",
+                          width: "110",
+                          height: "127",
+                          viewBox: "0 0 663.17 762"
+                        }
+                      },
+                      [
+                        _c(
+                          "defs",
+                          [
+                            _c(
+                              "linearGradient",
+                              {
+                                attrs: {
+                                  id: "d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3",
+                                  x1: "459.65",
+                                  y1: "738.32",
+                                  x2: "459.65",
+                                  y2: "284.02",
+                                  gradientUnits: "userSpaceOnUse"
+                                }
+                              },
+                              [
+                                _c("stop", {
+                                  attrs: {
+                                    offset: "0",
+                                    "stop-color": "gray",
+                                    "stop-opacity": "0.25"
+                                  }
+                                }),
+                                _c("stop", {
+                                  attrs: {
+                                    offset: "0.54",
+                                    "stop-color": "gray",
+                                    "stop-opacity": "0.12"
+                                  }
+                                }),
+                                _c("stop", {
+                                  attrs: {
+                                    offset: "1",
+                                    "stop-color": "gray",
+                                    "stop-opacity": "0.1"
+                                  }
+                                })
+                              ],
+                              1
+                            ),
+                            _c("linearGradient", {
+                              attrs: {
+                                id: "7e95541b-f23b-42af-96eb-14a53f85b88b",
+                                x1: "600.72",
+                                y1: "403",
+                                x2: "600.72",
+                                y2: "323.66",
+                                "xlink:href":
+                                  "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
+                              }
+                            }),
+                            _c("linearGradient", {
+                              attrs: {
+                                id: "1f71154d-6f54-4122-a624-3174e1d145ed",
+                                x1: "600.72",
+                                y1: "550.56",
+                                x2: "600.72",
+                                y2: "471.22",
+                                "xlink:href":
+                                  "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
+                              }
+                            }),
+                            _c("linearGradient", {
+                              attrs: {
+                                id: "bab1ef80-f439-400f-b75e-d481e1337c59",
+                                x1: "600.72",
+                                y1: "697.13",
+                                x2: "600.72",
+                                y2: "617.79",
+                                "xlink:href":
+                                  "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
+                              }
+                            }),
+                            _c("linearGradient", {
+                              attrs: {
+                                id: "311d0c02-f227-4717-bb3e-7b76a48f76fd",
+                                x1: "665.06",
+                                y1: "369.67",
+                                x2: "665.06",
+                                y2: "351.79",
+                                "xlink:href":
+                                  "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
+                              }
+                            }),
+                            _c("linearGradient", {
+                              attrs: {
+                                id: "f10401ff-75bf-4918-9522-41530bdcb224",
+                                x1: "479.65",
+                                y1: "365.1",
+                                x2: "479.65",
+                                y2: "234.63",
+                                "xlink:href":
+                                  "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
+                              }
+                            }),
+                            _c("linearGradient", {
+                              attrs: {
+                                id: "634fc42e-a625-48bc-9b77-e9d0b023e72c",
+                                x1: "614.02",
+                                y1: "339.34",
+                                x2: "614.02",
+                                y2: "310.82",
+                                "xlink:href":
+                                  "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
+                              }
+                            }),
+                            _c("linearGradient", {
+                              attrs: {
+                                id: "9b827108-e4f2-42b8-ba41-3c19060ad3f7",
+                                x1: "87.62",
+                                y1: "142.68",
+                                x2: "87.62",
+                                y2: "34.45",
+                                "xlink:href":
+                                  "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
+                              }
+                            }),
+                            _c("linearGradient", {
+                              attrs: {
+                                id: "3586a682-5eec-4ced-91ba-6237bff26d97",
+                                x1: "347.57",
+                                y1: "491.51",
+                                x2: "347.57",
+                                y2: "211.68",
+                                "xlink:href":
+                                  "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
+                              }
+                            }),
+                            _c("linearGradient", {
+                              attrs: {
+                                id: "dd5c4d5c-05f0-4f35-bbb4-fa512a8ce0cd",
+                                x1: "116.39",
+                                y1: "708.74",
+                                x2: "116.39",
+                                y2: "419.27",
+                                "xlink:href":
+                                  "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
+                              }
+                            }),
+                            _c("linearGradient", {
+                              attrs: {
+                                id: "9de476d2-69e8-44f9-8bb3-c420f419b2ba",
+                                x1: "499.2",
+                                y1: "831",
+                                x2: "499.2",
+                                y2: "777.74",
+                                "xlink:href":
+                                  "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
+                              }
+                            }),
+                            _c("linearGradient", {
+                              attrs: {
+                                id: "f7fb7603-20ad-4e52-86ea-1fa616cf7653",
+                                x1: "347.16",
+                                y1: "831",
+                                x2: "347.16",
+                                y2: "777.74",
+                                "xlink:href":
+                                  "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
+                              }
+                            }),
+                            _c("linearGradient", {
+                              attrs: {
+                                id: "5066a889-a40f-4241-bcba-44ac6c04f611",
+                                x1: "370.62",
+                                y1: "206.37",
+                                x2: "370.62",
+                                y2: "102.59",
+                                "xlink:href":
+                                  "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
+                              }
+                            }),
+                            _c("linearGradient", {
+                              attrs: {
+                                id: "371e619a-3c15-42e1-9941-bc21af164012",
+                                x1: "351.42",
+                                y1: "198.2",
+                                x2: "351.42",
+                                y2: "69",
+                                "xlink:href":
+                                  "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
+                              }
+                            }),
+                            _c("linearGradient", {
+                              attrs: {
+                                id: "10f878d5-e316-4ded-aa19-5e1413fbf4fb",
+                                x1: "355.36",
+                                y1: "108.01",
+                                x2: "355.36",
+                                y2: "84.91",
+                                "xlink:href":
+                                  "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
+                              }
+                            }),
+                            _c("linearGradient", {
+                              attrs: {
+                                id: "37ff1452-10ea-45a0-ad47-cadc68f3bfc5",
+                                x1: "361.95",
+                                y1: "198.2",
+                                x2: "361.95",
+                                y2: "69",
+                                "xlink:href":
+                                  "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
+                              }
+                            }),
+                            _c("linearGradient", {
+                              attrs: {
+                                id: "18a85275-116d-4ad3-9bbd-6c78581ea078",
+                                x1: "397.75",
+                                y1: "491.51",
+                                x2: "397.75",
+                                y2: "211.68",
+                                "xlink:href":
+                                  "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
+                              }
+                            }),
+                            _c("linearGradient", {
+                              attrs: {
+                                id: "eb6e6980-5e3c-4cc8-ba13-4b71197705e9",
+                                x1: "449.38",
+                                y1: "383.47",
+                                x2: "449.38",
+                                y2: "253.01",
+                                "xlink:href":
+                                  "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
+                              }
+                            }),
+                            _c("linearGradient", {
+                              attrs: {
+                                id: "ca1af11e-721e-46b0-bf29-fc3abce4d291",
+                                x1: "583.76",
+                                y1: "357.71",
+                                x2: "583.76",
+                                y2: "329.2",
+                                "xlink:href":
+                                  "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
+                              }
+                            }),
+                            _c("linearGradient", {
+                              attrs: {
+                                id: "87e6aff1-3600-405e-a0c9-f146cb0b14e5",
+                                x1: "87.62",
+                                y1: "165.87",
+                                x2: "87.62",
+                                y2: "119.49",
+                                "xlink:href":
+                                  "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
+                              }
+                            }),
+                            _c("linearGradient", {
+                              attrs: {
+                                id: "9310cc51-8904-4231-ae2b-5557a287eec3",
+                                x1: "96.33",
+                                y1: "708.74",
+                                x2: "96.33",
+                                y2: "484.55",
+                                "xlink:href":
+                                  "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
+                              }
+                            }),
+                            _c("linearGradient", {
+                              attrs: {
+                                id: "40a7ecb1-ccc7-469d-bfb2-8f2ca76aa016",
+                                x1: "190.29",
+                                y1: "708.74",
+                                x2: "190.29",
+                                y2: "419.27",
+                                "xlink:href":
+                                  "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
+                              }
+                            }),
+                            _c("linearGradient", {
+                              attrs: {
+                                id: "9872a281-de8b-443e-8a22-8ab73fd8eecc",
+                                x1: "522.82",
+                                y1: "831",
+                                x2: "522.82",
+                                y2: "777.74",
+                                "xlink:href":
+                                  "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
+                              }
+                            }),
+                            _c("linearGradient", {
+                              attrs: {
+                                id: "25814e7d-be9f-42ca-ba9f-5e4b50285847",
+                                x1: "375.07",
+                                y1: "831",
+                                x2: "375.07",
+                                y2: "777.74",
+                                "xlink:href":
+                                  "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
+                              }
+                            }),
+                            _c("linearGradient", {
+                              attrs: {
+                                id: "f6db3ab5-77d3-4926-85e6-26558235763f",
+                                x1: "259.45",
+                                y1: "270.72",
+                                x2: "259.45",
+                                y2: "260.36",
+                                "xlink:href":
+                                  "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
+                              }
+                            }),
+                            _c("linearGradient", {
+                              attrs: {
+                                id: "a12a6384-bcfe-49c1-a705-b61b36502b52",
+                                x1: "82.08",
+                                y1: "254.09",
+                                x2: "82.08",
+                                y2: "165.45",
+                                "xlink:href":
+                                  "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
+                              }
+                            }),
+                            _c("linearGradient", {
+                              attrs: {
+                                id: "24987791-5317-4d6d-bf01-0dc3e5459aa4",
+                                x1: "779.72",
+                                y1: "363.2",
+                                x2: "779.72",
+                                y2: "235.39",
+                                "xlink:href":
+                                  "#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3"
+                              }
+                            })
+                          ],
+                          1
+                        ),
+                        _c("title", [_vm._v("maintenance")]),
+                        _c("rect", {
+                          attrs: {
+                            x: "333.04",
+                            y: "279.64",
+                            width: "9.46",
+                            height: "6.31",
+                            fill: "#b0bec5"
+                          }
+                        }),
+                        _c("rect", {
+                          attrs: {
+                            x: "345.65",
+                            y: "279.64",
+                            width: "9.46",
+                            height: "6.31",
+                            fill: "#b0bec5"
+                          }
+                        }),
+                        _c("rect", {
+                          attrs: {
+                            x: "358.27",
+                            y: "279.64",
+                            width: "9.46",
+                            height: "6.31",
+                            fill: "#b0bec5"
+                          }
+                        }),
+                        _c("rect", {
+                          attrs: {
+                            x: "370.88",
+                            y: "279.64",
+                            width: "9.46",
+                            height: "6.31",
+                            fill: "#b0bec5"
+                          }
+                        }),
+                        _c("rect", {
+                          attrs: {
+                            x: "383.5",
+                            y: "279.64",
+                            width: "9.46",
+                            height: "6.31",
+                            fill: "#b0bec5"
+                          }
+                        }),
+                        _c("rect", {
+                          attrs: {
+                            x: "396.12",
+                            y: "279.64",
+                            width: "9.46",
+                            height: "6.31",
+                            fill: "#b0bec5"
+                          }
+                        }),
+                        _c("rect", {
+                          attrs: {
+                            x: "408.73",
+                            y: "279.64",
+                            width: "9.46",
+                            height: "6.31",
+                            fill: "#b0bec5"
+                          }
+                        }),
+                        _c("rect", {
+                          attrs: {
+                            x: "421.35",
+                            y: "279.64",
+                            width: "9.46",
+                            height: "6.31",
+                            fill: "#b0bec5"
+                          }
+                        }),
+                        _c("rect", {
+                          attrs: {
+                            x: "433.96",
+                            y: "279.64",
+                            width: "9.46",
+                            height: "6.31",
+                            fill: "#b0bec5"
+                          }
+                        }),
+                        _c("rect", {
+                          attrs: {
+                            x: "446.58",
+                            y: "279.64",
+                            width: "9.46",
+                            height: "6.31",
+                            fill: "#b0bec5"
+                          }
+                        }),
+                        _c("rect", {
+                          attrs: {
+                            x: "256.14",
+                            y: "284.02",
+                            width: "407.03",
+                            height: "454.29",
+                            fill: "url(#d72a5ab6-06b8-48ed-a5a5-a3a3f0331fd3)"
+                          }
+                        }),
+                        _c("rect", {
+                          attrs: {
+                            x: "262.87",
+                            y: "587.33",
+                            width: "393.58",
+                            height: "141.09",
+                            fill: "#eceff1"
+                          }
+                        }),
+                        _c("rect", {
+                          attrs: {
+                            x: "295.17",
+                            y: "620.8",
+                            width: "15.25",
+                            height: "72.29",
+                            fill: "#64ffda"
+                          }
+                        }),
+                        _c("g", { attrs: { opacity: "0.7" } }, [
+                          _c("rect", {
+                            attrs: {
+                              x: "325.28",
+                              y: "620.8",
+                              width: "15.25",
+                              height: "72.29",
+                              fill: "#64ffda"
+                            }
+                          })
+                        ]),
+                        _c("g", { attrs: { opacity: "0.6" } }, [
+                          _c("rect", {
+                            attrs: {
+                              x: "355.39",
+                              y: "620.8",
+                              width: "15.25",
+                              height: "72.29",
+                              fill: "#64ffda"
+                            }
+                          })
+                        ]),
+                        _c("g", { attrs: { opacity: "0.5" } }, [
+                          _c("rect", {
+                            attrs: {
+                              x: "385.5",
+                              y: "620.8",
+                              width: "15.25",
+                              height: "72.29",
+                              fill: "#64ffda"
+                            }
+                          })
+                        ]),
+                        _c("g", { attrs: { opacity: "0.5" } }, [
+                          _c("rect", {
+                            attrs: {
+                              x: "415.61",
+                              y: "620.8",
+                              width: "15.25",
+                              height: "72.29",
+                              fill: "#64ffda"
+                            }
+                          })
+                        ]),
+                        _c("g", { attrs: { opacity: "0.4" } }, [
+                          _c("rect", {
+                            attrs: {
+                              x: "445.72",
+                              y: "620.8",
+                              width: "15.25",
+                              height: "72.29",
+                              fill: "#64ffda"
+                            }
+                          })
+                        ]),
+                        _c("g", { attrs: { opacity: "0.3" } }, [
+                          _c("rect", {
+                            attrs: {
+                              x: "475.82",
+                              y: "620.8",
+                              width: "15.25",
+                              height: "72.29",
+                              fill: "#64ffda"
+                            }
+                          })
+                        ]),
+                        _c("circle", {
+                          attrs: {
+                            cx: "600.72",
+                            cy: "656.48",
+                            r: "36.8",
+                            fill: "#3490dc"
+                          }
+                        }),
+                        _c("rect", {
+                          attrs: {
+                            x: "262.87",
+                            y: "440.75",
+                            width: "393.58",
+                            height: "141.09",
+                            fill: "#eceff1"
+                          }
+                        }),
+                        _c("rect", {
+                          attrs: {
+                            x: "295.17",
+                            y: "474.22",
+                            width: "15.25",
+                            height: "72.29",
+                            fill: "#64ffda"
+                          }
+                        }),
+                        _c("g", { attrs: { opacity: "0.7" } }, [
+                          _c("rect", {
+                            attrs: {
+                              x: "325.28",
+                              y: "474.22",
+                              width: "15.25",
+                              height: "72.29",
+                              fill: "#64ffda"
+                            }
+                          })
+                        ]),
+                        _c("g", { attrs: { opacity: "0.6" } }, [
+                          _c("rect", {
+                            attrs: {
+                              x: "355.39",
+                              y: "474.22",
+                              width: "15.25",
+                              height: "72.29",
+                              fill: "#64ffda"
+                            }
+                          })
+                        ]),
+                        _c("g", { attrs: { opacity: "0.5" } }, [
+                          _c("rect", {
+                            attrs: {
+                              x: "385.5",
+                              y: "474.22",
+                              width: "15.25",
+                              height: "72.29",
+                              fill: "#64ffda"
+                            }
+                          })
+                        ]),
+                        _c("g", { attrs: { opacity: "0.5" } }, [
+                          _c("rect", {
+                            attrs: {
+                              x: "415.61",
+                              y: "474.22",
+                              width: "15.25",
+                              height: "72.29",
+                              fill: "#64ffda"
+                            }
+                          })
+                        ]),
+                        _c("g", { attrs: { opacity: "0.4" } }, [
+                          _c("rect", {
+                            attrs: {
+                              x: "445.72",
+                              y: "474.22",
+                              width: "15.25",
+                              height: "72.29",
+                              fill: "#64ffda"
+                            }
+                          })
+                        ]),
+                        _c("g", { attrs: { opacity: "0.3" } }, [
+                          _c("rect", {
+                            attrs: {
+                              x: "475.82",
+                              y: "474.22",
+                              width: "15.25",
+                              height: "72.29",
+                              fill: "#64ffda"
+                            }
+                          })
+                        ]),
+                        _c("circle", {
+                          attrs: {
+                            cx: "600.72",
+                            cy: "509.91",
+                            r: "36.8",
+                            fill: "#3490dc"
+                          }
+                        }),
+                        _c("rect", {
+                          attrs: {
+                            x: "262.87",
+                            y: "294.18",
+                            width: "393.58",
+                            height: "141.09",
+                            fill: "#eceff1"
+                          }
+                        }),
+                        _c("rect", {
+                          attrs: {
+                            x: "295.17",
+                            y: "327.64",
+                            width: "15.25",
+                            height: "72.29",
+                            fill: "#64ffda"
+                          }
+                        }),
+                        _c("g", { attrs: { opacity: "0.7" } }, [
+                          _c("rect", {
+                            attrs: {
+                              x: "325.28",
+                              y: "327.64",
+                              width: "15.25",
+                              height: "72.29",
+                              fill: "#64ffda"
+                            }
+                          })
+                        ]),
+                        _c("g", { attrs: { opacity: "0.6" } }, [
+                          _c("rect", {
+                            attrs: {
+                              x: "355.39",
+                              y: "327.64",
+                              width: "15.25",
+                              height: "72.29",
+                              fill: "#64ffda"
+                            }
+                          })
+                        ]),
+                        _c("g", { attrs: { opacity: "0.5" } }, [
+                          _c("rect", {
+                            attrs: {
+                              x: "385.5",
+                              y: "327.64",
+                              width: "15.25",
+                              height: "72.29",
+                              fill: "#64ffda"
+                            }
+                          })
+                        ]),
+                        _c("g", { attrs: { opacity: "0.5" } }, [
+                          _c("rect", {
+                            attrs: {
+                              x: "415.61",
+                              y: "327.64",
+                              width: "15.25",
+                              height: "72.29",
+                              fill: "#64ffda"
+                            }
+                          })
+                        ]),
+                        _c("g", { attrs: { opacity: "0.4" } }, [
+                          _c("rect", {
+                            attrs: {
+                              x: "445.72",
+                              y: "327.64",
+                              width: "15.25",
+                              height: "72.29",
+                              fill: "#64ffda"
+                            }
+                          })
+                        ]),
+                        _c("g", { attrs: { opacity: "0.3" } }, [
+                          _c("rect", {
+                            attrs: {
+                              x: "475.82",
+                              y: "327.64",
+                              width: "15.25",
+                              height: "72.29",
+                              fill: "#64ffda"
+                            }
+                          })
+                        ]),
+                        _c("circle", {
+                          attrs: {
+                            cx: "600.72",
+                            cy: "363.33",
+                            r: "39.67",
+                            fill: "url(#7e95541b-f23b-42af-96eb-14a53f85b88b)"
+                          }
+                        }),
+                        _c("circle", {
+                          attrs: {
+                            cx: "600.72",
+                            cy: "510.89",
+                            r: "39.67",
+                            fill: "url(#1f71154d-6f54-4122-a624-3174e1d145ed)"
+                          }
+                        }),
+                        _c("circle", {
+                          attrs: {
+                            cx: "600.72",
+                            cy: "657.46",
+                            r: "39.67",
+                            fill: "url(#bab1ef80-f439-400f-b75e-d481e1337c59)"
+                          }
+                        }),
+                        _c("circle", {
+                          attrs: {
+                            cx: "600.72",
+                            cy: "363.33",
+                            r: "36.8",
+                            fill: "#3490dc"
+                          }
+                        }),
+                        _c("path", {
+                          attrs: {
+                            d:
+                              "M740.22,369.67H594.86a5,5,0,0,1-5-5v-7.92a5,5,0,0,1,5-5H740.22Z",
+                            transform: "translate(-268.41 -69)",
+                            fill: "url(#311d0c02-f227-4717-bb3e-7b76a48f76fd)"
+                          }
+                        }),
+                        _c("path", {
+                          attrs: {
+                            d:
+                              "M740.22,367.56H597.49a5,5,0,0,1-5-5v-4.77a5,5,0,0,1,5-5H740.22Z",
+                            transform: "translate(-268.41 -69)",
+                            fill: "#b0bec5"
+                          }
+                        }),
+                        _c("path", {
+                          attrs: {
+                            d:
+                              "M369.8,272.22l105,92.88,122-25.77-9.45-27.49L492.81,323l-94.59-83a21.49,21.49,0,0,0-31.72,3.74h0A21.49,21.49,0,0,0,369.8,272.22Z",
+                            transform: "translate(-268.41 -69)",
+                            fill: "url(#f10401ff-75bf-4918-9522-41530bdcb224)"
+                          }
+                        }),
+                        _c("path", {
+                          attrs: {
+                            d:
+                              "M596.74,339.33s31.12.86,42.62-16.32-52.07-11.17-52.07-11.17Z",
+                            transform: "translate(-268.41 -69)",
+                            fill: "url(#634fc42e-a625-48bc-9b77-e9d0b023e72c)"
+                          }
+                        }),
+                        _c("circle", {
+                          attrs: {
+                            cx: "87.62",
+                            cy: "88.56",
+                            r: "54.12",
+                            fill: "url(#9b827108-e4f2-42b8-ba41-3c19060ad3f7)"
+                          }
+                        }),
+                        _c("path", {
+                          attrs: {
+                            d:
+                              "M333.7,216.83s-69.5,46.8-51.85,191.48a126.66,126.66,0,0,1-4.46,52.07l-9,29.6s152.9,3.44,157.19,0c2.66-2.13.59-56.65-6.87-132.28-4.57-46.33,9.76-110.78-39.51-146Z",
+                            transform: "translate(-268.41 -69)",
+                            fill: "url(#3586a682-5eec-4ced-91ba-6237bff26d97)"
+                          }
+                        }),
+                        _c("polygon", {
+                          attrs: {
+                            points:
+                              "157.19 419.27 225.05 562.72 232.78 708.74 184.68 708.74 164.06 557.56 122.83 484.55 81.6 708.74 33.5 708.74 48.1 542.1 0 420.99 157.19 419.27",
+                            fill: "url(#dd5c4d5c-05f0-4f35-bbb4-fa512a8ce0cd)"
+                          }
+                        }),
+                        _c("path", {
+                          attrs: {
+                            d:
+                              "M501.2,777.74l14.6,22.33s49,18.9,27.49,30.92H449.66V777.74Z",
+                            transform: "translate(-268.41 -69)",
+                            fill: "url(#9de476d2-69e8-44f9-8bb3-c420f419b2ba)"
+                          }
+                        }),
+                        _c("path", {
+                          attrs: {
+                            d:
+                              "M349.16,777.74l14.6,22.33s49,18.9,27.49,30.92H297.62V777.74Z",
+                            transform: "translate(-268.41 -69)",
+                            fill: "url(#f7fb7603-20ad-4e52-86ea-1fa616cf7653)"
+                          }
+                        }),
+                        _c("g", { attrs: { opacity: "0.2" } }, [
+                          _c("path", {
+                            attrs: {
+                              d:
+                                "M356.89,102.59a53.85,53.85,0,0,0-26.66,7,54.11,54.11,0,0,1,48.17,96.75,54.12,54.12,0,0,0-21.51-103.78Z",
+                              transform: "translate(-268.41 -69)",
+                              fill: "url(#5066a889-a40f-4241-bcba-44ac6c04f611)"
+                            }
+                          })
+                        ]),
+                        _c("path", {
+                          attrs: {
+                            d:
+                              "M421.82,69,406.76,92c-5.41,8.27-13.27,17.66-23,15.74-4.52-.89-8.14-4.15-11.75-7-11.81-9.38-26.42-15.74-41.5-15.83s-30.51,6.7-39,19.15c-6.29,9.19-8.46,20.53-9.7,31.59-2.49,22.12,0,48.23,18.47,60.65a8.68,8.68,0,0,0,5.24,1.89c2-.13,3.62-1.4,5.12-2.66,23.12-19.37,36-50.87,63.84-64.17,12.29-5.86,30.17-5.91,40.08-15.87C429.16,100.85,413,82.47,421.82,69Z",
+                            transform: "translate(-268.41 -69)",
+                            fill: "url(#371e619a-3c15-42e1-9941-bc21af164012)"
+                          }
+                        }),
+                        _c("g", { attrs: { opacity: "0.2" } }, [
+                          _c("path", {
+                            attrs: {
+                              d:
+                                "M366,100.74c3.61,2.87,7.22,6.13,11.75,7a13,13,0,0,0,5.56-.11c-4.31-1-7.8-4.15-11.29-6.91-11.81-9.38-26.42-15.74-41.5-15.83-1.06,0-2.11,0-3.17.09C341.45,85.81,355,92,366,100.74Z",
+                              transform: "translate(-268.41 -69)",
+                              fill: "url(#10f878d5-e316-4ded-aa19-5e1413fbf4fb)"
+                            }
+                          }),
+                          _c("path", {
+                            attrs: {
+                              d:
+                                "M421.82,69l-8.69,13.29c.83,10.93,5.63,23-4.55,33.2-9.92,10-27.8,10-40.08,15.87-27.87,13.3-40.73,44.81-63.84,64.17a16.5,16.5,0,0,1-2.56,1.84,6.71,6.71,0,0,0,3.45.82c2-.13,3.62-1.4,5.12-2.66,23.12-19.37,36-50.87,63.84-64.17,12.29-5.86,30.17-5.91,40.08-15.87C429.16,100.85,413,82.47,421.82,69Z",
+                              transform: "translate(-268.41 -69)",
+                              fill: "url(#37ff1452-10ea-45a0-ad47-cadc68f3bfc5)"
+                            }
+                          })
+                        ]),
+                        _c("g", { attrs: { opacity: "0.2" } }, [
+                          _c("path", {
+                            attrs: {
+                              d:
+                                "M418.74,357.71c-4.57-46.33,9.76-110.78-39.51-146l-10.43,1.18c47.35,35.48,33.4,99,37.92,144.84,7.46,75.63,9.54,130.15,6.87,132.28-1.31,1-16.44,1.46-36.83,1.52,26.23.07,47.3-.27,48.86-1.52C428.27,487.86,426.19,433.34,418.74,357.71Z",
+                              transform: "translate(-268.41 -69)",
+                              fill: "url(#18a85275-116d-4ad3-9bbd-6c78581ea078)"
+                            }
+                          })
+                        ]),
+                        _c("path", {
+                          attrs: {
+                            d:
+                              "M339.54,290.59l105,92.88,122-25.77L557,330.22l-94.49,11.17-94.59-83a21.49,21.49,0,0,0-31.72,3.74h0A21.49,21.49,0,0,0,339.54,290.59Z",
+                            transform: "translate(-268.41 -69)",
+                            fill: "url(#eb6e6980-5e3c-4cc8-ba13-4b71197705e9)"
+                          }
+                        }),
+                        _c("path", {
+                          attrs: {
+                            d:
+                              "M566.48,357.71s31.12.86,42.62-16.32S557,330.22,557,330.22Z",
+                            transform: "translate(-268.41 -69)",
+                            fill: "url(#ca1af11e-721e-46b0-bf29-fc3abce4d291)"
+                          }
+                        }),
+                        _c("rect", {
+                          attrs: {
+                            x: "64.42",
+                            y: "119.49",
+                            width: "46.38",
+                            height: "46.38",
+                            rx: "20.47",
+                            ry: "20.47",
+                            fill: "url(#87e6aff1-3600-405e-a0c9-f146cb0b14e5)"
+                          }
+                        }),
+                        _c("g", { attrs: { opacity: "0.2" } }, [
+                          _c("polygon", {
+                            attrs: {
+                              points:
+                                "113.38 484.55 72.15 708.74 81.6 708.74 120.51 497.17 113.38 484.55",
+                              fill: "url(#9310cc51-8904-4231-ae2b-5557a287eec3)"
+                            }
+                          }),
+                          _c("polygon", {
+                            attrs: {
+                              points:
+                                "225.05 562.72 157.19 419.27 147.79 419.37 215.6 562.72 223.33 708.74 232.78 708.74 225.05 562.72",
+                              fill: "url(#40a7ecb1-ccc7-469d-bfb2-8f2ca76aa016)"
+                            }
+                          })
+                        ]),
+                        _c("g", { attrs: { opacity: "0.2" } }, [
+                          _c("path", {
+                            attrs: {
+                              d:
+                                "M515.8,800.08l-14.6-22.33H496.9l14.6,22.33S560.47,819,539,831h4.29C564.76,819,515.8,800.08,515.8,800.08Z",
+                              transform: "translate(-268.41 -69)",
+                              fill: "url(#9872a281-de8b-443e-8a22-8ab73fd8eecc)"
+                            }
+                          })
+                        ]),
+                        _c("g", { attrs: { opacity: "0.2" } }, [
+                          _c("path", {
+                            attrs: {
+                              d:
+                                "M368.06,800.08l-14.6-22.33h-4.29l14.6,22.33s49,18.9,27.49,30.92h4.29C417,819,368.06,800.08,368.06,800.08Z",
+                              transform: "translate(-268.41 -69)",
+                              fill: "url(#25814e7d-be9f-42ca-ba9f-5e4b50285847)"
+                            }
+                          })
+                        ]),
+                        _c("g", { attrs: { opacity: "0.2" } }, [
+                          _c("polygon", {
+                            attrs: {
+                              points:
+                                "304.19 265.68 302.36 260.36 214.71 270.72 304.19 265.68",
+                              fill: "url(#f6db3ab5-77d3-4926-85e6-26558235763f)"
+                            }
+                          })
+                        ]),
+                        _c("polygon", {
+                          attrs: {
+                            points:
+                              "43.17 220.58 72.36 165.45 121 183.83 72.36 254.09 43.17 220.58",
+                            fill: "url(#a12a6384-bcfe-49c1-a705-b61b36502b52)"
+                          }
+                        }),
+                        _c("path", {
+                          attrs: {
+                            d:
+                              "M372.13,277.09l102.09,90.34,118.63-25.06-9.19-26.73-91.9,10.86-92-80.76a20.9,20.9,0,0,0-30.85,3.64h0A20.9,20.9,0,0,0,372.13,277.09Z",
+                            transform: "translate(-268.41 -69)",
+                            fill: "#ca7070"
+                          }
+                        }),
+                        _c("path", {
+                          attrs: {
+                            d:
+                              "M592.85,342.36s30.27.84,41.45-15.87-50.64-10.86-50.64-10.86Z",
+                            transform: "translate(-268.41 -69)",
+                            fill: "#ca7070"
+                          }
+                        }),
+                        _c("circle", {
+                          attrs: {
+                            cx: "90.32",
+                            cy: "96.58",
+                            r: "52.63",
+                            fill: "#ca7070"
+                          }
+                        }),
+                        _c("path", {
+                          attrs: {
+                            d:
+                              "M337,223.22s-67.6,45.52-50.43,186.24a123.19,123.19,0,0,1-4.34,50.65l-8.72,28.79s148.71,3.34,152.89,0c2.59-2.07.57-55.1-6.68-128.66-4.44-45.06,9.49-107.75-38.43-142Z",
+                            transform: "translate(-268.41 -69)",
+                            fill: "#263238"
+                          }
+                        }),
+                        _c("polygon", {
+                          attrs: {
+                            points:
+                              "157.99 418.22 223.99 557.74 231.5 699.76 184.72 699.76 164.67 552.73 124.57 481.71 84.47 699.76 37.68 699.76 51.88 537.69 5.1 419.89 157.99 418.22",
+                            fill: "#5caade"
+                          }
+                        }),
+                        _c("path", {
+                          attrs: {
+                            d:
+                              "M499.92,768.76l14.2,21.72s47.62,18.38,26.73,30.08H449.79v-51.8Z",
+                            transform: "translate(-268.41 -69)",
+                            fill: "#263238"
+                          }
+                        }),
+                        _c("path", {
+                          attrs: {
+                            d:
+                              "M352,768.76l14.2,21.72s47.62,18.38,26.73,30.08H301.92v-51.8Z",
+                            transform: "translate(-268.41 -69)",
+                            fill: "#263238"
+                          }
+                        }),
+                        _c("path", {
+                          attrs: {
+                            d:
+                              "M359.57,112.11a52.37,52.37,0,0,0-25.93,6.84A52.63,52.63,0,0,1,380.49,213a52.64,52.64,0,0,0-20.92-100.93Z",
+                            transform: "translate(-268.41 -69)",
+                            fill: "#fff",
+                            opacity: "0.2"
+                          }
+                        }),
+                        _c("path", {
+                          attrs: {
+                            d:
+                              "M422.71,79.44l-14.64,22.39c-5.26,8-12.9,17.17-22.33,15.31-4.4-.87-7.91-4-11.42-6.83C362.82,101.19,348.62,95,334,94.91s-29.67,6.52-38,18.62c-6.11,8.93-8.22,20-9.44,30.73-2.42,21.51,0,46.91,18,59a8.45,8.45,0,0,0,5.09,1.83c1.9-.13,3.52-1.36,5-2.59,22.48-18.83,35-49.48,62.1-62.41,11.95-5.7,29.34-5.75,39-15.43C429.86,110.42,414.14,92.54,422.71,79.44Z",
+                            transform: "translate(-268.41 -69)",
+                            fill: "#263238"
+                          }
+                        }),
+                        _c("g", { attrs: { opacity: "0.2" } }, [
+                          _c("path", {
+                            attrs: {
+                              d:
+                                "M368.46,110.31c3.51,2.79,7,6,11.42,6.83a12.69,12.69,0,0,0,5.41-.1c-4.19-1-7.59-4-11-6.72C362.82,101.19,348.62,95,334,94.91c-1,0-2.05,0-3.08.09C344.55,95.79,357.7,101.76,368.46,110.31Z",
+                              transform: "translate(-268.41 -69)",
+                              fill: "#fff"
+                            }
+                          }),
+                          _c("path", {
+                            attrs: {
+                              d:
+                                "M422.71,79.44l-8.46,12.93c.8,10.63,5.48,22.34-4.43,32.29-9.65,9.68-27,9.73-39,15.43-27.11,12.93-39.61,43.58-62.1,62.41a16,16,0,0,1-2.49,1.79,6.52,6.52,0,0,0,3.35.8c1.9-.13,3.52-1.36,5-2.59,22.48-18.83,35-49.48,62.1-62.41,11.95-5.7,29.34-5.75,39-15.43C429.86,110.42,414.14,92.54,422.71,79.44Z",
+                              transform: "translate(-268.41 -69)",
+                              fill: "#fff"
+                            }
+                          })
+                        ]),
+                        _c("path", {
+                          attrs: {
+                            d:
+                              "M419.72,360.23c-4.44-45.06,9.49-107.75-38.43-142l-10.14,1.15c46.05,34.51,32.48,96.31,36.88,140.88,7.25,73.56,9.27,126.59,6.68,128.66-1.27,1-16,1.42-35.82,1.48,25.52.07,46-.27,47.52-1.48C429,486.82,427,433.8,419.72,360.23Z",
+                            transform: "translate(-268.41 -69)",
+                            fill: "#fff",
+                            opacity: "0.2"
+                          }
+                        }),
+                        _c("path", {
+                          attrs: {
+                            d:
+                              "M342.69,295,444.78,385.3l118.63-25.06-9.19-26.73-91.9,10.86-92-80.76a20.9,20.9,0,0,0-30.85,3.64h0A20.9,20.9,0,0,0,342.69,295Z",
+                            transform: "translate(-268.41 -69)",
+                            fill: "#ca7070"
+                          }
+                        }),
+                        _c("path", {
+                          attrs: {
+                            d:
+                              "M563.41,360.23s30.27.84,41.45-15.87-50.64-10.86-50.64-10.86Z",
+                            transform: "translate(-268.41 -69)",
+                            fill: "#ca7070"
+                          }
+                        }),
+                        _c("rect", {
+                          attrs: {
+                            x: "67.76",
+                            y: "126.65",
+                            width: "45.11",
+                            height: "45.11",
+                            rx: "20.47",
+                            ry: "20.47",
+                            fill: "#ca7070"
+                          }
+                        }),
+                        _c("g", { attrs: { opacity: "0.2" } }, [
+                          _c("polygon", {
+                            attrs: {
+                              points:
+                                "115.38 481.71 75.28 699.76 84.47 699.76 122.31 493.99 115.38 481.71",
+                              fill: "#fff"
+                            }
+                          }),
+                          _c("polygon", {
+                            attrs: {
+                              points:
+                                "223.99 557.74 157.99 418.22 148.84 418.32 214.8 557.74 222.31 699.76 231.5 699.76 223.99 557.74",
+                              fill: "#fff"
+                            }
+                          })
+                        ]),
+                        _c("path", {
+                          attrs: {
+                            d:
+                              "M514.12,790.49l-14.2-21.72h-4.18l14.2,21.72s47.62,18.38,26.73,30.08h4.18C561.74,808.87,514.12,790.49,514.12,790.49Z",
+                            transform: "translate(-268.41 -69)",
+                            fill: "#fff",
+                            opacity: "0.2"
+                          }
+                        }),
+                        _c("path", {
+                          attrs: {
+                            d:
+                              "M370.43,790.49l-14.2-21.72H352l14.2,21.72s47.62,18.38,26.73,30.08h4.18C418,808.87,370.43,790.49,370.43,790.49Z",
+                            transform: "translate(-268.41 -69)",
+                            fill: "#fff",
+                            opacity: "0.2"
+                          }
+                        }),
+                        _c("polygon", {
+                          attrs: {
+                            points:
+                              "300.95 268.84 299.18 263.67 213.93 273.74 300.95 268.84",
+                            fill: "#fff",
+                            opacity: "0.2"
+                          }
+                        }),
+                        _c("polygon", {
+                          attrs: {
+                            points:
+                              "47.09 224.97 75.47 171.36 122.78 189.23 75.47 257.56 47.09 224.97",
+                            fill: "#263238"
+                          }
+                        }),
+                        _c("path", {
+                          attrs: {
+                            d:
+                              "M730.24,354.36l86-116.94a5,5,0,0,1,7-1.06l4,2.95a5,5,0,0,1,1.06,7l-86,116.94Z",
+                            transform: "translate(-268.41 -69)",
+                            fill: "url(#24987791-5317-4d6d-bf01-0dc3e5459aa4)"
+                          }
+                        }),
+                        _c("path", {
+                          attrs: {
+                            d:
+                              "M731.95,355.61l84.54-115a5,5,0,0,1,7-1.06l.41.3a5,5,0,0,1,1.06,7l-84.54,115Z",
+                            transform: "translate(-268.41 -69)",
+                            fill: "#b0bec5"
+                          }
+                        })
+                      ]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-lg-4" }, [
+                    _c("h4", [_vm._v("Backup Database")]),
+                    _vm._v(" "),
+                    _c(
+                      "form",
+                      {
+                        on: {
+                          submit: function($event) {
+                            $event.preventDefault()
+                            return _vm.createBackup($event)
+                          }
+                        }
+                      },
+                      [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.form.name,
+                              expression: "form.name"
+                            }
+                          ],
+                          staticClass: "form-control mt-3",
+                          attrs: {
+                            name: "name",
+                            type: "text",
+                            placeholder: "Backup name",
+                            required: ""
+                          },
+                          domProps: { value: _vm.form.name },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(_vm.form, "name", $event.target.value)
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-success mt-4",
+                            attrs: { type: "submit" }
+                          },
+                          [
+                            _vm._v(
+                              "\n                  Backup Now\n                "
+                            )
+                          ]
+                        )
+                      ]
+                    )
+                  ])
+                ])
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-lg-12" }, [
+            _c("div", { staticClass: "card" }, [
+              _c("div", { staticClass: "card-body table-responsive p-0" }, [
+                _c("table", { staticClass: "table table-hover" }, [
+                  _c(
+                    "tbody",
+                    [
+                      _vm._m(0),
+                      _vm._v(" "),
+                      _vm._l(_vm.backups.data, function(data, index) {
+                        return _c("tr", { key: index }, [
+                          _c("td", [_vm._v(_vm._s(index + 1))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(data.name))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(data.size) + " kb")]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(data.created))]),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "text-center" }, [
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-warning btn-sm",
+                                on: {
+                                  click: function($event) {
+                                    return _vm.restoreBackup(data.name)
+                                  }
+                                }
+                              },
+                              [
+                                _c("i", {
+                                  staticClass: "fas fa-redo-alt text-white"
+                                })
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-primary btn-sm",
+                                on: {
+                                  click: function($event) {
+                                    return _vm.downloadBackup(data.name)
+                                  }
+                                }
+                              },
+                              [_c("i", { staticClass: "fas fa-download" })]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-danger btn-sm",
+                                on: {
+                                  click: function($event) {
+                                    return _vm.deleteBackup(data.name)
+                                  }
+                                }
+                              },
+                              [_c("i", { staticClass: "fas fa-trash" })]
+                            )
+                          ])
+                        ])
+                      })
+                    ],
+                    2
+                  )
+                ])
+              ])
+            ])
+          ])
+        ])
+      : _c("div", { staticClass: "row" }, [_c("not-found")], 1)
   ])
 }
 var staticRenderFns = [
@@ -67646,9 +69166,17 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("button", { staticClass: "btn btn-success btn-lg mt-4" }, [
-        _vm._v("Backup Now")
+    return _c("tr", [
+      _c("th", [_vm._v("No")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Backup Name")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Size")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Created")]),
+      _vm._v(" "),
+      _c("th", { staticClass: "text-center", attrs: { width: "20%" } }, [
+        _vm._v("Action")
       ])
     ])
   }
