@@ -140,10 +140,12 @@ class Skpi extends Model
             $template = $skpi->mahasiswa()->first()->jurusan()->first()->template;
             $pdf = $this->generatedSkpi($skpi->id_mahasiswa);
             $filePdf = PDF::loadView('print.skpi', ['skpi' => $pdf]);
+            $filePdf->setPaper('A4', 'potrait');
             $file = $filePdf->download()->getOriginalContent();
             $fileName = time().uniqid().'.pdf';
             Storage::disk('skpi')->put($fileName, $file);
             $pdf= new CustomPdf();
+            $pdf->SetMargins(18,18,11, true);
             $pdf->setPrintHeader(false);
             $pdf->setSourceFile('storage/data/skpi/'.$fileName);
             $importPage = $pdf->importPage(1);

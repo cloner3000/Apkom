@@ -39,7 +39,7 @@
                                     <button v-if="data.status == 'published'" @click="viewSkpi(data.file)" class="btn btn-link btn-lg">
                                       <i  class="fas fa-file-pdf"></i>
                                     </button>
-                                    <button v-else @click="publishSkpi(data.id)" class="btn btn-sm btn-outline-success">
+                                    <button v-else @click="publishSkpi(data.id, data.id_mahasiswa)" class="btn btn-sm btn-outline-success">
                                       Publish
                                     </button>
                                   </div>
@@ -191,17 +191,25 @@
               cusEvent.$emit('ReloadData');
             }
           },
-          publishSkpi(id){
+          publishSkpi(id,id_mahasiswa){
             if(this.$gate.isKaprodi()){
               this.$Progress.start();
               axios.get('api/skpi/publish/'+ id)
               .then( () => {
                 cusEvent.$emit('ReloadData');
+                this.$Progress.finish();
                 toast.fire({
                     type: 'success',
                     title: 'Skpi publish successfull'
                 });
-                this.$Progress.finish();
+                axios.get('api/mahasiswa/point/'+id_mahasiswa)
+                .catch(() => {
+                  toast.fire({
+                      type: 'error',
+                      title: 'Calculated point failed'
+                  });
+                });
+                
               })
               .catch(() => {
                   this.$Progress.fail();

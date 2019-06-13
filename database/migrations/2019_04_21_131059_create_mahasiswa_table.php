@@ -25,7 +25,7 @@ class CreateMahasiswaTable extends Migration
             $table->date('tgl_masuk');
             $table->date('tgl_lulus');
             $table->float('ipk');
-            $table->float('total_point')->default(0);
+            $table->float('total_point', 8,5)->default(0);
             $table->timestamps();
             $table->foreign('id_jurusan')
             ->references('id')->on('jurusan')

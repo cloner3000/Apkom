@@ -8,8 +8,11 @@
         body{
             font-size: 12px;
             font-family: sans-serif;
+            margin: 0;
         }
         @page{
+            margin-left: 68px!important;
+            margin-right: 68px!important;
             margin-top: 220px;
         }
         label{
@@ -77,19 +80,21 @@
             width: 50%;
         }
         .wrapfield .left{
-            margin-right: -50%;
+            width: 47%;
+            margin-right: -54%;
             float: left;
         }
         .wrapfield .right{
-            margin-left: 50%;
+            margin-left: 47%;
+            width: 53%;
         }
         .wrapfield .left .field .label{
             width: 40%;
             margin-right: -40%;
         }
         .wrapfield .left  .field .input{
-            margin-left: 40%;
-            width: 60%;
+            margin-left: 43%;
+            width: 57%;
         }
         .wrapfield .right .field .label{
             width: 40%;
@@ -167,7 +172,7 @@
             margin-top: 50px;
         }
         .toRight{
-            margin-left: 130px;
+            margin-left: 100px;
         }
         .toLeft{
             margin-top: 38px;

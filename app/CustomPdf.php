@@ -7,8 +7,8 @@ class CustomPdf extends FPDI
 {
     function Footer()
     {
-        // Go to 1.5 cm from bottom
-        $this->SetY(-15);
+        // Go to 3 cm from bottom
+        $this->SetY(-30);
         // Select Helvetica italic 8
         $this->SetFont('Helvetica','',8);
         // Print centered page number

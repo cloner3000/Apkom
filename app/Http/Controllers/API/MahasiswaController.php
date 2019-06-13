@@ -109,4 +109,16 @@ class MahasiswaController extends Controller
         $mahasiswa = $this->mahasiswa->getMahasiswaProfile();
         return $mahasiswa;
     }
+
+    public function setPoint($id){
+        $this->authorize('isAdmin');
+        $mahasiswa = $this->mahasiswa->setPoint($id);
+        return $mahasiswa;
+    }
+
+    public function achievement(){
+        $this->authorize('isWarek');
+        $mahasiswa = $this->mahasiswa->mahasiswaAchievement();
+        return $mahasiswa;
+    }
 }

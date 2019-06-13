@@ -91,6 +91,43 @@ class Mahasiswa extends Model
         }
     }
 
+    public function setPoint($id){
+        $mahasiswa = self::find($id);
+        $wIpk = 4 / (2+1);
+        $wStudi = 2 / (4+1);
+        $wSkpi = 1 / (4+2);
+        $ipk = $mahasiswa['ipk'];
+        $period =  date_diff(date_create($mahasiswa->tgl_masuk), date_create($mahasiswa->tgl_lulus));
+        $studi = ($period->format('%y')* 12) + $period->format('%m');
+        $skpi = $mahasiswa->skpi->point_skpi;
+        $s = pow($ipk, $wIpk) * pow($studi, $wStudi) * pow($skpi, $wSkpi);
+        $mahasiswa->total_point = $s;
+        if($mahasiswa->save()){
+            return ['message' => 'Mahasiswa Total Point has calculate'];
+        }else{
+            return ['message' => 'Failed calculate Total Point'];
+        }
+    }
+
+    public function mahasiswaAchievement(){
+        $total = self::sum('total_point');
+        $mahasiswa= [];
+        $dataMahasiswa = self::with('jurusan')->where('total_point', '!=', 0.00)->get();
+        foreach($dataMahasiswa as $data){
+            array_push($mahasiswa,
+            [
+                'nama' => $data->nama,
+                'npm' => $data->npm,
+                'jurusan' => $data->jurusan->nama_jurusan,
+                'total_point' => $data->total_point / $total
+            ]);
+        }
+        usort($mahasiswa, function($a, $b){
+            return -1 * strcmp($a['total_point'], $b['total_point']);
+        });
+        return $mahasiswa;
+    }
+
     public function getMahasiswaProfile(){
         $mahasiswa = self::with('jurusan')->where('id_account', auth('api')->user()->id)->first();
         if($mahasiswa != null){

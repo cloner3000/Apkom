@@ -38,7 +38,7 @@ class MahasiswaRequest extends FormRequest
                     'tgl_masuk' => 'required|date',
                     'tgl_lulus' => 'required|date',
                     'ipk' => 'required|numeric',
-                 ];
+                ];
             }
             case 'PUT':
             {
@@ -57,5 +57,13 @@ class MahasiswaRequest extends FormRequest
             }
             default:break;
         }
+    }
+
+    public function messages()
+    {
+        return 
+        [
+            'ipk.required' => 'IPK must be number with format 0.00 example 3.23'
+         ];
     }
 }

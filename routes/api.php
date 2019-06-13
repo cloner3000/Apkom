@@ -43,6 +43,8 @@ Route::get('kompetensi-wajib/find', 'API\KompetensiWajibController@search');
 Route::get('mahasiswa/profile', 'API\MahasiswaController@profile');
 Route::get('mahasiswa/export', 'API\MahasiswaController@export');
 Route::get('mahasiswa/find', 'API\MahasiswaController@search');
+Route::get('mahasiswa/point/{id}', 'API\MahasiswaController@setPoint');
+Route::get('mahasiswa/achievement', 'API\MahasiswaController@achievement');
 
 //Kompetensi Route Custom
 Route::get('kompetensi/export', 'API\KompetensiController@export');
