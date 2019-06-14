@@ -117,7 +117,7 @@ class MahasiswaController extends Controller
     }
 
     public function achievement(){
-        $this->authorize('isWarek');
+        $this->authorize('isAdmin');
         $mahasiswa = $this->mahasiswa->mahasiswaAchievement();
         return $mahasiswa;
     }

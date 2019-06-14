@@ -4,6 +4,7 @@ namespace Apkom;
 
 use Apkom\BuktiKompetensiWajib;
 use Apkom\KompetensiWajib;
+use Apkom\Jurusan;
 use Illuminate\Database\Eloquent\Model;
 use Apkom\Http\Resources\MahasiswaResource;
 
@@ -148,8 +149,13 @@ class Mahasiswa extends Model
         return true;
     }
 
-    public function countData(){
-        $mahasiswa = self::count();
+    public function countData($id=false){
+        if($id){
+            $jurusan = Jurusan::where('id_account', $id)->select('id')->first();
+            $mahasiswa = self::where('id_jurusan', $jurusan->id)->count();
+        }else{
+            $mahasiswa = self::count();
+        }
         return $mahasiswa;
     }
 

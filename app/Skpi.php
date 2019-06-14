@@ -128,9 +128,26 @@ class Skpi extends Model
         }
     }
 
-    public function countData(){
-        $skpiProgress = self::where('status', 'progress')->count();
-        $skpiPublished = self::where('status', 'published')->count();
+    public function countData($id=false){
+        if($id){
+            $skpiProgress = self::join('mahasiswa', function($join) use($id){
+                $join->on('skpi.id_mahasiswa', '=', 'mahasiswa.id')
+                ->join('jurusan', 'mahasiswa.id_jurusan', '=', 'jurusan.id')
+                ->where('jurusan.id_account', $id);
+            })
+            ->where('status', 'progress')
+            ->count();
+            $skpiPublished = self::join('mahasiswa', function($join) use($id){
+                $join->on('skpi.id_mahasiswa', '=', 'mahasiswa.id')
+                ->join('jurusan', 'mahasiswa.id_jurusan', '=', 'jurusan.id')
+                ->where('jurusan.id_account', $id);
+            })
+            ->where('status', 'published')
+            ->count();
+        }else{
+            $skpiProgress = self::where('status', 'progress')->count();
+            $skpiPublished = self::where('status', 'published')->count();
+        }
         return[$skpiProgress, $skpiPublished];
     }
 

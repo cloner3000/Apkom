@@ -4,6 +4,7 @@ namespace Apkom\Http\Controllers\API;
 
 use Illuminate\Http\Request;
 use Apkom\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
 use Apkom\Skpi;
 use Apkom\Mahasiswa;
 use Apkom\BidangKompetensi;
@@ -19,8 +20,13 @@ class DashboardController extends Controller
 
     public function index(){
         $this->authorize('isAdmin');
-        $mahasiswa = $this->mahasiswa->countData();
-        $skpi = $this->skpi->countData();
+        if(Gate::check('isKaprodi')){
+            $mahasiswa = $this->mahasiswa->countData(auth('api')->user()->id);
+            $skpi = $this->skpi->countData(auth('api')->user()->id);
+        }else{
+            $mahasiswa = $this->mahasiswa->countData();
+            $skpi = $this->skpi->countData();    
+        }
         $bidangKompetensi = $this->bidangKompetensi->countData();
         return ['skpiProgress' => $skpi[0],
                 'skpiPublished' => $skpi[1],
