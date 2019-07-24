@@ -9,7 +9,7 @@
                 <th>No</th>
                 <th>Nama Kompetensi</th>
                 <th>Upload</th>
-                <th>View</th>
+                <th>Lihat</th>
                 </tr>
                 <tr v-for="(data, index) in kompetensiWajib.data" :key="index">
                     <td>{{kompetensiWajib.meta.from+index}}</td>

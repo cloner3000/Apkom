@@ -8,7 +8,7 @@
                         <div class="card-header">
                             <h3 class="card-title">
                                 <i class="fas fa-user-graduate"></i>
-                                Mahasiswa Profile
+                                Profil Mahasiswa
                             </h3>
                         </div>
                         <!-- /.card-header -->
@@ -92,7 +92,7 @@
                                 </div>    
                             </div> 
                             <div class="card-footer text-center">
-                                <button type="submit" class="btn btn-primary">Save Data</button>
+                                <button type="submit" class="btn btn-primary">Simpan Data</button>
                             </div>
                         </form>         
                     </div>
