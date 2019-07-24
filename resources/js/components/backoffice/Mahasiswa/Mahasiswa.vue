@@ -30,7 +30,7 @@
                     <td>{{data.npm}}</td>
                     <td>{{data.jurusan.nama_jurusan}}</td>
                     <td>{{data.no_ijazah}}</td>
-                    <td>{{data.ipk}}</td>
+                    <td>{{data.ipk | ipkFormat}}</td>
                     <td class="text-center">{{data.total_point}}</td>
                     <td class="text-center">
                         <button @click="viewModal(data)" class="btn btn-link"><i  class="fas fa-eye"></i></button>

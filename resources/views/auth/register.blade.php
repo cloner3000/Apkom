@@ -6,7 +6,7 @@
         <div class="col-md-6">
             <div class="card mt-4">
                 <a href="{{ route('welcome') }}"><img class="mx-auto d-block mb-3 mt-3" src="{{asset('img/logo.png')}}" alt="Logo UKDC"></a>
-                <h3 class="login-box-msg">Aplikasi <b>Kompetensi</b></h3>
+                <h3 class="login-box-msg">Sistem Informasi <b>SKPI</b></h3>
                 <div class="card-body">
                     <form method="POST" action="{{ route('register') }}">
                         @csrf

@@ -111,10 +111,10 @@
               cancelButtonColor: '#d33',
               confirmButtonText: 'Yes, restore it!'
             }).then((result) => {
+              this.$Progress.start();
               if (result.value){
                 axios.get('api/backup/restore/'+name)
                 .then(() => {
-                  this.$Progress.start();
                   swal.fire(
                     'Restored!',
                     'Database has been Restored',

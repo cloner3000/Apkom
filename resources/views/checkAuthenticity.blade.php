@@ -7,7 +7,7 @@
       <div class="card mt-4">
           <div class="card-body">
               <a href="{{ route('welcome') }}"><img class="mx-auto d-block mb-3" src="{{asset('img/logo.png')}}" alt="Logo UKDC"></a>
-            <h3 class="login-box-msg">Aplikasi <b>Kompetensi</b></h3>
+            <h3 class="login-box-msg">Sistem Informasi <b>SKPI</b></h3>
           </div>
           <div class="row mb-4">
             <div class="col-md-6">

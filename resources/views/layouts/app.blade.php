@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/x-icon" href="{{asset('img/logo.png')}}" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Aplikasi Kompetensi Mahasiswa</title>
+    <title>Sistem Informasi SKPI</title>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body background="{{asset('img/bg.jpg')}}">

@@ -79,6 +79,6 @@ Route::apiResources([
     'mahasiswa' => 'API\MahasiswaController',
     'kompetensi' => 'API\KompetensiController',
     'bukti-kompetensi-wajib' => 'API\BuktiKompetensiWajibController',
-    'skpi' => 'API\SkpiCOntroller',
+    'skpi' => 'API\SkpiController',
     'backup' => 'API\BackupController'
     ]);

@@ -5,7 +5,7 @@
       <div class="card">
         <div class="card-body login-card-body">
           <a href="{{ route('welcome') }}"><img class="mx-auto d-block mb-3" src="{{asset('img/logo.png')}}" alt="Logo UKDC"></a>
-          <h3 class="login-box-msg">Aplikasi <b>Kompetensi</b></h3>
+          <h3 class="login-box-msg">Sistem Informasi <b>SKPI</b></h3>
           <div class="row">
               <div class="col-md-12">
                 <div class="row">
@@ -18,7 +18,7 @@
                 </div>
                 <div class="row mt-3">
                   <div class="col-md-12">
-                  <a class="btn btn-outline-success btn-block" href="{{ route('validation') }}">Validation</a>
+                  <a class="btn btn-outline-success btn-block" href="{{ route('check-authenticity') }}">Check Authenticity </a>
                   </div>
                 </div>
               </div>

@@ -119,7 +119,7 @@ class Skpi extends Model
         $skpi = self::find($id);
         if($skpi->delete()){
             $fileTemp = public_path('storage/data/skpi/').$skpi->file;
-            if($user->file != '' && file_exists($fileTemp)){
+            if($skpi->file != '' && file_exists($fileTemp)){
                 @unlink($fileTemp);
             }
             return ['message' => 'Delete Skpi Successfull'];
@@ -252,7 +252,7 @@ class Skpi extends Model
         ->selectRaw('count(nama_kemampuan) as jumlah, nama_kemampuan')
         ->groupBy('nama_kemampuan')
         ->orderBy('jumlah', 'DESC')
-        ->limit(5)
+        ->limit(3)
         ->get();
 
         return [
@@ -268,7 +268,6 @@ class Skpi extends Model
         ->selectRaw('sum(point_kompetensi) as total_point')
         ->first();
         return $kompetensi->total_point;
-
     }
 
     public function saveChart($request){

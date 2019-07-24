@@ -2518,10 +2518,10 @@ __webpack_require__.r(__webpack_exports__);
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes, restore it!'
       }).then(function (result) {
+        _this3.$Progress.start();
+
         if (result.value) {
           axios.get('api/backup/restore/' + name).then(function () {
-            _this3.$Progress.start();
-
             swal.fire('Restored!', 'Database has been Restored', 'success');
             cusEvent.$emit('ReloadData');
 
@@ -4843,35 +4843,17 @@ __webpack_require__.r(__webpack_exports__);
       options: [{
         nama_kemampuan: 'Komunikasi'
       }, {
-        nama_kemampuan: 'Integritas'
-      }, {
-        nama_kemampuan: 'Kerjasama'
-      }, {
-        nama_kemampuan: 'Interpersonal'
-      }, {
-        nama_kemampuan: 'Etos Kerja'
-      }, {
-        nama_kemampuan: 'Inisiatif'
-      }, {
-        nama_kemampuan: 'Adaptasi'
-      }, {
         nama_kemampuan: 'Organisasi'
-      }, {
-        nama_kemampuan: 'Orientasi Detail'
       }, {
         nama_kemampuan: 'Kepemimpinan'
       }, {
-        nama_kemampuan: 'Percaya Diri'
+        nama_kemampuan: 'Logika'
+      }, {
+        nama_kemampuan: 'Usaha'
+      }, {
+        nama_kemampuan: 'Kerjasama Kelompok'
       }, {
         nama_kemampuan: 'Etika'
-      }, {
-        nama_kemampuan: 'Bijaksana'
-      }, {
-        nama_kemampuan: 'Kreativ'
-      }, {
-        nama_kemampuan: 'Humoris'
-      }, {
-        nama_kemampuan: 'Etreprenership'
       }],
       form: new Form({
         id: '',
@@ -71236,7 +71218,9 @@ var render = function() {
                             _vm._v(" "),
                             _c("td", [_vm._v(_vm._s(data.no_ijazah))]),
                             _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(data.ipk))]),
+                            _c("td", [
+                              _vm._v(_vm._s(_vm._f("ipkFormat")(data.ipk)))
+                            ]),
                             _vm._v(" "),
                             _c("td", { staticClass: "text-center" }, [
                               _vm._v(_vm._s(data.total_point))
@@ -94257,6 +94241,9 @@ Vue.filter('date', function (date) {
 });
 Vue.filter('dateSkpi', function (date) {
   return moment__WEBPACK_IMPORTED_MODULE_8___default()(date).format('LL');
+});
+Vue.filter('ipkFormat', function (ipk) {
+  return Math.round(ipk * 100) / 100;
 });
 var cusEvent = new Vue();
 window.cusEvent = cusEvent;

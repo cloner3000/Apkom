@@ -14,9 +14,9 @@
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
-Route::get('/validation', function () {
-    return view('validation');
-})->name('validation');
+Route::get('/check-authenticity', function () {
+    return view('checkAuthenticity');
+})->name('check-authenticity');
 Route::post('/check', 'CheckSkpiController@checkSkpi');
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');

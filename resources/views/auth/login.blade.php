@@ -5,7 +5,7 @@
     <div class="card">
       <div class="card-body login-card-body">
           <a href="{{ route('welcome') }}"><img class="mx-auto d-block mb-3" src="{{asset('img/logo.png')}}" alt="Logo UKDC"></a>
-        <h3 class="login-box-msg">Aplikasi <b>Kompetensi</b></h3>
+        <h3 class="login-box-msg">Sistem Informasi <b>SKPI</b></h3>
         <form action="{{ route('login') }}" method="post">
           @csrf
             <div class="input-group mb-3">

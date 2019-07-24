@@ -4,7 +4,7 @@ namespace Apkom;
 
 use Illuminate\Database\Eloquent\Model;
 
-class kemampuan extends Model
+class Kemampuan extends Model
 {
     protected $table = 'kemampuan';
     

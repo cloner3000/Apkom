@@ -94,17 +94,21 @@ class Mahasiswa extends Model
 
     public function setPoint($id){
         $mahasiswa = self::find($id);
-        $wIpk = 4 / (2+1);
-        $wStudi = 2 / (4+1);
-        $wSkpi = 1 / (4+2);
+        $wIpk = 4 / (4+2+1);
+        $wSkpi = 2 / (4+2+1);
+        $wStudi = -1*(1 / (4+2+1));
         $ipk = $mahasiswa['ipk'];
         $period =  date_diff(date_create($mahasiswa->tgl_masuk), date_create($mahasiswa->tgl_lulus));
         $studi = ($period->format('%y')* 12) + $period->format('%m');
         $skpi = $mahasiswa->skpi->point_skpi;
         $s = pow($ipk, $wIpk) * pow($studi, $wStudi) * pow($skpi, $wSkpi);
-        $mahasiswa->total_point = $s;
+        $mahasiswa->total_point = round($s,5);
         if($mahasiswa->save()){
-            return ['message' => 'Mahasiswa Total Point has calculate'];
+            return ['message' => 'Mahasiswa Total Point has calculate',
+            'IPK' => $ipk.' pangkat  '.$wIpk.' = '.pow($ipk, $wIpk),
+            'SKPI' => $skpi.' pangkat  '.$wSkpi.' = '.pow($skpi, $wSkpi),
+            'Studi' => $studi.' pangkat  '.$wStudi.' = '.pow($studi, $wStudi),
+        's' => $s];
         }else{
             return ['message' => 'Failed calculate Total Point'];
         }
@@ -120,7 +124,7 @@ class Mahasiswa extends Model
                 'nama' => $data->nama,
                 'npm' => $data->npm,
                 'jurusan' => $data->jurusan->nama_jurusan,
-                'total_point' => $data->total_point / $total
+                'total_point' => round($data->total_point / $total,5)
             ]);
         }
         usort($mahasiswa, function($a, $b){

@@ -112,6 +112,9 @@ const routes = [
   Vue.filter('dateSkpi',function(date){
     return moment(date).format('LL');
 });
+Vue.filter('ipkFormat',function(ipk){
+    return Math.round(ipk *100)/100;
+});
 
 
   let cusEvent = new Vue();

@@ -58,10 +58,12 @@ class Jurusan extends Model
         $jurusan->persyaratan = $request->persyaratan;
         $jurusan->persyaratan_en = $request->persyaratan_en;
         $jurusan->penilaian = $request->penilaian;
-        $explode = explode(",", $request->template);
-        $decoded_file = base64_decode($explode['1']);
-        Storage::disk('template')->put($request->nama_jurusan.'.pdf', $decoded_file);
-        $jurusan->template = $request->nama_jurusan.'.pdf';
+        if($request->template != ''){
+            $explode = explode(",", $request->template);
+            $decoded_file = base64_decode($explode['1']);
+            Storage::disk('template')->put($request->nama_jurusan.'.pdf', $decoded_file);
+            $jurusan->template = $request->nama_jurusan.'.pdf';
+        }
         if($jurusan->save()){
             return ['message' => 'Save Jurusan Successfull'];
         }else{

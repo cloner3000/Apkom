@@ -50,8 +50,11 @@ class BuktiKompetensiWajib extends Model
                 }
             }
             $buktiKompetensiWajib->bukti_wajib = $fileName;
-            $buktiKompetensiWajib->save();
-            return $buktiKompetensiWajib;
+            if($buktiKompetensiWajib->save()){
+                return ['message' => 'Upload Bukti Kompetensi Wajib Successfull'];
+            }else{
+                return ['message' => 'Upload Bukti Kompetensi Wajib Failed'];
+            }
         }
     }
 

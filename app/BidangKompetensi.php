@@ -15,7 +15,7 @@ class BidangKompetensi extends Model
     ];
 
     public function getData(){
-        $bidangKompetensi = self::latest()->paginate(8);
+        $bidangKompetensi = self::paginate(8);
         return BidangKompetensiResource::collection($bidangKompetensi);
     }
 
