@@ -74299,7 +74299,7 @@ var staticRenderFns = [
       _vm._v(" "),
       _c("th", [_vm._v("Upload")]),
       _vm._v(" "),
-      _c("th", [_vm._v("View")])
+      _c("th", [_vm._v("Lihat")])
     ])
   }
 ]
@@ -74326,13 +74326,18 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _c("div", { staticClass: "card-header bg-white" }, [
-      _c("h3", { staticClass: "card-title" }, [_vm._v("Manage Kompetensi")]),
+      _c("h3", { staticClass: "card-title" }, [
+        _vm._v("Pengelolaan Kompetensi")
+      ]),
       _vm._v(" "),
       _c("div", { staticClass: "card-tools" }, [
         _c(
           "button",
           { staticClass: "btn btn-primary", on: { click: _vm.newModal } },
-          [_c("i", { staticClass: "fas fa-plus-square" }), _vm._v(" Add New")]
+          [
+            _c("i", { staticClass: "fas fa-plus-square" }),
+            _vm._v(" Tambah Baru")
+          ]
         ),
         _vm._v(" "),
         _c(
@@ -74486,7 +74491,7 @@ var render = function() {
                     ],
                     staticClass: "modal-title"
                   },
-                  [_vm._v("Add New Kompetensi")]
+                  [_vm._v("Tambah Kompetensi")]
                 ),
                 _vm._v(" "),
                 _c(
@@ -74502,7 +74507,7 @@ var render = function() {
                     ],
                     staticClass: "modal-title"
                   },
-                  [_vm._v("Edit Kompetensi")]
+                  [_vm._v("Ubah Kompetensi")]
                 ),
                 _vm._v(" "),
                 _vm._m(1)
@@ -75024,7 +75029,7 @@ var render = function() {
                         staticClass: "btn btn-primary",
                         attrs: { type: "submit" }
                       },
-                      [_vm._v("Add")]
+                      [_vm._v("Tambah")]
                     ),
                     _vm._v(" "),
                     _c(
@@ -75041,7 +75046,7 @@ var render = function() {
                         staticClass: "btn btn-success",
                         attrs: { type: "submit" }
                       },
-                      [_vm._v("Save")]
+                      [_vm._v("Simpan")]
                     ),
                     _vm._v(" "),
                     _c(
@@ -75050,7 +75055,7 @@ var render = function() {
                         staticClass: "btn btn-danger",
                         attrs: { type: "button", "data-dismiss": "modal" }
                       },
-                      [_vm._v("Close")]
+                      [_vm._v("Tutup")]
                     )
                   ])
                 ]
@@ -75120,11 +75125,11 @@ var staticRenderFns = [
       _c("th", [_vm._v("Peran")]),
       _vm._v(" "),
       _c("th", { staticClass: "text-center", attrs: { width: "5%" } }, [
-        _vm._v("Point")
+        _vm._v("Poin")
       ]),
       _vm._v(" "),
       _c("th", { staticClass: "text-center", attrs: { width: "20%" } }, [
-        _vm._v("Action")
+        _vm._v("Aksi")
       ])
     ])
   },
@@ -75782,7 +75787,7 @@ var staticRenderFns = [
       _c("h3", { staticClass: "card-title" }, [
         _c("i", { staticClass: "fas fa-user-graduate" }),
         _vm._v(
-          "\n                            Mahasiswa Profile\n                        "
+          "\n                            Profil Mahasiswa\n                        "
         )
       ])
     ])
@@ -75824,8 +75829,8 @@ var render = function() {
                         ref: "wizard",
                         attrs: {
                           "hide-buttons": _vm.status != "null" ? true : false,
-                          title: "SKPI SUBMISSION",
-                          subtitle: "Please check preview your data submission",
+                          title: "PENGAJUAN SKPI",
+                          subtitle: "Silakan pratinjau pengiriman data Anda",
                           finishButtonText: "Submit",
                           color: "#3490DC"
                         },
@@ -75836,7 +75841,7 @@ var render = function() {
                           "tab-content",
                           {
                             attrs: {
-                              title: "Mahasiswa Profile",
+                              title: "Profil Mahasiswa",
                               icon: "fas fa-user"
                             }
                           },
@@ -76271,13 +76276,17 @@ var render = function() {
                                   _c(
                                     "h3",
                                     { staticClass: "text-center text-grey" },
-                                    [_vm._v("Your SKPI document published")]
+                                    [
+                                      _vm._v(
+                                        "Dokumen SKPI Anda telah diterbitkan"
+                                      )
+                                    ]
                                   ),
                                   _vm._v(" "),
                                   _c(
                                     "h3",
                                     { staticClass: "text-center text-grey" },
-                                    [_vm._v("please check to akademik")]
+                                    [_vm._v("silakan periksa ke akademik")]
                                   )
                                 ])
                               : _vm._e(),
