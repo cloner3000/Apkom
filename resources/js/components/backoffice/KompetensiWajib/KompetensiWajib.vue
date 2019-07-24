@@ -5,9 +5,9 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Manage Kompetensi Wajib</h3>
+                <h3 class="card-title">Pengelolaan Kompetensi Wajib</h3>
                 <div class="card-tools">
-                  <button class="btn btn-primary" @click="newModal"><i class="fas fa-plus-square"></i> Add New</button>
+                  <button class="btn btn-primary" @click="newModal"><i class="fas fa-plus-square"></i> Tambah Baru</button>
                   <button @click="exportKompetensiWajib('KompetensiWajib.pdf')" class="btn btn-danger"><i class="fas fa-file-pdf"></i></button>
                   <button @click="exportKompetensiWajib('KompetensiWajib.xlsx')" class="btn btn-success"><i class="fas fa-file-excel"></i></button>
                 </div>
@@ -18,7 +18,7 @@
                   <tbody><tr>
                     <th>No</th>
                     <th>Nama Kompetensi</th>
-                    <th width="15%" class="text-center">Action</th>
+                    <th width="15%" class="text-center">Aksi</th>
                   </tr>
                   <tr v-for="(data, index) in kompetensiWajib.data" :key="index">
                     <td>{{kompetensiWajib.meta.from+index}}</td>
@@ -43,8 +43,8 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 v-show="!editMode" class="modal-title">Add New Kompetensi Wajib</h5>
-                        <h5 v-show="editMode" class="modal-title">Edit Kompetensi Wajib</h5>
+                        <h5 v-show="!editMode" class="modal-title">Tambah Kompetensi Wajib</h5>
+                        <h5 v-show="editMode" class="modal-title">Ubah Kompetensi Wajib</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -59,9 +59,9 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                      <button v-show="!editMode" type="submit" class="btn btn-primary">Add</button>
-                      <button v-show="editMode" type="submit" class="btn btn-success">Save</button>
-                      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                      <button v-show="!editMode" type="submit" class="btn btn-primary">Tambah</button>
+                      <button v-show="editMode" type="submit" class="btn btn-success">Simpan</button>
+                      <button type="button" class="btn btn-danger" data-dismiss="modal">Tutup</button>
                     </div>
                     </form>
                 </div>
@@ -114,7 +114,7 @@
               this.$Progress.fail();
               toast.fire({
                 type: 'error',
-                title: 'Load data kompetensi wajib failed'
+                title: 'Gagal memuat kompetensi wajib'
               });
               });
             }
@@ -127,7 +127,7 @@
               $('#modalForm').modal('hide');
               toast.fire({
                 type: 'success',
-                title: 'Kompetensi Wajib created successfully'
+                title: 'Kompetensi Wajib berhasil dibuat'
               });
               this.$Progress.finish();
             })
@@ -135,7 +135,7 @@
               this.$Progress.fail();
               toast.fire({
                 type: 'error',
-                title: 'Kompetensi Wajib create failed'
+                title: 'Kompetensi Wajib gagal dibuat'
               });
             });
           },
@@ -147,26 +147,26 @@
               $('#modalForm').modal('hide');
               toast.fire({
                 type: 'success',
-                title: 'Kompetensi Wajib updated successfully'
+                title: 'Kompetensi Wajib berhasil diubah'
               });
               this.$Progress.finish();
             }).catch(() => {
               this.$Progress.fail();
               toast.fire({
                 type: 'error',
-                title: 'Kompetensi Wajib update failed'
+                title: 'Kompetensi Wajib gagal diubah'
               });
             });
           },
           deleteKompetensiWajib(id){
             swal.fire({
-              title: 'Are you sure?',
-              text: "You won't be able to revert this!",
+              title: 'Anda yakin?',
+              text: "Anda tidak akan dapat mengembalikan ini!",
               type: 'warning',
               showCancelButton: true,
               confirmButtonColor: '#3085d6',
               cancelButtonColor: '#d33',
-              confirmButtonText: 'Yes, delete it!'
+              confirmButtonText: 'Yes, hapus!'
             }).then((result) => {
               if (result.value){
                 this.form.delete('api/kompetensi-wajib/'+id)
@@ -174,7 +174,7 @@
                   this.$Progress.start();
                   swal.fire(
                     'Deleted!',
-                    'Kompetensi Wajib has been deleted.',
+                    'Kompetensi Wajib berhasil dihapus.',
                     'success'
                   );
                   cusEvent.$emit('ReloadData');
@@ -185,7 +185,7 @@
                   swal.fire({
                     type: 'error',
                     title: 'Oops...',
-                    text: 'Kompetensi Wajib delete failed'
+                    text: 'Kompetensi Wajib gagal dihapus'
                   });
                 });
               }
@@ -212,7 +212,7 @@
               this.$Progress.fail();
               toast.fire({
               type: 'error',
-              title: 'Kompetensi Wajib export failed'
+              title: 'Kompetensi Wajib gagal diekspor'
               });
             })
           },

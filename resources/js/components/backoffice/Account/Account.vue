@@ -5,9 +5,9 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Manage Account</h3>
+                <h3 class="card-title">Pengelolaan Akun</h3>
                 <div class="card-tools">
-                  <button class="btn btn-primary" @click="newModal"><i class="fas fa-user-plus"></i> Add New</button>
+                  <button class="btn btn-primary" @click="newModal"><i class="fas fa-user-plus"></i> Tambah Data</button>
                   <button @click="exportUsers('Accounts.pdf')" class="btn btn-danger"><i class="fas fa-file-pdf"></i></button>
                   <button @click="exportUsers('Accounts.xlsx')" class="btn btn-success"><i class="fas fa-file-excel"></i></button>
                 </div>
@@ -17,11 +17,11 @@
                 <table class="table table-hover">
                   <tbody><tr>
                     <th>No</th>
-                    <th>Name</th>
+                    <th>Nama</th>
                     <th>Email</th>
-                    <th>Role</th>
-                    <th>Created</th>
-                    <th width="12%" class="text-center">Action</th>
+                    <th>Hak Akses</th>
+                    <th>Tanggal Dibuat</th>
+                    <th width="12%" class="text-center">Aksi</th>
                   </tr>
                   <tr v-for="(data, index) in users.data" :key="index">
                     <td>{{users.meta.from+index}}</td>
@@ -50,8 +50,8 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 v-show="!editMode" class="modal-title">Add New Account</h5>
-                        <h5 v-show="editMode" class="modal-title">Edit Account</h5>
+                        <h5 v-show="!editMode" class="modal-title">Tambah Akun Baru</h5>
+                        <h5 v-show="editMode" class="modal-title">Ubah Akun</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -59,28 +59,28 @@
                     <form @submit.prevent="editMode ? updateUser() : createUser()">
                     <div class="modal-body">
                         <div class="form-group">
-                          <label for="inputName">Name</label>
+                          <label for="inputName">Nama</label>
                           <input v-model="form.name" type="text" name="name"
-                            class="form-control" placeholder="Full Name" :class="{ 'is-invalid': form.errors.has('name') }" id="inputName">
+                            class="form-control" placeholder="Nama Lengkap" :class="{ 'is-invalid': form.errors.has('name') }" id="inputName">
                           <has-error :form="form" field="name"></has-error>
                         </div>
                         <div class="form-group">
                           <label for="inputEmail">Email</label>
                           <input v-model="form.email" type="text" name="email"
-                            class="form-control" placeholder="Email Address" :class="{ 'is-invalid': form.errors.has('email') }" id="inputEmail">
+                            class="form-control" placeholder="Alamat Email" :class="{ 'is-invalid': form.errors.has('email') }" id="inputEmail">
                           <has-error :form="form" field="email"></has-error>
                         </div>
                         <div class="form-group">
-                          <label for="inputPassword">Password</label>
+                          <label for="inputPassword">Kata Sandi</label>
                           <input v-model="form.password" type="password" name="password"
-                            class="form-control" placeholder="Password" :class="{ 'is-invalid': form.errors.has('password') }" id="inputPassword">
+                            class="form-control" placeholder="Kata Sandi" :class="{ 'is-invalid': form.errors.has('password') }" id="inputPassword">
                           <has-error :form="form" field="password"></has-error>
                         </div>
                         <div class="form-group">
-                          <label for="inputRole">Role</label>
+                          <label for="inputRole">Hak Akses</label>
                           <select name="role" v-model="form.role" id="inputRole" class="form-control" :class="{
                             'is-invalid': form.errors.has('role')}">
-                            <option value="" selected>Choose Role</option>
+                            <option value="" selected>Pilih Hak Akses</option>
                             <option value="Kaprodi">Kepala Program Studi</option>
                             <option value="Bagian Akademik">Bagian Akademik</option>
                             <option value="Wakil Rektor">Wakil Rektor</option>
@@ -147,7 +147,7 @@
               this.$Progress.fail();
               toast.fire({
                 type: 'error',
-                title: 'Load data account failed'
+                title: 'Gagal memuat data akun'
               });
               });
             }
@@ -160,7 +160,7 @@
               $('#modalForm').modal('hide');
               toast.fire({
                 type: 'success',
-                title: 'Account created successfully'
+                title: 'Berhasil menambah akun'
               });
               this.$Progress.finish();
             })
@@ -168,7 +168,7 @@
               this.$Progress.fail();
               toast.fire({
                 type: 'error',
-                title: 'Account create failed'
+                title: 'Gagal menambah akun'
               });
             });
           },
@@ -180,26 +180,26 @@
               $('#modalForm').modal('hide');
               toast.fire({
                 type: 'success',
-                title: 'Account updated successfully'
+                title: 'Berhasil mengubah akun'
               });
               this.$Progress.finish();
             }).catch(() => {
               this.$Progress.fail();
               toast.fire({
                 type: 'error',
-                title: 'Account update failed'
+                title: 'Gagal mengubah akun'
               });
             });
           },
           deleteUser(id){
             swal.fire({
-              title: 'Are you sure?',
-              text: "You won't be able to revert this!",
+              title: 'Anda yakin?',
+              text: "Anda tidak akan dapat mengembalikan ini!",
               type: 'warning',
               showCancelButton: true,
               confirmButtonColor: '#3085d6',
               cancelButtonColor: '#d33',
-              confirmButtonText: 'Yes, delete it!'
+              confirmButtonText: 'Ya, hapus!'
             }).then((result) => {
               if (result.value){
                 this.form.delete('api/user/'+id)
@@ -207,7 +207,7 @@
                   this.$Progress.start();
                   swal.fire(
                     'Deleted!',
-                    'Account has been deleted.',
+                    'Berhasil menghapus akun.',
                     'success'
                   );
                   cusEvent.$emit('ReloadData');
@@ -218,7 +218,7 @@
                   swal.fire({
                     type: 'error',
                     title: 'Oops...',
-                    text: 'Account delete failed'
+                    text: 'Gagal menghapus akun'
                   });
                 });
               }
@@ -245,7 +245,7 @@
               this.$Progress.fail();
               toast.fire({
               type: 'error',
-              title: 'Account export failed'
+              title: 'Gagal ekspor akun'
               });
             })
           },

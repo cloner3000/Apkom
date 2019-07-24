@@ -83,19 +83,19 @@ Vue.use(VueRouter);
 
 const routes = [
     { path: '/dashboard', component: require('./components/backoffice/Dashboard').default },
-    { path: '/skpi', component: require('./components/backoffice/skpi/Skpi').default },
-    { path: '/skpi-kompetensi', name:'skpi-kompetensi', props:true, component: require('./components/backoffice/skpi/SkpiKompetensi').default },
-    { path: '/mahasiswa-achievement', component: require('./components/backoffice/mahasiswa/MahasiswaAchievement').default },
-    { path: '/kompetensi-wajib', component: require('./components/backoffice/kompetensiwajib/KompetensiWajib').default },
-    { path: '/mahasiswa', component: require('./components/backoffice/mahasiswa/Mahasiswa').default },
-    { path: '/Jurusan', component: require('./components/backoffice/jurusan/Jurusan').default },
-    { path: '/bidang-kompetensi', component: require('./components/backoffice/bidangkompetensi/BidangKompetensi').default },
-    { path: '/account', component: require('./components/backoffice/account/Account').default },
+    { path: '/skpi', component: require('./components/backoffice/Skpi/Skpi').default },
+    { path: '/skpi-kompetensi', name:'skpi-kompetensi', props:true, component: require('./components/backoffice/Skpi/SkpiKompetensi').default },
+    { path: '/mahasiswa-achievement', component: require('./components/backoffice/Mahasiswa/MahasiswaAchievement').default },
+    { path: '/kompetensi-wajib', component: require('./components/backoffice/KompetensiWajib/KompetensiWajib').default },
+    { path: '/mahasiswa', component: require('./components/backoffice/Mahasiswa/Mahasiswa').default },
+    { path: '/Jurusan', component: require('./components/backoffice/Jurusan/Jurusan').default },
+    { path: '/bidang-kompetensi', component: require('./components/backoffice/BidangKompetensi/BidangKompetensi').default },
+    { path: '/account', component: require('./components/backoffice/Account/Account').default },
     { path: '/profile', component: require('./components/Profile').default },
-    { path: '/backup', component: require('./components/backoffice/backup/Backup').default },
+    { path: '/backup', component: require('./components/backoffice/Backup/Backup').default },
     { path: '/skpi-submission', component: require('./components/frontoffice/skpi/Skpi').default },
     { path: '/mahasiswa-profile', component: require('./components/frontoffice/mahasiswaprofile/MahasiswaProfile').default },
-    { path: '/kompetensi', component: require('./components/frontoffice/kompetensi/Kompetensi').default },
+    { path: '/kompetensi', component: require('./components/frontoffice/Kompetensi/Kompetensi').default },
     { path: '*', component: require('./components/NotFound.vue').default }
   ];
 

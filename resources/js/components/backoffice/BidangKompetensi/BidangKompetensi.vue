@@ -5,9 +5,9 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Manage Bidang Kompetensi</h3>
+                <h3 class="card-title">Pengelolaan Bidang Kompetensi</h3>
                 <div class="card-tools">
-                  <button class="btn btn-primary" @click="newModal"><i class="fas fa-plus-square"></i> Add New</button>
+                  <button class="btn btn-primary" @click="newModal"><i class="fas fa-plus-square"></i> Tambah Data</button>
                   <button @click="exportBidangKompetensi('BidangKompetensi.pdf')" class="btn btn-danger"><i class="fas fa-file-pdf"></i></button>
                   <button @click="exportBidangKompetensi('BidangKompetensi.xlsx')" class="btn btn-success"><i class="fas fa-file-excel"></i></button>
                 </div>
@@ -18,8 +18,8 @@
                   <tbody><tr>
                     <th>No</th>
                     <th>Nama Bidang</th>
-                    <th>Nama Bidang English</th>
-                    <th width="12%" class="text-center">Action</th>
+                    <th>Nama Bidang(Inggris)</th>
+                    <th width="12%" class="text-center">Aksi</th>
                   </tr>
                   <tr v-for="(data, index) in bidangKompetensi.data" :key="index">
                     <td>{{bidangKompetensi.meta.from+index}}</td>
@@ -46,8 +46,8 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 v-show="!editMode" class="modal-title">Add New Bidang Kompetensi</h5>
-                        <h5 v-show="editMode" class="modal-title">Edit Bidang Kompetensi</h5>
+                        <h5 v-show="!editMode" class="modal-title">Tambah Bidang Kompetensi</h5>
+                        <h5 v-show="editMode" class="modal-title">Ubah Bidang Kompetensi</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -61,16 +61,16 @@
                           <has-error :form="form" field="nama_bidang"></has-error>
                         </div>
                         <div class="form-group">
-                          <label for="inputNamaBidangEn">Nama Bidang Kompetensi English</label>
+                          <label for="inputNamaBidangEn">Nama Bidang Kompetensi(Inggris)</label>
                           <input v-model="form.nama_bidang_en" type="text" name="nama_bidang_en"
                             class="form-control" placeholder="Nama Bidang English" :class="{ 'is-invalid': form.errors.has('nama_bidang_en') }" id="inputNamaBidangEn">
                           <has-error :form="form" field="nama_bidang_en"></has-error>
                         </div>
                     </div>
                     <div class="modal-footer">
-                      <button v-show="!editMode" type="submit" class="btn btn-primary">Add</button>
-                      <button v-show="editMode" type="submit" class="btn btn-success">Save</button>
-                      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                      <button v-show="!editMode" type="submit" class="btn btn-primary">Tambah</button>
+                      <button v-show="editMode" type="submit" class="btn btn-success">Simpan</button>
+                      <button type="button" class="btn btn-danger" data-dismiss="modal">Tutup</button>
                     </div>
                     </form>
                 </div>
@@ -123,7 +123,7 @@
               this.$Progress.fail();
               toast.fire({
                 type: 'error',
-                title: 'Load data bidang kompetensi failed'
+                title: 'Gagal memuat bidang kompetensi'
               });
               });
             }
@@ -136,7 +136,7 @@
               $('#modalForm').modal('hide');
               toast.fire({
                 type: 'success',
-                title: 'Bidang Kompetensi created successfully'
+                title: 'Bidang Kompetensi berhasil dibuat'
               });
               this.$Progress.finish();
             })
@@ -144,7 +144,7 @@
               this.$Progress.fail();
               toast.fire({
                 type: 'error',
-                title: 'Bidang Kompetensi create failed'
+                title: 'Bidang Kompetensi gagal dibuat'
               });
             });
           },
@@ -156,26 +156,26 @@
               $('#modalForm').modal('hide');
               toast.fire({
                 type: 'success',
-                title: 'Bidang Kompetensi updated successfully'
+                title: 'Bidang Kompetensi berhasil diubah'
               });
               this.$Progress.finish();
             }).catch(() => {
               this.$Progress.fail();
               toast.fire({
                 type: 'error',
-                title: 'Bidang Kompetensi update failed'
+                title: 'Bidang Kompetensi gagal diubah'
               });
             });
           },
           deleteBidangKompetensi(id){
             swal.fire({
-              title: 'Are you sure?',
-              text: "You won't be able to revert this!",
+              title: 'Anda yakin?',
+              text: "Anda tidak akan dapat mengembalikan ini!",
               type: 'warning',
               showCancelButton: true,
               confirmButtonColor: '#3085d6',
               cancelButtonColor: '#d33',
-              confirmButtonText: 'Yes, delete it!'
+              confirmButtonText: 'Yes, hapus!'
             }).then((result) => {
               if (result.value){
                 this.form.delete('api/bidang-kompetensi/'+id)
@@ -183,7 +183,7 @@
                   this.$Progress.start();
                   swal.fire(
                     'Deleted!',
-                    'Bidang Kompetensi has been deleted.',
+                    'Bidang Kompetensi berhasil dihapus.',
                     'success'
                   );
                   cusEvent.$emit('ReloadData');
@@ -194,7 +194,7 @@
                   swal.fire({
                     type: 'error',
                     title: 'Oops...',
-                    text: 'Bidang Kompetensi delete failed'
+                    text: 'Bidang Kompetensi gagal dihapus'
                   });
                 });
               }
@@ -221,7 +221,7 @@
               this.$Progress.fail();
               toast.fire({
               type: 'error',
-              title: 'Bidang Kompetensi export failed'
+              title: 'Gagal ekspor Bidang Kompetensi'
               });
             })
           },

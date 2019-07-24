@@ -5,7 +5,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Manage SKPI</h3>
+                            <h3 class="card-title">Pengelolaan SKPI</h3>
                             <div class="card-tools">
                             <button @click="exportSkpi('Skpi.pdf')" class="btn btn-danger"><i class="fas fa-file-pdf"></i></button>
                             <button @click="exportSkpi('Skpi.xlsx')" class="btn btn-success"><i class="fas fa-file-excel"></i></button>
@@ -18,11 +18,11 @@
                                 <th>Nama</th>
                                 <th>Npm</th>
                                 <th>Jurusan</th>
-                                <th class="text-center">Point Skpi</th>
+                                <th class="text-center">Poin Skpi</th>
                                 <th class="text-center">Status</th>
-                                <th class="text-center">Preview</th>
+                                <th class="text-center">Pratinjau</th>
                                 <th v-if="!$gate.isAkademik()">Kompetensi</th>
-                                <th v-if="$gate.isWarek()">Action</th>
+                                <th v-if="$gate.isWarek()">Aksi</th>
                             </tr>
                             <tr v-for="(data, index) in skpi.data" :key="index">
                                 <td class="align-middle">{{skpi.meta.from+index}}</td>
@@ -108,7 +108,7 @@
                 this.$Progress.fail();
                 toast.fire({
                   type: 'error',
-                  title: 'Load data skpi failed'
+                  title: 'Gagal memuat data SKPI'
                 });
               });
             }
@@ -116,13 +116,14 @@
           deleteSkpi(id){
             if(this.$gate.isWarek()){
               swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
+                title: 'Anda yakin?',
+                text: "Anda tidak akan dapat mengembalikan ini!",
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal'
               }).then((result) => {
                 if (result.value){
                   axios.delete('api/skpi/'+id)
@@ -130,7 +131,7 @@
                     this.$Progress.start();
                     swal.fire(
                       'Deleted!',
-                      'Skpi has been deleted.',
+                      'Berhasil menghapus SKPI.',
                       'success'
                     );
                     cusEvent.$emit('ReloadData');
@@ -141,7 +142,7 @@
                     swal.fire({
                       type: 'error',
                       title: 'Oops...',
-                      text: 'Skpi delete failed'
+                      text: 'Gagal menghapus SKPI'
                     });
                   });
                 }
@@ -169,7 +170,7 @@
               this.$Progress.fail();
               toast.fire({
               type: 'error',
-              title: 'Data Skpi export failed'
+              title: 'Gagal ekspor data SKPI'
               });
             })
           },
@@ -200,13 +201,13 @@
                 this.$Progress.finish();
                 toast.fire({
                     type: 'success',
-                    title: 'Skpi publish successfull'
+                    title: 'Berhasil menerbitkan SKPI'
                 });
                 axios.get('api/mahasiswa/point/'+id_mahasiswa)
                 .catch(() => {
                   toast.fire({
                       type: 'error',
-                      title: 'Calculated point failed'
+                      title: 'Gagal menghitung poin'
                   });
                 });
                 
@@ -215,7 +216,7 @@
                   this.$Progress.fail();
                   toast.fire({
                       type: 'error',
-                      title: 'Skpi publish failed'
+                      title: 'Gagal menerbitkan SKPI'
                   });
               });
             }  

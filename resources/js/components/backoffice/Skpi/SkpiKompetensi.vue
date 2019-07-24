@@ -19,10 +19,10 @@
                                 <th>Tanggal Kegiatan</th>
                                 <th>Tingkat</th>
                                 <th>Peran</th>
-                                <th>Point</th>
+                                <th>Poin</th>
                                 <th>Kemampuan</th>
                                 <th>Bukti</th>
-                                <th>Validation</th>
+                                <th>Validasi</th>
                                 </tr>
                                 <tr v-for="(data, index) in kompetensi.data" :key="index">
                                 <td class="align-middle">{{kompetensi.meta.from+index}}</td>
@@ -80,7 +80,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Tutup</button>
                         </div>
                         
                     </div>

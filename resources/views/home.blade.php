@@ -19,7 +19,7 @@
       </ul>
       <form class="form-inline ml-3">
         <div class="input-group input-group-sm">
-          <input class="form-control form-control-navbar" type="search" @keyup="searching" v-model="search" placeholder="Search" aria-label="Search">
+          <input class="form-control form-control-navbar" type="search" @keyup="searching" v-model="search" placeholder="Cari" aria-label="Search">
           <div class="input-group-append">
             <button class="btn btn-navbar" type="submit">
               <i class="fa fa-search"></i>
@@ -34,11 +34,11 @@
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
               <router-link  to="/profile" href="#" class="dropdown-item">
-                  <i class="fas fa-user-alt mr-2"></i> Profile
+                  <i class="fas fa-user-alt mr-2"></i> Profil
               </router-link>
               <div class="dropdown-divider"></div>
               <a  onclick="event.preventDefault();document.getElementById('logout-form').submit();" href="#" class="dropdown-item">
-                <i class="fas fa-power-off mr-2"></i> Logout
+                <i class="fas fa-power-off mr-2"></i> Keluar
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                     @csrf
                 </form>
@@ -53,7 +53,7 @@
       <router-link to="/dashboard" class="brand-link">
         <img src="{{asset('img/logo.png')}}" alt="Logo UKDC" class="brand-image img-circle"
             style="opacity: .8">
-        <span class="brand-text font-weight-light text-primary">SKPI Application</span>
+        <span class="brand-text font-weight-light text-primary">Aplikasi SKPI</span>
       </router-link>
       <div class="sidebar">
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
@@ -72,7 +72,7 @@
               <router-link to="/dashboard" active-class="active" class="nav-link" exact>
                 <i class="nav-icon fas fa-tachometer-alt text-belizehole"></i>
                 <p>
-                  Dashboard
+                  Dasbor
                 </p>
               </router-link>
             </li>
@@ -88,7 +88,7 @@
               <router-link to="/mahasiswa-achievement" active-class="active" class="nav-link" exact>
                 <i class="nav-icon fas fa-award text-orange"></i>
                 <p>
-                  Mahasiswa Achievement
+                  Pencapaian Mahasiswa
                 </p>
               </router-link>
             </li>
@@ -98,7 +98,7 @@
               <router-link to="/skpi-submission" active-class="active" class="nav-link" exact>
                 <i class="nav-icon fas fa-id-card text-darkblue"></i>
                 <p>
-                  SKPI Submission
+                  Pengajuan SKPI
                 </p>
               </router-link>
             </li>
@@ -158,7 +158,7 @@
               <router-link to="/account" active-class="active" class="nav-link" exact>
                 <i class="nav-icon fas fa-user text-guava"></i>
                 <p>
-                  Account
+                  Akun
                 </p>
               </router-link>
             </li>
@@ -166,7 +166,7 @@
               <router-link to="/backup" active-class="active" class="nav-link" exact>
                 <i class="nav-icon fas fa-database text-grey"></i>
                 <p>
-                  Backup Database
+                  Pencadangan Basis Data
                 </p>
               </router-link>
             </li>
@@ -186,7 +186,7 @@
       </div>
     </div>
     <footer class="main-footer">
-      Copyright &copy; 2019 <a href="http://ukdc.ac.id/">Universitas Katolik Darma Cendika</a>. All rights reserved.
+      Hak Cipta &copy; 2019 <a href="http://ukdc.ac.id/">Universitas Katolik Darma Cendika</a>. All rights reserved.
     </footer>
   </div>
   @auth
