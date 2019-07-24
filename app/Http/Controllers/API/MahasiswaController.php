@@ -37,7 +37,7 @@ class MahasiswaController extends Controller
      */
     public function store(MahasiswaRequest $request)
     {
-        $this->authorize('isMahasiswa');
+        $this->authorize('isWarek');
         $mahasiswa = $this->mahasiswa->saveData($request);
         return $mahasiswa;
     }

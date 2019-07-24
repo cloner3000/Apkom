@@ -84,7 +84,6 @@
                             <option value="Kaprodi">Kepala Program Studi</option>
                             <option value="Bagian Akademik">Bagian Akademik</option>
                             <option value="Wakil Rektor">Wakil Rektor</option>
-                            <option value="Mahasiswa">Mahasiswa</option>
                           </select>
                           <has-error :form="form" field="role"></has-error>
                         </div>

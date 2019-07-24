@@ -8,6 +8,7 @@ use Apkom\Http\Controllers\Controller;
 use Apkom\Http\Requests\JurusanRequest;
 use Apkom\Exports\JurusanExport;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Gate;
 use PDF;
 
 class JurusanController extends Controller
@@ -104,8 +105,9 @@ class JurusanController extends Controller
     }
 
     public function getJurusanData(){
-        $this->authorize('isMahasiswa');
-        $jurusan = $this->jurusan->getJurusanData();
-        return $jurusan;
+        if(Gate::check('isMahasiswa') || Gate::check('isWarek')){
+            $jurusan = $this->jurusan->getJurusanData();
+            return $jurusan;
+        }
     }
 }

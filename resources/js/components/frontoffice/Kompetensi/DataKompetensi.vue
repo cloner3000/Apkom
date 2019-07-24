@@ -130,6 +130,7 @@
                                   <has-error :form="form" field="bukti"></has-error>
                               </div>
                           </div>
+                           <p>ukuran maksimal 2 MB</p>
                         </div>
                          <div v-if="form.id_bidang != 1" class="form-group">
                           <label for="inputKemampuan">Kemampuan</label>

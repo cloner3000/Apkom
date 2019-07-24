@@ -8,7 +8,7 @@
                 <a href="{{ route('welcome') }}"><img class="mx-auto d-block mb-3 mt-3" src="{{asset('img/logo.png')}}" alt="Logo UKDC"></a>
                 <h3 class="login-box-msg">Sistem Informasi <b>SKPI</b></h3>
                 <div class="card-body">
-                    <form method="POST" action="{{ route('register') }}">
+                    {{-- <form method="POST" action="{{ route('register') }}">
                         @csrf
                         <div class="form-group">
                             <label for="name">Account Name</label>
@@ -46,7 +46,8 @@
                                 Register
                             </button>
                         </div>
-                    </form>
+                    </form> --}}
+                    <h5>Masukan email dengan password NPM anda untuk login</h5>
                 </div>
             </div>
         </div>

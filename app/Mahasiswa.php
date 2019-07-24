@@ -29,7 +29,7 @@ class Mahasiswa extends Model
     ];
 
     public function getData(){
-        $mahasiswa = self::with('jurusan')->latest()->paginate(8);
+        $mahasiswa = self::with('jurusan')->with('user')->latest()->paginate(8);
         return MahasiswaResource::collection($mahasiswa);
     }
 
@@ -52,9 +52,6 @@ class Mahasiswa extends Model
         $mahasiswa = new Mahasiswa;
         if($id){
             $mahasiswa = self::find($id);
-            if($mahasiswa->id_account != auth('api')->user()->id){
-                return ['message' => 'Mahasiswa Not Found'];
-            }
             if($mahasiswa->id_jurusan != $request->id_jurusan){
                 $mahasiswa->buktiKompetensiWajib()->delete();
             }else{
@@ -62,7 +59,7 @@ class Mahasiswa extends Model
             }
         }
         $mahasiswa->id_jurusan = $request->id_jurusan;
-        $mahasiswa->id_account = auth('api')->user()->id;
+        $mahasiswa->id_account = $request->id_account;
         $mahasiswa->npm = $request->npm;
         $mahasiswa->nama = $request->nama;
         $mahasiswa->kota_lahir = $request->kota_lahir;

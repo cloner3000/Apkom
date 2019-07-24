@@ -24,6 +24,7 @@ Route::get('dashboard', 'API\DashboardController@index');
 Route::get('user/select/kaprodi', 'API\UserController@getKaprodiData');
 Route::get('user/export', 'API\UserController@export');
 Route::get('user/find', 'API\UserController@search');
+Route::post('user/add', 'API\UserController@storeUserMahasiswa');
 
 //Jurusan Route Custom
 Route::get('jurusan/select', 'API\JurusanController@getJurusanData');

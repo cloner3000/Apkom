@@ -43,9 +43,13 @@ class UserController extends Controller
         $this->authorize('isWarek');
         $user = $this->user->saveData($request);
         return $user;
-
     }
 
+    public function storeUserMahasiswa(UserRequest $request){
+        $this->authorize('isWarek');
+        $user = $this->user->saveUserMahasiswa($request);
+        return $user;
+    }
     /**
      * Display the specified resource.
      *

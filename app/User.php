@@ -54,6 +54,22 @@ class User extends Authenticatable
         return UserResource::collection($user);
     }
 
+    public function saveUserMahasiswa($request, $id=false){
+        $user = new User;
+        if($id){
+            $user = self::find($id);
+        }else{
+            $user->password = Hash::make($request->password);
+        } 
+        $user->name = $request->name;
+        $user->email = $request->email;
+        if($user->save()){
+            return $user->id;
+        }else{
+            return ['message' => 'Save User Failed'];
+        }
+    }
+
     public function saveData($request, $id=false){
         $user = new User;
         $userTemp = auth('api')->user();

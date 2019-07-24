@@ -18,7 +18,7 @@
                                 <div class="form-group">
                                     <label for="inputNama">Nama Lengkap</label>
                                     <input v-model="form.nama" type="text" name="nama"
-                                        class="form-control" placeholder="Nama Lengkap" :class="{ 'is-invalid': form.errors.has('nama') }" id="inputNama">
+                                        class="form-control" placeholder="Nama Lengkap" :class="{ 'is-invalid': form.errors.has('nama') }" id="inputNama" disabled>
                                     <has-error :form="form" field="nama"></has-error>
                                 </div>
                                 <div class="row">
@@ -26,7 +26,7 @@
                                         <div class="form-group">
                                             <label for="inputKotaLahir">Kota Kelahiran</label><br>
                                             <input v-model="form.kota_lahir" type="text" name="kota_lahir"
-                                            class="form-control" placeholder="Kota Kelahiran" :class="{ 'is-invalid': form.errors.has('kota_lahir') }" id="inputKotaLahir">
+                                            class="form-control" placeholder="Kota Kelahiran" :class="{ 'is-invalid': form.errors.has('kota_lahir') }" id="inputKotaLahir" disabled>
                                             <has-error :form="form" field="kota_lahir"></has-error>
                                         </div>
                                     </div>
@@ -34,7 +34,7 @@
                                     <div class="form-group">
                                             <label for="inputTglLahir">Tanggal Kelahiran</label><br>
                                             <date-picker v-model="form.tgl_lahir" lang="en" value-type="format" name="tgl_lahir" id="inputTglLahir" class="form-control-file" 
-                                            :class="{ 'is-invalid': form.errors.has('tgl_lahir') }"></date-picker>
+                                            :class="{ 'is-invalid': form.errors.has('tgl_lahir') }" disabled></date-picker>
                                             <has-error :form="form" field="tgl_lahir"></has-error>
                                         </div>  
                                     </div>
@@ -42,7 +42,7 @@
                                 <div class="form-group">
                                     <label for="inputNoIjazah">No Ijazah</label>
                                     <input v-model="form.no_ijazah" type="text" name="no_ijazah"
-                                        class="form-control" placeholder="No Ijazah" :class="{ 'is-invalid': form.errors.has('no_ijazah') }" id="inputNoIjazah">
+                                        class="form-control" placeholder="No Ijazah" :class="{ 'is-invalid': form.errors.has('no_ijazah') }" id="inputNoIjazah" disabled>
                                     <has-error :form="form" field="no_ijazah"></has-error>
                                 </div>
                                 <div class="row">
@@ -50,7 +50,7 @@
                                         <div class="form-group">
                                             <label for="inputNpm">Nomor Pokok Mahasiswa</label>
                                             <input v-model="form.npm" type="text" name="npm"
-                                            class="form-control" placeholder="Nomor Pokok Mahasiswa" :class="{ 'is-invalid': form.errors.has('npm') }" id="inputNpm">
+                                            class="form-control" placeholder="Nomor Pokok Mahasiswa" :class="{ 'is-invalid': form.errors.has('npm') }" id="inputNpm" disabled>
                                             <has-error :form="form" field="npm"></has-error>
                                         </div>
                                     </div>
@@ -58,7 +58,7 @@
                                         <div class="form-group">
                                             <label for="inputIpk">Indeks Prestasi Kumulatif</label>
                                             <input v-model="form.ipk" type="text" name="ipk"
-                                            class="form-control" placeholder="Indeks Prestasi Kumulatif" :class="{ 'is-invalid': form.errors.has('ipk') }" id="inputIpk">
+                                            class="form-control" placeholder="Indeks Prestasi Kumulatif" :class="{ 'is-invalid': form.errors.has('ipk') }" id="inputIpk" disabled>
                                             <has-error :form="form" field="ipk"></has-error>
                                         </div>
                                     </div>
@@ -66,7 +66,7 @@
                                 <div class="form-group">
                                     <label for="inputJurusan">Jurusan</label>
                                     <select name="id_jurusan" v-model="form.id_jurusan" id="inputJurusan" class="form-control" :class="{
-                                        'is-invalid': form.errors.has('id_jurusan')}">
+                                        'is-invalid': form.errors.has('id_jurusan')}" disabled>
                                         <option value="" selected>Choose Jurusan</option>
                                         <option v-for="data in jurusan.data" :key="data.id" v-bind:value="data.id">{{ data.nama_jurusan }}</option>
                                     </select>
@@ -77,7 +77,7 @@
                                         <div class="form-group">
                                             <label for="inputTglMasuk">Tanggal Mulai Studi</label><br>
                                             <date-picker v-model="form.tgl_masuk" lang="en"  name="tgl_masuk" value-type="format" id="inputTglMasuk" class="form-control-file" 
-                                            :class="{ 'is-invalid': form.errors.has('tgl_masuk') }"></date-picker>
+                                            :class="{ 'is-invalid': form.errors.has('tgl_masuk') }" disabled></date-picker>
                                             <has-error :form="form" field="tgl_masuk"></has-error>
                                         </div>
                                     </div>
@@ -85,14 +85,14 @@
                                         <div class="form-group">
                                             <label for="inputTglLulus">Tanggal Kelulusan</label><br>
                                             <date-picker v-model="form.tgl_lulus" lang="en"  name="tgl_lulus" value-type="format" id="inputTglLulus" class="form-control-file" 
-                                            :class="{ 'is-invalid': form.errors.has('tgl_lulus') }"></date-picker>
+                                            :class="{ 'is-invalid': form.errors.has('tgl_lulus') }" disabled></date-picker>
                                             <has-error :form="form" field="tgl_lulus"></has-error>
                                         </div>
                                     </div>
                                 </div>    
                             </div> 
                             <div class="card-footer text-center">
-                                <button type="submit" class="btn btn-primary">Save Data</button>
+                                <!-- <button type="submit" class="btn btn-primary">Save Data</button> -->
                             </div>
                         </form>         
                     </div>
