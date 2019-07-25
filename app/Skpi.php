@@ -244,6 +244,7 @@ class Skpi extends Model
 
         $kompetensiWajib = BuktiKompetensiWajib::where('id_mahasiswa', $id_mahasiswa)
         ->whereNotNull('bukti_wajib')
+        ->where('active', 1)
         ->select('nama_kompetensi_wajib')
         ->get();
 

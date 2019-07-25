@@ -25,6 +25,7 @@ class CreateKompetensiTable extends Migration
             $table->double('point_kompetensi');
             $table->string('bukti');
             $table->boolean('active')->default(1);
+            $table->string('pesan')->nullable($value = true);
             $table->timestamps();
             $table->foreign('id_mahasiswa')
             ->references('id')->on('mahasiswa')

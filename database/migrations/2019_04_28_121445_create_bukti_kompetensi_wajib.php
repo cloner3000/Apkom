@@ -18,6 +18,8 @@ class CreateBuktiKompetensiWajib extends Migration
             $table->bigInteger('id_mahasiswa')->unsigned();
             $table->string('nama_kompetensi_wajib');
             $table->string('bukti_wajib')->nullable();
+            $table->boolean('active')->default(1);
+            $table->string('pesan')->nullable($value = true);
             $table->timestamps();
             $table->foreign('id_mahasiswa')
             ->references('id')->on('mahasiswa')

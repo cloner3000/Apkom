@@ -16,9 +16,34 @@ class BuktiKompetensiWajib extends Model
         'bukti'
     ];
 
-    public function getData(){
-        $buktiKompetensiWajib = self::where('id_mahasiswa',auth('api')->user()->mahasiswa()->id)
+    public function getData($id = false){
+        if($id){
+            $buktiKompetensiWajib = self::where('id_mahasiswa', $id)
+            ->where('bukti_wajib', '!=', null )->latest()->paginate(8);
+            return BuktiKompetensiWajibResource::collection($buktiKompetensiWajib);
+        }else{
+            $buktiKompetensiWajib = self::where('id_mahasiswa', auth('api')->user()->mahasiswa()->id)
+            ->paginate(8);
+            return BuktiKompetensiWajibResource::collection($buktiKompetensiWajib);
+        }
+    }
+
+    public function getDataReject(){
+        $buktiKompetensiWajib = self::where('id_mahasiswa', auth('api')->user()
+        ->mahasiswa()->id)->where('active', 0)
         ->paginate(8);
+        return BuktiKompetensiWajibResource::collection($buktiKompetensiWajib);
+    }
+
+    public function searchData($search, $id = false){
+        if($id){
+            $id_mahasiswa = $id;
+        }else{
+            $id_mahasiswa = auth('api')->user()->mahasiswa()->id;
+        }
+        $buktiKompetensiWajib = self::where('id_mahasiswa', $id_mahasiswa)
+            ->where('nama_kompetensi_wajib','LIKE',"%$search%")
+            ->paginate(8);
         return BuktiKompetensiWajibResource::collection($buktiKompetensiWajib);
     }
 
@@ -58,11 +83,29 @@ class BuktiKompetensiWajib extends Model
         }
     }
 
-    public function searchData($search){
-        $buktiKompetensiWajib = self::where('id_mahasiswa',auth('api')->user()->mahasiswa()->id)
-            ->where('nama_kompetensi_wajib','LIKE',"%$search%")
-            ->paginate(8);
-        return BuktiKompetensiWajibResource::collection($buktiKompetensiWajib);
+    public function changeValidation($id){
+        $buktiKompetensiWajib = self::find($id);
+        if($buktiKompetensiWajib->active == 1){
+            $buktiKompetensiWajib->active = 0;
+        }else{
+            $buktiKompetensiWajib->active = 1;
+            $buktiKompetensiWajib->pesan = '';
+        }
+        if($buktiKompetensiWajib->save()){
+            return $buktiKompetensiWajib->active;
+        }else{
+            return ['message' => 'Change Validation Failed'];
+        }
+    }
+
+    public function savePesan($request){
+        $buktiKompetensiWajib = self::find($request->id);
+        $buktiKompetensiWajib->pesan = $request->pesan;
+        if($buktiKompetensiWajib->save()){
+            return ['message' => 'Save pesan Successfull'];
+        }else{
+            return ['message' => 'Save pesan Failed'];
+        }
     }
     
 }

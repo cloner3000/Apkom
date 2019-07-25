@@ -7,7 +7,7 @@
             <div class="card">
               <div class="card-header p-2">
                 <ul class="nav nav-pills">
-                  <li @click="changeTab('data-kompetensi')" class="nav-item"><a class="nav-link  active show" href="#kompetensiTab" data-toggle="tab">Kompetensi</a></li>
+                  <li @click="changeTab('data-kompetensi')" class="nav-item"><a class="nav-link  active show" href="#kompetensiTab" data-toggle="tab">Kompetensi Tambahan</a></li>
                   <li @click="changeTab('bukti-kompetensi')" class="nav-item"><a class="nav-link" href="#kompetensiWajibTab" data-toggle="tab">Kompetensi Wajib</a></li>
                 </ul>
               </div>

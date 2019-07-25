@@ -4291,6 +4291,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -4570,12 +4576,43 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       kompetensi: {},
       searching: false,
-      kompetensiSelect: {}
+      kompetensiSelect: {},
+      form: new Form({
+        id: '',
+        pesan: ''
+      })
     };
   },
   methods: {
@@ -4597,13 +4634,19 @@ __webpack_require__.r(__webpack_exports__);
         });
       });
     },
-    changeValidation: function changeValidation(id) {
+    changeValidation: function changeValidation(data) {
       var _this2 = this;
 
       if (this.$gate.isKaprodi()) {
         this.$Progress.start();
-        axios.put('api/kompetensi/skpi/validation/' + id).then(function () {
+        axios.put('api/kompetensi/skpi/validation/' + data.id).then(function (response) {
           _this2.$Progress.finish();
+
+          if (response.data != 1) {
+            _this2.form.fill(data);
+
+            $('#pesanKompetensi').modal('show');
+          }
         })["catch"](function () {
           _this2.$Progress.fail();
 
@@ -4642,6 +4685,238 @@ __webpack_require__.r(__webpack_exports__);
     previewBukti: function previewBukti(data) {
       this.kompetensiSelect = data;
       $('#previewBukti').modal('show');
+    },
+    createPesan: function createPesan() {
+      var _this4 = this;
+
+      this.$Progress.start();
+      this.form.put('api/kompetensi/pesan').then(function () {
+        $('#pesanKompetensi').modal('hide');
+        toast.fire({
+          type: 'success',
+          title: 'Berhasil menyimpan pesan'
+        });
+
+        _this4.$Progress.finish();
+      })["catch"](function () {
+        _this4.$Progress.fail();
+
+        toast.fire({
+          type: 'error',
+          title: 'Gagal menyimpan pesan'
+        });
+      });
+    }
+  },
+  mounted: function mounted() {
+    this.$root.search = '';
+    this.getKompetensi();
+    cusEvent.$on('Searching', this.searchKompetensi);
+    cusEvent.$on('ReloadData', this.getKompetensi);
+  },
+  beforeDestroy: function beforeDestroy() {
+    cusEvent.$off('Searching', this.searchKompetensi);
+    cusEvent.$off('ReloadData', this.getKompetensi);
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/backoffice/Skpi/SkpiKompetensiWajib.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/backoffice/Skpi/SkpiKompetensiWajib.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      kompetensi: {},
+      searching: false,
+      kompetensiSelect: {},
+      form: new Form({
+        id: '',
+        pesan: ''
+      })
+    };
+  },
+  methods: {
+    getKompetensi: function getKompetensi() {
+      var _this = this;
+
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+      this.$Progress.start();
+      axios.get('api/bukti-kompetensi-wajib/skpi/' + this.$route.params.id + '?page=' + page).then(function (response) {
+        _this.kompetensi = response.data;
+
+        _this.$Progress.finish();
+      })["catch"](function () {
+        _this.$Progress.fail();
+
+        toast.fire({
+          type: 'error',
+          title: 'Load data kompetensi wajib failed'
+        });
+      });
+    },
+    changeValidation: function changeValidation(data) {
+      var _this2 = this;
+
+      if (this.$gate.isKaprodi()) {
+        this.$Progress.start();
+        axios.put('api/bukti-kompetensi-wajib/skpi/validation/' + data.id).then(function (response) {
+          _this2.$Progress.finish();
+
+          if (response.data != 1) {
+            _this2.form.fill(data);
+
+            $('#pesanKompetensi').modal('show');
+          }
+        })["catch"](function () {
+          _this2.$Progress.fail();
+
+          toast.fire({
+            type: 'error',
+            title: 'Unvalidation kompetensi wajib failed'
+          });
+        });
+      }
+    },
+    searchKompetensi: function searchKompetensi() {
+      var _this3 = this;
+
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+      var query = this.$root.search;
+
+      if (this.$root.search != '') {
+        this.$Progress.start();
+        this.searching = true;
+        axios.get('api/bukti-kompetensi-wajib/skpi/' + this.$route.params.id + '/find?q=' + query + '&page=' + page).then(function (response) {
+          _this3.kompetensi = response.data;
+
+          _this3.$Progress.finish();
+        })["catch"](function () {
+          _this3.$Progress.fail();
+        });
+      } else {
+        this.searching = false;
+        cusEvent.$emit('ReloadData');
+      }
+    },
+    previewBukti: function previewBukti(data) {
+      this.kompetensiSelect = data;
+      $('#previewBukti').modal('show');
+    },
+    createPesan: function createPesan() {
+      var _this4 = this;
+
+      this.$Progress.start();
+      this.form.put('api/bukti-kompetensi-wajib/pesan').then(function () {
+        $('#pesanKompetensi').modal('hide');
+        toast.fire({
+          type: 'success',
+          title: 'Berhasil menyimpan pesan'
+        });
+
+        _this4.$Progress.finish();
+      })["catch"](function () {
+        _this4.$Progress.fail();
+
+        toast.fire({
+          type: 'error',
+          title: 'Gagal menyimpan pesan'
+        });
+      });
     }
   },
   mounted: function mounted() {
@@ -5779,6 +6054,40 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -5787,6 +6096,12 @@ __webpack_require__.r(__webpack_exports__);
         jurusan: {}
       },
       kompetensi: {},
+      kompetensiReject: {
+        data: ''
+      },
+      kompetensiWajibReject: {
+        data: ''
+      },
       kompetensiWajib: {
         data: ''
       },
@@ -5824,14 +6139,46 @@ __webpack_require__.r(__webpack_exports__);
         });
       }
     },
-    getKompetensiWajib: function getKompetensiWajib() {
+    getKompetensiReject: function getKompetensiReject() {
       var _this3 = this;
 
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
 
       if (this.$gate.isMahasiswa()) {
+        axios.get('api/kompetensi/reject?page=' + page).then(function (response) {
+          _this3.kompetensiReject = response.data;
+        })["catch"](function () {
+          toast.fire({
+            type: 'error',
+            title: 'Load data kompetensi reject failed'
+          });
+        });
+      }
+    },
+    getKompetensiWajibReject: function getKompetensiWajibReject() {
+      var _this4 = this;
+
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+
+      if (this.$gate.isMahasiswa()) {
+        axios.get('api/bukti-kompetensi-wajib/reject?page=' + page).then(function (response) {
+          _this4.kompetensiWajibReject = response.data;
+        })["catch"](function () {
+          toast.fire({
+            type: 'error',
+            title: 'Load data kompetensi wajib reject failed'
+          });
+        });
+      }
+    },
+    getKompetensiWajib: function getKompetensiWajib() {
+      var _this5 = this;
+
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+
+      if (this.$gate.isMahasiswa()) {
         axios.get('api/bukti-kompetensi-wajib?page=' + page).then(function (response) {
-          _this3.kompetensiWajib = response.data;
+          _this5.kompetensiWajib = response.data;
         })["catch"](function () {
           toast.fire({
             type: 'error',
@@ -5841,19 +6188,23 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     getStatus: function getStatus() {
-      var _this4 = this;
+      var _this6 = this;
 
       if (this.$gate.isMahasiswa()) {
         axios.get('api/skpi/cek').then(function (response) {
-          _this4.status = response.data.status;
+          _this6.status = response.data.status;
 
-          if (_this4.status != 'uncompleted' && _this4.status != 'unregister') {
-            _this4.getMahasiswa();
+          if (_this6.status == 'progress') {
+            _this6.getKompetensiReject();
 
-            _this4.getKompetensi();
+            _this6.getKompetensiWajibReject();
+          } else if (_this6.status != 'uncompleted' && _this6.status != 'unregister') {
+            _this6.getMahasiswa();
 
-            _this4.getKompetensiWajib();
-          }
+            _this6.getKompetensi();
+
+            _this6.getKompetensiWajib();
+          } else {}
         })["catch"](function () {
           toast.fire({
             type: 'error',
@@ -5863,7 +6214,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     onComplete: function onComplete() {
-      var _this5 = this;
+      var _this7 = this;
 
       this.$Progress.start();
       axios.post('api/skpi').then(function (response) {
@@ -5873,14 +6224,14 @@ __webpack_require__.r(__webpack_exports__);
           title: 'Submit skpi successfully'
         });
 
-        _this5.$Progress.finish();
+        _this7.$Progress.finish();
       })["catch"](function () {
         toast.fire({
           type: 'error',
           title: 'Submit skpi failed'
         });
 
-        _this5.$Progress.fail();
+        _this7.$Progress.fail();
       });
     }
   },
@@ -73527,6 +73878,17 @@ var render = function() {
                             ? _c("th", [_vm._v("Kompetensi")])
                             : _vm._e(),
                           _vm._v(" "),
+                          !_vm.$gate.isAkademik()
+                            ? _c(
+                                "th",
+                                {
+                                  staticClass: "text-center",
+                                  attrs: { width: "10%" }
+                                },
+                                [_vm._v("Kompetensi Wajib")]
+                              )
+                            : _vm._e(),
+                          _vm._v(" "),
                           _vm.$gate.isWarek()
                             ? _c("th", [_vm._v("Aksi")])
                             : _vm._e()
@@ -73663,6 +74025,38 @@ var render = function() {
                                         attrs: {
                                           to: {
                                             name: "skpi-kompetensi",
+                                            params: {
+                                              id: data.id_mahasiswa,
+                                              nama: data.nama,
+                                              status: data.status
+                                            }
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _c("i", {
+                                          staticClass:
+                                            "fas fa-sign-in-alt text-teal"
+                                        })
+                                      ]
+                                    )
+                                  ],
+                                  1
+                                )
+                              : _vm._e(),
+                            _vm._v(" "),
+                            !_vm.$gate.isAkademik()
+                              ? _c(
+                                  "td",
+                                  { staticClass: "text-center align-middle" },
+                                  [
+                                    _c(
+                                      "router-link",
+                                      {
+                                        staticClass: "btn btn-link btn-lg",
+                                        attrs: {
+                                          to: {
+                                            name: "skpi-kompetensi-wajib",
                                             params: {
                                               id: data.id_mahasiswa,
                                               nama: data.nama,
@@ -73913,7 +74307,7 @@ var render = function() {
                                     domProps: { checked: data.active == 1 },
                                     on: {
                                       change: function($event) {
-                                        return _vm.changeValidation(data.id)
+                                        return _vm.changeValidation(data)
                                       }
                                     }
                                   }),
@@ -74049,6 +74443,92 @@ var render = function() {
                 ]
               )
             ]
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "modal",
+              attrs: { id: "pesanKompetensi", tabindex: "-1", role: "dialog" }
+            },
+            [
+              _c(
+                "div",
+                {
+                  staticClass: "modal-dialog modal-dialog-centered",
+                  attrs: { role: "document" }
+                },
+                [
+                  _c("div", { staticClass: "modal-content" }, [
+                    _vm._m(4),
+                    _vm._v(" "),
+                    _c(
+                      "form",
+                      {
+                        on: {
+                          submit: function($event) {
+                            $event.preventDefault()
+                            return _vm.createPesan($event)
+                          }
+                        }
+                      },
+                      [
+                        _c("div", { staticClass: "modal-body" }, [
+                          _c("div", { staticClass: "card" }, [
+                            _c(
+                              "div",
+                              { staticClass: "card-body p-0" },
+                              [
+                                _c("textarea", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.form.pesan,
+                                      expression: "form.pesan"
+                                    }
+                                  ],
+                                  staticClass: "form-control",
+                                  class: {
+                                    "is-invalid": _vm.form.errors.has("pesan")
+                                  },
+                                  attrs: {
+                                    name: "pesan",
+                                    placeholder: "Masukan Alasan Ditolak",
+                                    id: "inputPesan",
+                                    required: ""
+                                  },
+                                  domProps: { value: _vm.form.pesan },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        _vm.form,
+                                        "pesan",
+                                        $event.target.value
+                                      )
+                                    }
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c("has-error", {
+                                  attrs: { form: _vm.form, field: "pesan" }
+                                })
+                              ],
+                              1
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _vm._m(5)
+                      ]
+                    )
+                  ])
+                ]
+              )
+            ]
           )
         ])
       : _c("div", { staticClass: "row" }, [_c("not-found")], 1)
@@ -74132,6 +74612,371 @@ var staticRenderFns = [
           attrs: { type: "button", "data-dismiss": "modal" }
         },
         [_vm._v("Tutup")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header bg-primary" }, [
+      _c("h5", { staticClass: "modal-title" }, [
+        _c("i", { staticClass: "fas fa-message mr-1" }),
+        _vm._v(
+          "\n                            Alasan Ditolak\n                        "
+        )
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c(
+        "button",
+        { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+        [_vm._v("Simpan")]
+      )
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/backoffice/Skpi/SkpiKompetensiWajib.vue?vue&type=template&id=511a78a6&":
+/*!**************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/backoffice/Skpi/SkpiKompetensiWajib.vue?vue&type=template&id=511a78a6& ***!
+  \**************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "container" }, [
+    this.$gate.isWarek() || this.$gate.isKaprodi()
+      ? _c("div", [
+          _c("div", { staticClass: "row mt-4" }, [
+            _c("div", { staticClass: "col-md-12" }, [
+              _c("div", { staticClass: "card card-primary card-outline" }, [
+                _c("div", { staticClass: "card-header" }, [
+                  _c("h5", { staticClass: "card-title" }, [
+                    _vm._m(0),
+                    _vm._v(
+                      "    \n                        " +
+                        _vm._s(_vm.$route.params.nama) +
+                        "\n                    "
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "card-body table-responsive p-0" }, [
+                  _c("table", { staticClass: "table table-hover" }, [
+                    _c(
+                      "tbody",
+                      [
+                        _vm._m(1),
+                        _vm._v(" "),
+                        _vm._l(_vm.kompetensi.data, function(data, index) {
+                          return _c("tr", { key: index }, [
+                            _c("td", { staticClass: "align-middle" }, [
+                              _vm._v(_vm._s(_vm.kompetensi.meta.from + index))
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "align-middle" }, [
+                              _vm._v(_vm._s(data.nama_kompetensi_wajib))
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "td",
+                              {
+                                staticClass: "text-center align-middle",
+                                attrs: { width: "10%" }
+                              },
+                              [
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass: "btn btn-link",
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.previewBukti(data)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("i", {
+                                      staticClass: "text-grey fas fa-eye"
+                                    })
+                                  ]
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "td",
+                              {
+                                staticClass: "text-center align-middle",
+                                attrs: { width: "10%" }
+                              },
+                              [
+                                _c("label", { staticClass: "checkwrap" }, [
+                                  _c("input", {
+                                    attrs: {
+                                      type: "checkbox",
+                                      disabled:
+                                        _vm.$route.params.status !=
+                                          "progress" || !_vm.$gate.isKaprodi(),
+                                      hidden: ""
+                                    },
+                                    domProps: { checked: data.active == 1 },
+                                    on: {
+                                      change: function($event) {
+                                        return _vm.changeValidation(data)
+                                      }
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _vm.$route.params.status == "progress" &&
+                                  _vm.$gate.isKaprodi()
+                                    ? _c("span", { staticClass: "checkmark" })
+                                    : _c("span", {
+                                        staticClass:
+                                          "checkmark bg-dark cursor-default"
+                                      })
+                                ])
+                              ]
+                            )
+                          ])
+                        })
+                      ],
+                      2
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "card-footer" },
+                  [
+                    !_vm.searching
+                      ? _c("pagination", {
+                          attrs: { data: _vm.kompetensi, align: "center" },
+                          on: { "pagination-change-page": _vm.getKompetensi }
+                        })
+                      : _c("pagination", {
+                          attrs: { data: _vm.kompetensi, align: "center" },
+                          on: { "pagination-change-page": _vm.searchKompetensi }
+                        })
+                  ],
+                  1
+                )
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "modal fade",
+              attrs: { id: "previewBukti", tabindex: "-1", role: "dialog" }
+            },
+            [
+              _c(
+                "div",
+                {
+                  staticClass: "modal-dialog modal-dialog-centered",
+                  attrs: { role: "document" }
+                },
+                [
+                  _vm.kompetensiSelect.bukti_wajib != null
+                    ? _c("div", { staticClass: "modal-body" }, [
+                        _vm.kompetensiSelect.bukti_wajib.split(".")[1] == "pdf"
+                          ? _c("div", { staticClass: "modal-content" }, [
+                              _c("embed", {
+                                attrs: {
+                                  src:
+                                    "storage/data/kompetensi/pdf/" +
+                                    _vm.kompetensiSelect.bukti_wajib,
+                                  width: "100%",
+                                  height: "600",
+                                  type: "application/pdf"
+                                }
+                              })
+                            ])
+                          : _vm.kompetensiSelect.bukti_wajib.split(".")[1] ==
+                              "jpg" ||
+                            _vm.kompetensiSelect.bukti_wajib.split(".")[1] ==
+                              "jpeg" ||
+                            _vm.kompetensiSelect.bukti_wajib.split(".")[1] ==
+                              "png"
+                          ? _c("img", {
+                              attrs: {
+                                src:
+                                  "storage/data/kompetensi/img/" +
+                                  _vm.kompetensiSelect.bukti_wajib
+                              }
+                            })
+                          : _vm._e()
+                      ])
+                    : _vm._e()
+                ]
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "modal",
+              attrs: { id: "pesanKompetensi", tabindex: "-1", role: "dialog" }
+            },
+            [
+              _c(
+                "div",
+                {
+                  staticClass: "modal-dialog modal-dialog-centered",
+                  attrs: { role: "document" }
+                },
+                [
+                  _c("div", { staticClass: "modal-content" }, [
+                    _vm._m(2),
+                    _vm._v(" "),
+                    _c(
+                      "form",
+                      {
+                        on: {
+                          submit: function($event) {
+                            $event.preventDefault()
+                            return _vm.createPesan($event)
+                          }
+                        }
+                      },
+                      [
+                        _c("div", { staticClass: "modal-body" }, [
+                          _c("div", { staticClass: "card" }, [
+                            _c(
+                              "div",
+                              { staticClass: "card-body p-0" },
+                              [
+                                _c("textarea", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.form.pesan,
+                                      expression: "form.pesan"
+                                    }
+                                  ],
+                                  staticClass: "form-control",
+                                  class: {
+                                    "is-invalid": _vm.form.errors.has("pesan")
+                                  },
+                                  attrs: {
+                                    name: "pesan",
+                                    placeholder: "Masukan Alasan Ditolak",
+                                    id: "inputPesan",
+                                    required: ""
+                                  },
+                                  domProps: { value: _vm.form.pesan },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        _vm.form,
+                                        "pesan",
+                                        $event.target.value
+                                      )
+                                    }
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c("has-error", {
+                                  attrs: { form: _vm.form, field: "pesan" }
+                                })
+                              ],
+                              1
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _vm._m(3)
+                      ]
+                    )
+                  ])
+                ]
+              )
+            ]
+          )
+        ])
+      : _c("div", { staticClass: "row" }, [_c("not-found")], 1)
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "a",
+      {
+        staticClass: "btn btn-white",
+        attrs: { href: "javascript:history.go(-1)" }
+      },
+      [_c("i", { staticClass: "fas fa-arrow-left" })]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [
+      _c("th", [_vm._v("No")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Nama Kompetensi")]),
+      _vm._v(" "),
+      _c("th", { staticClass: "text-center", attrs: { width: "10%" } }, [
+        _vm._v("Bukti")
+      ]),
+      _vm._v(" "),
+      _c("th", { staticClass: "text-center", attrs: { width: "10%" } }, [
+        _vm._v("Validasi")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header bg-primary" }, [
+      _c("h5", { staticClass: "modal-title" }, [
+        _c("i", { staticClass: "fas fa-message mr-1" }),
+        _vm._v(
+          "\n                            Alasan Ditolak\n                        "
+        )
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c(
+        "button",
+        { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+        [_vm._v("Simpan")]
       )
     ])
   }
@@ -75200,7 +76045,7 @@ var render = function() {
                               "data-toggle": "tab"
                             }
                           },
-                          [_vm._v("Kompetensi")]
+                          [_vm._v("Kompetensi Tambahan")]
                         )
                       ]
                     ),
@@ -76257,17 +77102,282 @@ var render = function() {
                             _vm._v(" "),
                             _vm.status == "progress"
                               ? _c("div", [
-                                  _c(
-                                    "h3",
-                                    { staticClass: "text-center text-grey" },
-                                    [_vm._v("Your submission success")]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "h3",
-                                    { staticClass: "text-center text-grey" },
-                                    [_vm._v("it will be validation by kaprodi")]
-                                  )
+                                  _vm.kompetensiReject.data != "" ||
+                                  _vm.kompetensiWajibReject != ""
+                                    ? _c(
+                                        "div",
+                                        [
+                                          _c(
+                                            "h6",
+                                            {
+                                              staticClass:
+                                                "text-center text-grey"
+                                            },
+                                            [
+                                              _vm._v(
+                                                "Ada kompetensi yang tidak sesuai sebagai berikut :"
+                                              )
+                                            ]
+                                          ),
+                                          _vm._v(" "),
+                                          _vm.kompetensiWajibReject.data != ""
+                                            ? _c(
+                                                "table",
+                                                {
+                                                  staticClass:
+                                                    "table table-condensed"
+                                                },
+                                                [
+                                                  _c(
+                                                    "tbody",
+                                                    [
+                                                      _c("tr", [
+                                                        _c(
+                                                          "th",
+                                                          {
+                                                            staticStyle: {
+                                                              width: "10px"
+                                                            }
+                                                          },
+                                                          [_vm._v("#")]
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                          "th",
+                                                          {
+                                                            attrs: {
+                                                              width: "30%"
+                                                            }
+                                                          },
+                                                          [
+                                                            _vm._v(
+                                                              "Nama Kompetensi"
+                                                            )
+                                                          ]
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                          "th",
+                                                          {
+                                                            attrs: {
+                                                              width: "60%"
+                                                            }
+                                                          },
+                                                          [
+                                                            _vm._v(
+                                                              "Alasan Ditolak"
+                                                            )
+                                                          ]
+                                                        )
+                                                      ]),
+                                                      _vm._v(" "),
+                                                      _vm._l(
+                                                        _vm
+                                                          .kompetensiWajibReject
+                                                          .data,
+                                                        function(data, index) {
+                                                          return _c(
+                                                            "tr",
+                                                            { key: index },
+                                                            [
+                                                              _c("td", [
+                                                                _vm._v(
+                                                                  _vm._s(
+                                                                    _vm
+                                                                      .kompetensiWajibReject
+                                                                      .meta
+                                                                      .from +
+                                                                      index
+                                                                  )
+                                                                )
+                                                              ]),
+                                                              _vm._v(" "),
+                                                              _c("td", [
+                                                                _vm._v(
+                                                                  _vm._s(
+                                                                    data.nama_kompetensi_wajib
+                                                                  )
+                                                                )
+                                                              ]),
+                                                              _vm._v(" "),
+                                                              _c("td", [
+                                                                _vm._v(
+                                                                  _vm._s(
+                                                                    data.pesan
+                                                                  )
+                                                                )
+                                                              ])
+                                                            ]
+                                                          )
+                                                        }
+                                                      )
+                                                    ],
+                                                    2
+                                                  )
+                                                ]
+                                              )
+                                            : _vm._e(),
+                                          _vm._v(" "),
+                                          _c("pagination", {
+                                            attrs: {
+                                              data: _vm.kompetensiWajibReject,
+                                              align: "center"
+                                            },
+                                            on: {
+                                              "pagination-change-page":
+                                                _vm.getKompetensiWajibReject
+                                            }
+                                          }),
+                                          _vm._v(" "),
+                                          _vm.kompetensiReject.data != ""
+                                            ? _c(
+                                                "table",
+                                                {
+                                                  staticClass:
+                                                    "table table-condensed"
+                                                },
+                                                [
+                                                  _c(
+                                                    "tbody",
+                                                    [
+                                                      _c("tr", [
+                                                        _c(
+                                                          "th",
+                                                          {
+                                                            attrs: {
+                                                              width: "5%"
+                                                            }
+                                                          },
+                                                          [_vm._v("#")]
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                          "th",
+                                                          {
+                                                            attrs: {
+                                                              width: "25%"
+                                                            }
+                                                          },
+                                                          [
+                                                            _vm._v(
+                                                              "Nama Kompetensi"
+                                                            )
+                                                          ]
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                          "th",
+                                                          {
+                                                            attrs: {
+                                                              width: "20%"
+                                                            }
+                                                          },
+                                                          [_vm._v("Tanggal")]
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                          "th",
+                                                          {
+                                                            attrs: {
+                                                              width: "50%"
+                                                            }
+                                                          },
+                                                          [
+                                                            _vm._v(
+                                                              "Alasan Ditolak"
+                                                            )
+                                                          ]
+                                                        )
+                                                      ]),
+                                                      _vm._v(" "),
+                                                      _vm._l(
+                                                        _vm.kompetensiReject
+                                                          .data,
+                                                        function(data, index) {
+                                                          return _c(
+                                                            "tr",
+                                                            { key: index },
+                                                            [
+                                                              _c("td", [
+                                                                _vm._v(
+                                                                  _vm._s(
+                                                                    _vm
+                                                                      .kompetensiReject
+                                                                      .meta
+                                                                      .from +
+                                                                      index
+                                                                  )
+                                                                )
+                                                              ]),
+                                                              _vm._v(" "),
+                                                              _c("td", [
+                                                                _vm._v(
+                                                                  _vm._s(
+                                                                    data.nama_kompetensi
+                                                                  )
+                                                                )
+                                                              ]),
+                                                              _vm._v(" "),
+                                                              _c("td", [
+                                                                _vm._v(
+                                                                  _vm._s(
+                                                                    data.tgl_mulai
+                                                                  )
+                                                                )
+                                                              ]),
+                                                              _vm._v(" "),
+                                                              _c("td", [
+                                                                _vm._v(
+                                                                  _vm._s(
+                                                                    data.pesan
+                                                                  )
+                                                                )
+                                                              ])
+                                                            ]
+                                                          )
+                                                        }
+                                                      )
+                                                    ],
+                                                    2
+                                                  )
+                                                ]
+                                              )
+                                            : _vm._e(),
+                                          _vm._v(" "),
+                                          _c("pagination", {
+                                            attrs: {
+                                              data: _vm.kompetensiReject,
+                                              align: "center"
+                                            },
+                                            on: {
+                                              "pagination-change-page":
+                                                _vm.getKompetensiReject
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      )
+                                    : _c("div", [
+                                        _c(
+                                          "h3",
+                                          {
+                                            staticClass: "text-center text-grey"
+                                          },
+                                          [_vm._v("Your submission success")]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "h3",
+                                          {
+                                            staticClass: "text-center text-grey"
+                                          },
+                                          [
+                                            _vm._v(
+                                              "it will be validation by kaprodi"
+                                            )
+                                          ]
+                                        )
+                                      ])
                                 ])
                               : _vm._e(),
                             _vm._v(" "),
@@ -76278,15 +77388,11 @@ var render = function() {
                                     { staticClass: "text-center text-grey" },
                                     [
                                       _vm._v(
-                                        "Dokumen SKPI Anda telah diterbitkan"
-                                      )
+                                        "Dokumen SKPI Anda telah diterbitkan "
+                                      ),
+                                      _c("br"),
+                                      _vm._v("silakan periksa ke akademik")
                                     ]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "h3",
-                                    { staticClass: "text-center text-grey" },
-                                    [_vm._v("silakan periksa ke akademik")]
                                   )
                                 ])
                               : _vm._e(),
@@ -79098,11 +80204,11 @@ var render = function() {
                   "h3",
                   { staticClass: "text-center text-grey" },
                   [
-                    _vm._v("Please Check "),
+                    _vm._v("Mohon cek data "),
                     _c("router-link", { attrs: { to: "/mahasiswa-profile" } }, [
-                      _vm._v("Mahasiswa Profile")
+                      _vm._v("Mahasiswa")
                     ]),
-                    _vm._v(" and Fill"),
+                    _vm._v(" dan unggah "),
                     _c("router-link", { attrs: { to: "/kompetensi" } }, [
                       _vm._v("Kompetensi")
                     ])
@@ -95090,6 +96196,11 @@ var routes = [{
   props: true,
   component: __webpack_require__(/*! ./components/backoffice/Skpi/SkpiKompetensi */ "./resources/js/components/backoffice/Skpi/SkpiKompetensi.vue")["default"]
 }, {
+  path: '/skpi-kompetensi-wajib',
+  name: 'skpi-kompetensi-wajib',
+  props: true,
+  component: __webpack_require__(/*! ./components/backoffice/Skpi/SkpiKompetensiWajib */ "./resources/js/components/backoffice/Skpi/SkpiKompetensiWajib.vue")["default"]
+}, {
   path: '/mahasiswa-achievement',
   component: __webpack_require__(/*! ./components/backoffice/Mahasiswa/MahasiswaAchievement */ "./resources/js/components/backoffice/Mahasiswa/MahasiswaAchievement.vue")["default"]
 }, {
@@ -96057,6 +97168,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SkpiKompetensi_vue_vue_type_template_id_25406ac3___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SkpiKompetensi_vue_vue_type_template_id_25406ac3___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/backoffice/Skpi/SkpiKompetensiWajib.vue":
+/*!*************************************************************************!*\
+  !*** ./resources/js/components/backoffice/Skpi/SkpiKompetensiWajib.vue ***!
+  \*************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _SkpiKompetensiWajib_vue_vue_type_template_id_511a78a6___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SkpiKompetensiWajib.vue?vue&type=template&id=511a78a6& */ "./resources/js/components/backoffice/Skpi/SkpiKompetensiWajib.vue?vue&type=template&id=511a78a6&");
+/* harmony import */ var _SkpiKompetensiWajib_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SkpiKompetensiWajib.vue?vue&type=script&lang=js& */ "./resources/js/components/backoffice/Skpi/SkpiKompetensiWajib.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _SkpiKompetensiWajib_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _SkpiKompetensiWajib_vue_vue_type_template_id_511a78a6___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _SkpiKompetensiWajib_vue_vue_type_template_id_511a78a6___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/backoffice/Skpi/SkpiKompetensiWajib.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/backoffice/Skpi/SkpiKompetensiWajib.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************************!*\
+  !*** ./resources/js/components/backoffice/Skpi/SkpiKompetensiWajib.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SkpiKompetensiWajib_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./SkpiKompetensiWajib.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/backoffice/Skpi/SkpiKompetensiWajib.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SkpiKompetensiWajib_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/backoffice/Skpi/SkpiKompetensiWajib.vue?vue&type=template&id=511a78a6&":
+/*!********************************************************************************************************!*\
+  !*** ./resources/js/components/backoffice/Skpi/SkpiKompetensiWajib.vue?vue&type=template&id=511a78a6& ***!
+  \********************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SkpiKompetensiWajib_vue_vue_type_template_id_511a78a6___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./SkpiKompetensiWajib.vue?vue&type=template&id=511a78a6& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/backoffice/Skpi/SkpiKompetensiWajib.vue?vue&type=template&id=511a78a6&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SkpiKompetensiWajib_vue_vue_type_template_id_511a78a6___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SkpiKompetensiWajib_vue_vue_type_template_id_511a78a6___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

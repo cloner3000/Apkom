@@ -15,30 +15,16 @@
                             <tbody><tr>
                                 <th>No</th>
                                 <th>Nama Kompetensi</th>
-                                <th>Bidang</th>
-                                <th>Tanggal Kegiatan</th>
-                                <th>Tingkat</th>
-                                <th>Peran</th>
-                                <th>Poin</th>
-                                <th>Kemampuan</th>
-                                <th>Bukti</th>
-                                <th>Validasi</th>
+                                <th width="10%" class="text-center">Bukti</th>
+                                <th width="10%" class="text-center">Validasi</th>
                                 </tr>
                                 <tr v-for="(data, index) in kompetensi.data" :key="index">
                                 <td class="align-middle">{{kompetensi.meta.from+index}}</td>
-                                <td class="align-middle">{{data.nama_kompetensi}}</td>
-                                <td class="align-middle">{{data.bidang_kompetensi.nama_bidang}}</td>
-                                <td class="align-middle">{{data.tgl_mulai}} - {{data.tgl_selesai}}</td>
-                                <td class="align-middle">{{data.tingkat}}</td>
-                                <td class="align-middle">{{data.peran}}</td>
-                                <td class="align-middle">{{data.point_kompetensi}}</td>
-                                <td class="text-center align-middle">
-                                    <button class="btn btn-link" @click="previewKemampuan(data.kemampuan)"><i  class="fas fa-external-link-alt"></i></button>
-                                </td>
-                                <td class="text-center align-middle">
+                                <td class="align-middle">{{data.nama_kompetensi_wajib}}</td>
+                                <td width="10%" class="text-center align-middle">
                                     <button class="btn btn-link"  @click="previewBukti(data)"><i  class="text-grey fas fa-eye"></i></button>
                                 </td>
-                                <td class="text-center align-middle">
+                                <td width="10%" class="text-center align-middle">
                                     <label class="checkwrap">
                                       <input type="checkbox" :checked="data.active == 1" v-on:change="changeValidation(data)" v-bind:disabled="$route.params.status != 'progress' || !$gate.isKaprodi()" hidden>
                                         <span v-if="$route.params.status == 'progress' && $gate.isKaprodi()" class="checkmark"></span>
@@ -56,43 +42,13 @@
                 </div>
                 </div>
             </div>
-            <div id="previewKemampuan" class="modal" tabindex="-1" role="dialog">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header bg-primary">
-                            <h5 class="modal-title">
-                                <i class="fas fa-user-graduate mr-1"></i>
-                                Kemampuan
-                            </h5>
-                            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="card">
-                                <div class="card-body p-0">
-                                    <ul class="nav nav-pills flex-column">
-                                        <li v-for="(data, index) in kompetensiSelect" :key="index" class="nav-item">
-                                            <span class="nav-link">{{data.nama_kemampuan}}</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Tutup</button>
-                        </div>
-                        
-                    </div>
-                </div>
-            </div>
             <div id="previewBukti" class="modal fade" tabindex="-1" role="dialog">
                 <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div v-if="kompetensiSelect.bukti != null" class="modal-body">
-                        <div v-if="kompetensiSelect.bukti.split('.')[1] == 'pdf'" class="modal-content">
-                        <embed  :src="'storage/data/kompetensi/pdf/'+kompetensiSelect.bukti" width="100%" height="600" type="application/pdf">
+                    <div v-if="kompetensiSelect.bukti_wajib != null" class="modal-body">
+                        <div v-if="kompetensiSelect.bukti_wajib.split('.')[1] == 'pdf'" class="modal-content">
+                        <embed  :src="'storage/data/kompetensi/pdf/'+kompetensiSelect.bukti_wajib" width="100%" height="600" type="application/pdf">
                         </div>
-                        <img v-else-if="kompetensiSelect.bukti.split('.')[1] == 'jpg' || kompetensiSelect.bukti.split('.')[1] == 'jpeg' || kompetensiSelect.bukti.split('.')[1] == 'png'" :src="'storage/data/kompetensi/img/'+kompetensiSelect.bukti">  
+                        <img v-else-if="kompetensiSelect.bukti_wajib.split('.')[1] == 'jpg' || kompetensiSelect.bukti_wajib.split('.')[1] == 'jpeg' || kompetensiSelect.bukti_wajib.split('.')[1] == 'png'" :src="'storage/data/kompetensi/img/'+kompetensiSelect.bukti_wajib">  
                     </div>
                 </div>  
             </div>  
@@ -145,7 +101,7 @@ export default {
     methods:{
         getKompetensi(page = 1){
             this.$Progress.start();
-            axios.get('api/kompetensi/skpi/'+ this.$route.params.id + '?page=' + page)
+            axios.get('api/bukti-kompetensi-wajib/skpi/'+ this.$route.params.id + '?page=' + page)
             .then( response => {
                 this.kompetensi = response.data;
                 this.$Progress.finish();
@@ -154,14 +110,14 @@ export default {
                 this.$Progress.fail();
                 toast.fire({
                     type: 'error',
-                    title: 'Load data kompetensi failed'
+                    title: 'Load data kompetensi wajib failed'
                 });
             });
         },
         changeValidation(data){
             if(this.$gate.isKaprodi()){
                 this.$Progress.start();
-                axios.put('api/kompetensi/skpi/validation/'+ data.id)
+                axios.put('api/bukti-kompetensi-wajib/skpi/validation/'+ data.id)
                 .then( (response) => {
                     this.$Progress.finish();
                     if(response.data != 1){
@@ -173,7 +129,7 @@ export default {
                     this.$Progress.fail();
                     toast.fire({
                         type: 'error',
-                        title: 'Unvalidation kompetensi failed'
+                        title: 'Unvalidation kompetensi wajib failed'
                     });
                 });
             }    
@@ -183,7 +139,7 @@ export default {
             if(this.$root.search != ''){
                 this.$Progress.start();
                 this.searching= true;
-                axios.get('api/kompetensi/skpi/'+ this.$route.params.id +'/find?q=' + query + '&page='+ page)
+                axios.get('api/bukti-kompetensi-wajib/skpi/'+ this.$route.params.id +'/find?q=' + query + '&page='+ page)
                 .then((response) => {
                     this.kompetensi = response.data
                     this.$Progress.finish();
@@ -196,17 +152,13 @@ export default {
                 cusEvent.$emit('ReloadData');
             }
         },
-        previewKemampuan(data){
-            this.kompetensiSelect = data;
-            $('#previewKemampuan').modal('show');
-        },
         previewBukti(data){
             this.kompetensiSelect = data;
             $('#previewBukti').modal('show');
         },
         createPesan(){   
             this.$Progress.start();     
-            this.form.put('api/kompetensi/pesan')
+            this.form.put('api/bukti-kompetensi-wajib/pesan')
             .then(() =>{
                 $('#pesanKompetensi').modal('hide');
                 toast.fire({

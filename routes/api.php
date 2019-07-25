@@ -50,12 +50,20 @@ Route::get('mahasiswa/achievement', 'API\MahasiswaController@achievement');
 //Kompetensi Route Custom
 Route::get('kompetensi/export', 'API\KompetensiController@export');
 Route::get('kompetensi/find', 'API\KompetensiController@search');
+Route::put('kompetensi/pesan', 'API\KompetensiController@savePesan');
+Route::get('kompetensi/reject', 'API\KompetensiController@getDataReject');
 Route::put('kompetensi/skpi/validation/{id}', 'API\KompetensiController@changeValidation');
 Route::get('kompetensi/skpi/{id}', 'API\KompetensiController@skpiKompetensi');
 Route::get('kompetensi/skpi/{id}/find', 'API\KompetensiController@skpiSearchKompetensi');
 
+
 //Bukti Kompetensi Wajib Route Custom
 Route::get('bukti-kompetensi-wajib/find', 'API\BuktiKompetensiWajibController@search');
+Route::put('bukti-kompetensi-wajib/pesan', 'API\BuktiKompetensiWajibController@savePesan');
+Route::get('bukti-kompetensi-wajib/reject', 'API\BuktiKompetensiWajibController@getDataReject');
+Route::put('bukti-kompetensi-wajib/skpi/validation/{id}', 'API\BuktiKompetensiWajibController@changeValidation');
+Route::get('bukti-kompetensi-wajib/skpi/{id}', 'API\BuktiKompetensiWajibController@skpiBuktiKompetensiWajib');
+Route::get('bukti-kompetensi-wajib/skpi/{id}/find', 'API\BuktiKompetensiController@skpiSearchBuktiKompetensiWajib');
 
 //Skpi Route Custom
 Route::get('skpi/export', 'API\SkpiController@export');

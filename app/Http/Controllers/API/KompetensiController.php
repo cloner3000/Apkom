@@ -123,4 +123,16 @@ class KompetensiController extends Controller
         $kompetensi = $this->kompetensi->changeValidation($id);
         return $kompetensi;
     }
+
+    public function savePesan(Request $request){
+        $this->authorize('isKaprodi');
+        $kompetensi = $this->kompetensi->savePesan($request);
+        return $kompetensi;
+    }
+
+    public function getDataReject(){
+        $this->authorize('isMahasiswa');
+        $kompetensi = $this->kompetensi->getDataReject();
+        return $kompetensi;
+    }
 }

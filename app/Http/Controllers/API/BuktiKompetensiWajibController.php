@@ -82,4 +82,38 @@ class BuktiKompetensiWajibController extends Controller
         return $buktiKompetensiWajib;
 
     }
+ 
+    public function skpiBuktiKompetensiWajib($id){
+        $this->authorize('isAdmin');
+        $buktiKompetensiWajib = $this->buktiKompetensiWajib->getData($id);
+        return $buktiKompetensiWajib;
+    }
+
+    public function skpiSearchBuktiKompetensiWajib(Request $request, $id){
+        $this->authorize('isAdmin');
+        if ($search = $request->q) {
+            $buktiKompetensiWajib = $this->buktiKompetensiWajib->searchData($request->q, $id);
+        }else{
+            $buktiKompetensiWajib = $this->buktiKompetensiWajib->getData($id);
+        }
+        return $buktiKompetensiWajib;
+    }
+
+    public function changeValidation($id){
+        $this->authorize('isKaprodi');
+        $buktiKompetensiWajib = $this->buktiKompetensiWajib->changeValidation($id);
+        return $buktiKompetensiWajib;
+    }
+
+    public function savePesan(Request $request){
+        $this->authorize('isKaprodi');
+        $buktiKompetensiWajib = $this->buktiKompetensiWajib->savePesan($request);
+        return $buktiKompetensiWajib;
+    }
+
+    public function getDataReject(){
+        $this->authorize('isMahasiswa');
+        $buktiKompetensiWajib = $this->buktiKompetensiWajib->getDataReject();
+        return $buktiKompetensiWajib;
+    }
 }

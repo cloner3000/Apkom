@@ -41,6 +41,13 @@ class Kompetensi extends Model
         return KompetensiResource::collection($kompetensi);
     }
 
+    public function getDataReject(){
+        $kompetensi = self::where('id_mahasiswa', auth('api')->user()
+        ->mahasiswa()->id)->where('active', 0)
+        ->paginate(8);
+        return KompetensiResource::collection($kompetensi);
+    }
+
     public function searchData($search, $id = false){
         if($id){
             $id_mahasiswa = $id;
@@ -125,9 +132,10 @@ class Kompetensi extends Model
             $kompetensi->active = 0;
         }else{
             $kompetensi->active = 1;
+            $kompetensi->pesan = '';
         }
         if($kompetensi->save()){
-            return ['message' => 'Change Validation Successfull'];
+            return $kompetensi->active;
         }else{
             return ['message' => 'Change Validation Failed'];
         }
@@ -254,6 +262,16 @@ class Kompetensi extends Model
                 
             }
             return $fileName;   
+        }
+    }
+
+    public function savePesan($request){
+        $kompetensi = self::find($request->id);
+        $kompetensi->pesan = $request->pesan;
+        if($kompetensi->save()){
+            return ['message' => 'Save pesan Successfull'];
+        }else{
+            return ['message' => 'Save pesan Failed'];
         }
     }
 

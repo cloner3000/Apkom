@@ -22,6 +22,7 @@
                                 <th class="text-center">Status</th>
                                 <th class="text-center">Pratinjau</th>
                                 <th v-if="!$gate.isAkademik()">Kompetensi</th>
+                                <th class="text-center" width="10%" v-if="!$gate.isAkademik()">Kompetensi Wajib</th>
                                 <th v-if="$gate.isWarek()">Aksi</th>
                             </tr>
                             <tr v-for="(data, index) in skpi.data" :key="index">
@@ -52,6 +53,11 @@
                                 </td>
                                 <td v-if="!$gate.isAkademik()" class="text-center align-middle">
                                   <router-link :to="{name:'skpi-kompetensi', params:{ id:data.id_mahasiswa, nama:data.nama, status:data.status}}" class="btn btn-link btn-lg">
+                                    <i class="fas fa-sign-in-alt text-teal"></i>
+                                  </router-link>
+                                </td>
+                                <td v-if="!$gate.isAkademik()" class="text-center align-middle">
+                                  <router-link :to="{name:'skpi-kompetensi-wajib', params:{ id:data.id_mahasiswa, nama:data.nama, status:data.status}}" class="btn btn-link btn-lg">
                                     <i class="fas fa-sign-in-alt text-teal"></i>
                                   </router-link>
                                 </td>
