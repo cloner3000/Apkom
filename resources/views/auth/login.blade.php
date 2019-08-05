@@ -31,14 +31,14 @@
               @endif
             </div>
             <div class="row">
-                <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                <button type="submit" class="btn btn-primary btn-block">Masuk</button>
             </div>
             <div class="row">
               <div class="col">
                 <div class="form-check mt-2">
                   <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
                   <label class="form-check-label" for="remember">
-                    {{ __('Remember') }}
+                    Ingat saya
                   </label>
               </div>
               </div>

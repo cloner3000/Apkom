@@ -12,23 +12,23 @@
           <div class="row mb-4">
             <div class="col-md-6">
               <div class="container text-center">
-                <h5>Scan QR Code here</h5>
+                <h5>Scan Kode QR disini</h5>
                 <div class="bg-light p-3">
-                    <button id="scan" class="btn btn-outline-success mt-5 mb-5">Scann Now</button>
+                    <button id="scan" class="btn btn-outline-success mt-5 mb-5">Scan Sekarang</button>
                     <video id="preview" class="qr-validation hide"></video>
                 </div>
               </div>
             </div>
             <div class="col-md-6">
               <div class="container">
-                  <h5 class="text-center">SKPI Information</h5>
+                  <h5 class="text-center">Informasi SKPI</h5>
                   <div id="information" class="bg-light p-3">
                     <div>
-                      Name :<br>
+                      Nama :<br>
                       ---------------<br>
-                      Number of Certificate :<br>
+                      No Ijazah :<br>
                       ---------------<br>
-                      Grade Point Average :<br>
+                      Indeks Prestasi Kumulatif :<br>
                       ---------------<br>
                     </div>
                   </div>
@@ -69,7 +69,7 @@ $(document).ready(() => {
                 '</strong><br> Grade Average Point :<br><strong>'+response.data.ipk+'</strong></div>'
               );
             }else{
-              $('#information').append('<h2 class="text-center mt-4"><i class="fas fa-window-close text-danger"></i></h2><h5 class="text-center mb-5">SKPI not Verified</h5>');
+              $('#information').append('<h2 class="text-center mt-4"><i class="fas fa-window-close text-danger"></i></h2><h5 class="text-center mb-5">SKPI tidak terverifikasi</h5>');
             }
           }
         });

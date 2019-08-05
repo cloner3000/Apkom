@@ -5,9 +5,11 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Manage Mahasiswa</h3>
+                <h3 class="card-title">Pengelolaan Mahasiswa</h3>
                 <div class="card-tools">
-                  <button class="btn btn-primary" @click="newModal"><i class="fas fa-plus-square"></i> Add New</button>
+                  <input id="openFile" type="file" v-on:input="importMahasiswa" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" style="display:none;">
+                  <button class="btn btn-success" @click="openFile"><i class="fas fa-table"></i> Impor Excel</button>
+                  <button class="btn btn-primary" @click="newModal"><i class="fas fa-plus-square"></i> Tambah Baru</button>
                   <button @click="exportMahasiswa('Mahasiswa.pdf')" class="btn btn-danger"><i class="fas fa-file-pdf"></i></button>
                   <button @click="exportMahasiswa('Mahasiswa.xlsx')" class="btn btn-success"><i class="fas fa-file-excel"></i></button>
                 </div>
@@ -22,8 +24,8 @@
                     <th>Jurusan</th>
                     <th>No Ijazah</th>
                     <th>Ipk</th>
-                    <th width="10%" class="text-center">Total Point</th>
-                    <th width="15%" class="text-center">Action</th>
+                    <th width="10%" class="text-center">Total Poin</th>
+                    <th width="15%" class="text-center">Aksi</th>
                   </tr>
                   <tr v-for="(data, index) in mahasiswa.data" :key="index">
                     <td>{{mahasiswa.meta.from+index}}</td>
@@ -54,7 +56,7 @@
           <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 v-show="!editMode" class="modal-title">Add New Mahasiswa</h5>
+                        <h5 v-show="!editMode" class="modal-title">Tambah Mahasiswa Baru</h5>
                         <h5 v-show="editMode" class="modal-title">Edit Mahasiswa</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -143,9 +145,9 @@
                         </div> 
                     </div>
                     <div class="modal-footer">
-                      <button v-show="!editMode" type="submit" class="btn btn-primary">Add</button>
-                      <button v-show="editMode" type="submit" class="btn btn-success">Save</button>
-                      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                      <button v-show="!editMode" type="submit" class="btn btn-primary">Tambah</button>
+                      <button v-show="editMode" type="submit" class="btn btn-success">Simpan</button>
+                      <button type="button" class="btn btn-danger" data-dismiss="modal">Tutup</button>
                     </div>
                     </form>
                 </div>
@@ -157,7 +159,7 @@
                     <div class="modal-header bg-primary">
                         <h5 class="modal-title">
                             <i class="fas fa-user-graduate mr-1"></i>
-                             Mahasiswa Detail
+                             Detail Mahasiswa
                         </h5>
                         <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -278,6 +280,9 @@
             $('#modalDetail').modal('show');
             this.form.fill(mahasiswa)
           },
+          openFile(){
+            $("#openFile").click();
+          },
           getJurusan(){
               if(this.$gate.isWarek()){
                   this.$Progress.start();
@@ -323,7 +328,7 @@
                 $('#modalForm').modal('hide');
                 toast.fire({
                   type: 'success',
-                  title: 'Mahasiswa created successfully'
+                  title: 'Berhasil menambahkan data mahasiswa'
                 });
                 this.$Progress.finish();
               })
@@ -331,14 +336,14 @@
                 this.$Progress.fail();
                 toast.fire({
                   type: 'error',
-                  title: 'Mahasiswa create failed'
+                  title: 'Gagal menambahkan data mahasiswa'
                 });
               });
             }).catch(() => {
               this.$Progress.fail();
               toast.fire({
                 type: 'error',
-                title: 'Mahasiswa create failed'
+                title: 'Gagal menambah data mahasiswa'
               });
             })
           },
@@ -363,21 +368,21 @@
           },
           deleteMahasiswa(id){
             swal.fire({
-              title: 'Are you sure?',
-              text: "You won't be able to revert this!",
+              title: 'Anda yakin ?',
+              text: "Anda tidak akan dapat mengembalikan ini!",
               type: 'warning',
               showCancelButton: true,
               confirmButtonColor: '#3085d6',
               cancelButtonColor: '#d33',
-              confirmButtonText: 'Yes, delete it!'
+              confirmButtonText: 'Ya, hapus!'
             }).then((result) => {
               if (result.value){
                 this.form.delete('api/mahasiswa/'+id)
                 .then(() => {
                   this.$Progress.start();
                   swal.fire(
-                    'Deleted!',
-                    'Mahasiswa has been deleted.',
+                    'Terhapus!',
+                    'Mahasiswa telah dihapus',
                     'success'
                   );
                   cusEvent.$emit('ReloadData');
@@ -388,11 +393,44 @@
                   swal.fire({
                     type: 'error',
                     title: 'Oops...',
-                    text: 'Mahasiswa delete failed'
+                    text: 'Gagal menghapus mahasiswa'
                   });
                 });
               }
             });
+          },
+          importMahasiswa(e){
+            let file = e.target.files[0];
+            let nama = file['name'];
+            let validFileTypes = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'];
+            if(validFileTypes.includes(file['type'])){
+              this.$Progress.start();
+              let data = new FormData();
+              data.append('file', file);
+              data.append('name', nama);
+               axios.post('api/mahasiswa/import', data)
+              .then((response) => {
+                cusEvent.$emit('ReloadData');
+                toast.fire({
+                  type: 'success',
+                  title: 'Berhasil mengimpor data mahasiswa'
+                });
+                this.$Progress.finish();
+              }).catch(() => {
+                toast.fire({
+                  type: 'error',
+                  title: 'Gagal mengimpor data mahasiswa'
+                });
+                this.$Progress.fail();
+              })
+            }else{
+              e.target.value = ''
+              swal.fire({
+                type: 'error',
+                title: 'Oops...',
+                text: 'File yang diunggah harus excel'
+              });
+            }
           },
           exportMahasiswa(fileType){
             this.$Progress.start();

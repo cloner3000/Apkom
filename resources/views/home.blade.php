@@ -72,7 +72,7 @@
               <router-link to="/dashboard" active-class="active" class="nav-link" exact>
                 <i class="nav-icon fas fa-tachometer-alt text-belizehole"></i>
                 <p>
-                  Dasbor
+                  Beranda
                 </p>
               </router-link>
             </li>

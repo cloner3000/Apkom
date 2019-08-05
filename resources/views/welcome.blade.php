@@ -10,15 +10,15 @@
               <div class="col-md-12">
                 <div class="row">
                   <div class="col-md-6">
-                  <a class="btn btn-outline-primary btn-block" href="{{ route('login') }}">Login</a>
+                  <a class="btn btn-outline-primary btn-block" href="{{ route('login') }}">Masuk</a>
                   </div>
                   <div class="col-md-6">
-                  <a class="btn btn-outline-primary btn-block" href="{{ route('register') }}">Register</a>
+                  <a class="btn btn-outline-primary btn-block" href="{{ route('register') }}">Informasi</a>
                   </div>
                 </div>
                 <div class="row mt-3">
                   <div class="col-md-12">
-                  <a class="btn btn-outline-success btn-block" href="{{ route('check-authenticity') }}">Check Authenticity </a>
+                  <a class="btn btn-outline-success btn-block" href="{{ route('check-authenticity') }}">Cek Keaslian SKPI </a>
                   </div>
                 </div>
               </div>

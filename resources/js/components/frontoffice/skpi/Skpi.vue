@@ -3,7 +3,7 @@
         <div v-if="this.$gate.isMahasiswa()" class="row justify-content-center">
             <div v-if="status != 'unregister' && status != 'uncompleted'" class="col-md-8 mt-5">
                 <div class="card">
-                    <form-wizard @on-complete="onComplete" :hide-buttons="status != 'null' ? true : false"  ref="wizard" title="PENGAJUAN SKPI" subtitle="Silakan pratinjau pengiriman data Anda"   finishButtonText="Submit" color="#3490DC">
+                    <form-wizard @on-complete="onComplete" :hide-buttons="status != 'null' ? true : false"  ref="wizard" title="PENGAJUAN SKPI" subtitle="Silakan pratinjau pengiriman data Anda"   finishButtonText="Selesai" nextButtonText="Selanjutnya" backButtonText="Kembali" color="#3490DC">
                         <tab-content title="Profil Mahasiswa" icon="fas fa-user">
                             <div class="card-body">
                                 <div class="form-group">
@@ -99,13 +99,13 @@
                             </table>
                             <pagination :data="kompetensiWajib" align="center" @pagination-change-page="getKompetensiWajib"></pagination>
                         </tab-content>
-                        <tab-content title="Submit" icon="fas fa-check">
+                        <tab-content title="Mengajukan" icon="fas fa-check">
                             <div v-if="status == 'null'">    
-                                <h3  class="text-center text-grey">Submit your submission</h3>
-                                <h3  class="text-center text-grey">Your submission will be sent to kaprodi</h3>
+                                <h3  class="text-center text-grey">Selesaikan pengajuan dokumen SKPI</h3>
+                                <h3  class="text-center text-grey">agar dapat diproses oleh kaprodi</h3>
                             </div>        
                             <div v-if="status == 'progress'">
-                                 <div v-if="kompetensiReject.data != '' || kompetensiWajibReject != ''">
+                                 <div v-if="kompetensiReject.data != '' || kompetensiWajibReject.data != ''">
                                     <h6 class="text-center text-grey">Ada kompetensi yang tidak sesuai sebagai berikut :</h6>
                                     <table v-if="kompetensiWajibReject.data != ''" class="table table-condensed">
                                         <tbody><tr>
@@ -139,8 +139,8 @@
                                     <pagination :data="kompetensiReject" align="center" @pagination-change-page="getKompetensiReject"></pagination>
                                 </div>
                                 <div v-else>
-                                    <h3 class="text-center text-grey">Your submission success</h3>
-                                    <h3 class="text-center text-grey">it will be validation by kaprodi</h3>
+                                    <h3 class="text-center text-grey">Pengajuan SKPI berhasil</h3>
+                                    <h3 class="text-center text-grey">tunggu proses validasi oleh kaprodi</h3>
                                 </div>
                             </div>
                             <div v-if="status == 'published'">
@@ -286,14 +286,14 @@ export default {
                 cusEvent.$emit('ReloadData');
                 toast.fire({
                     type: 'success',
-                    title: 'Submit skpi successfully'
+                    title: 'Pengajuan SKPI berhasil'
                 });
                 this.$Progress.finish();
             })
             .catch(() => {
                  toast.fire({
                     type: 'error',
-                    title: 'Submit skpi failed'
+                    title: 'Pengajuan SKPI gagal'
                 });
                 this.$Progress.fail();
             });

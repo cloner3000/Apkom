@@ -8,7 +8,7 @@
                 <tbody><tr>
                 <th>No</th>
                 <th>Nama Kompetensi</th>
-                <th>Upload</th>
+                <th>Unggah</th>
                 <th>Lihat</th>
                 </tr>
                 <tr v-for="(data, index) in kompetensiWajib.data" :key="index">
@@ -90,15 +90,15 @@
                         swal.fire({
                             type: 'error',
                             title: 'Oops...',
-                            text: 'You are uploading file must be pdf or image'
+                            text: 'File yang diunggah harus berupa gambar atau pdf'
                         });
                     }
                 }else{
                     e.target.value = ''
                     swal.fire({
-                        type: 'error',
+                       type: 'error',
                         title: 'Oops...',
-                        text: 'You are uploading a large file! maximum is 2 MB'
+                        text: 'Ukuran file terlalu besar, maksimal 2mb'
                     });
                 }
             },
@@ -109,14 +109,14 @@
                     cusEvent.$emit('ReloadData');
                     toast.fire({
                         type: 'success',
-                        title: 'Upload bukti kompetensi wajib successfully'
+                        title: 'Berhasil mengunggah bukti kompetensi'
                     });
                     this.$Progress.finish();
                 }).catch(() => {
                     this.$Progress.fail();
                     toast.fire({
                         type: 'error',
-                        title: 'Upload bukti kompetensi wajib failed'
+                        title: 'Berhasil mengunggah bukti kompetensi'
                     });
                 });
             },

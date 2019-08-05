@@ -104,7 +104,7 @@
           restoreBackup(name){
             swal.fire({
               title: 'Anda yakin?',
-              text: "Database anda akan dikembalikan",
+              text: "Basis Data anda akan dikembalikan",
               type: 'warning',
               showCancelButton: true,
               confirmButtonColor: '#38C172',
@@ -116,8 +116,8 @@
                 axios.get('api/backup/restore/'+name)
                 .then(() => {
                   swal.fire(
-                    'Restored!',
-                    'Database has been Restored',
+                    'Berhasil',
+                    'Basis data telah dikembalikan',
                     'success'
                   );
                   cusEvent.$emit('ReloadData');
@@ -173,7 +173,7 @@
                 .then(() => {
                   this.$Progress.start();
                   swal.fire(
-                    'Deleted!',
+                    'Terhapus!',
                     'Pencadangan telah dihapus.',
                     'success'
                   );

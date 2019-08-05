@@ -269,7 +269,7 @@ export default {
               $('#modalForm').modal('hide');
               toast.fire({
                 type: 'success',
-                title: 'Kompetensi created successfully'
+                title: 'Berhasil menambahkan data kompetensi'
               });
               this.$Progress.finish();
             })
@@ -289,34 +289,34 @@ export default {
               $('#modalForm').modal('hide');
               toast.fire({
                 type: 'success',
-                title: 'Kompetensi updated successfully'
+                title: 'Kompetensi berhasil diubah'
               });
               this.$Progress.finish();
             }).catch(() => {
               this.$Progress.fail();
               toast.fire({
                 type: 'error',
-                title: 'Kompetensi update failed'
+                title: 'Kompetensi gagal diubah'
               });
             });
           },
           deleteKompetensi(id){
             swal.fire({
-              title: 'Are you sure?',
-              text: "You won't be able to revert this!",
+              title: 'Anda yakin?',
+              text: "Anda tidak akan dapat mengembalikan ini!",
               type: 'warning',
               showCancelButton: true,
               confirmButtonColor: '#3085d6',
               cancelButtonColor: '#d33',
-              confirmButtonText: 'Yes, delete it!'
+              confirmButtonText: 'Ya, hapus!'
             }).then((result) => {
               if (result.value){
                 this.form.delete('api/kompetensi/'+id)
                 .then(() => {
                   this.$Progress.start();
                   swal.fire(
-                    'Deleted!',
-                    'Kompetensi has been deleted.',
+                    'Terhapus!',
+                    'Kompetensi berhasil dihapus.',
                     'success'
                   );
                   cusEvent.$emit('ReloadData');
@@ -327,7 +327,7 @@ export default {
                   swal.fire({
                     type: 'error',
                     title: 'Oops...',
-                    text: 'Kompetensi delete failed'
+                    text: 'Hapus kompetensi gagal'
                   });
                 });
               }
@@ -393,7 +393,7 @@ export default {
                     swal.fire({
                     type: 'error',
                     title: 'Oops...',
-                    text: 'You are uploading file must be pdf or image'
+                    text: 'File yang diunggah harus berupa gambar atau pdf'
                   });
                 }
             }else{
@@ -402,7 +402,7 @@ export default {
                 swal.fire({
                 type: 'error',
                 title: 'Oops...',
-                text: 'You are uploading a large file! maximum is 2 MB'
+                text: 'Ukuran file terlalu besar, maksimal 2mb'
               });
             }
           },

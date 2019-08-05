@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Apkom\Http\Controllers\Controller;
 use Apkom\Http\Requests\MahasiswaRequest;
 use Apkom\Exports\MahasiswaExport;
+use Apkom\Imports\MahasiswaImport;
 use Maatwebsite\Excel\Facades\Excel;
 use PDF;
 
@@ -102,6 +103,16 @@ class MahasiswaController extends Controller
             return $pdf->output();
         }
 
+    }
+
+    public function import(Request $request) {
+        $this->authorize('isWarek');
+        if($request->file != ''){
+            $mahasiswa = Excel::import(new MahasiswaImport,$request->file);
+            return ['message' => 'Sucess to import'];
+        }else{
+            return ['message' => 'Fail to import'];
+        }
     }
 
     public function profile(){

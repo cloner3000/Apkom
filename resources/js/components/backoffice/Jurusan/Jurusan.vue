@@ -317,7 +317,7 @@
                 .then(() => {
                   this.$Progress.start();
                   swal.fire(
-                    'Deleted!',
+                    'Terhapus!',
                     'Jurusan berhasil dihapus.',
                     'success'
                   );

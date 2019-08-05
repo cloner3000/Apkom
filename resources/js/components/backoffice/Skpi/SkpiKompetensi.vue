@@ -33,7 +33,7 @@
                                 <td class="align-middle">{{data.peran}}</td>
                                 <td class="align-middle">{{data.point_kompetensi}}</td>
                                 <td class="text-center align-middle">
-                                    <button class="btn btn-link" @click="previewKemampuan(data.kemampuan)"><i  class="fas fa-external-link-alt"></i></button>
+                                    <button class="btn btn-link" @click="previewKemampuan(data)"><i  class="fas fa-external-link-alt"></i></button>
                                 </td>
                                 <td class="text-center align-middle">
                                     <button class="btn btn-link"  @click="previewBukti(data)"><i  class="text-grey fas fa-eye"></i></button>
@@ -69,10 +69,10 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <div class="card">
+                            <div v-if="kompetensiSelect.kemampuan != null" class="card">
                                 <div class="card-body p-0">
                                     <ul class="nav nav-pills flex-column">
-                                        <li v-for="(data, index) in kompetensiSelect" :key="index" class="nav-item">
+                                        <li v-for="(data, index) in kompetensiSelect.kemampuan" :key="index" class="nav-item">
                                             <span class="nav-link">{{data.nama_kemampuan}}</span>
                                         </li>
                                     </ul>

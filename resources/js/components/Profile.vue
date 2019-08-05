@@ -16,14 +16,13 @@
                                 <p class="text-muted text-center">{{ user.role }}</p>
                                 <ul class="list-group list-group-unbordered mb-3">
                                 <li class="list-group-item">
-                                    <b>Created</b> <br><a>{{ user.created_at | date }}</a>
+                                    <b>Dibuat pada</b> <br><a>{{ user.created_at | date }}</a>
                                 </li>
                                 <li class="list-group-item">
-                                    <b>Last Updated</b> <br><a>{{ user.updated_at | date }}</a>
+                                    <b>Terakhir diubah</b> <br><a>{{ user.updated_at | date }}</a>
                                 </li>
                                 </ul>
-
-                                <button @click.prevent="updateProfile" type="submit" class="btn btn-success btn-block"><b>Update</b></button>
+                                <button @click.prevent="updateProfile" type="submit" class="btn btn-success btn-block"><b>Simpan</b></button>
                             </div>
                             <!-- /.card-body -->
                             </div>
@@ -36,7 +35,7 @@
                                 </div>
                                 <div class="card-body">
                                         <div class="form-group">
-                                            <label for="inputName">Name</label>
+                                            <label for="inputName">Nama</label>
                                             <input v-model="form.name" type="text" name="name"
                                                 class="form-control" placeholder="Full Name" :class="{ 'is-invalid': form.errors.has('name') }" id="inputName">
                                             <has-error :form="form" field="name"></has-error>
@@ -54,7 +53,7 @@
                                             <has-error :form="form" field="password"></has-error>
                                         </div>
                                         <div class="form-group">
-                                            <label for="inputPhoto">Photo</label>
+                                            <label for="inputPhoto">Foto</label>
                                             <div class="input-group">
                                                 <div class="custom-file">
                                                     <input type="file" class="custom-file-input" @change="updatePhoto" name="photo" id="inputPhoto" placeholder="Photo" :class="{ 'is-invalid': form.errors.has('photo') }" accept="image/*">
@@ -79,7 +78,7 @@
         data() {
             return {
               user:{},
-              nama_file:'Choose File Image',
+              nama_file:'Pilih file gambar',
               form: new Form({
               id:'',
               name:'',
@@ -114,7 +113,7 @@
                     cusEvent.$emit('ReloadData');
                     toast.fire({
                         type: 'success',
-                        title: 'Account updated successfully'
+                        title: 'Profil akun berhasil diubah'
                     });
                     this.$Progress.finish();
                 })
@@ -140,7 +139,7 @@
                     reader.readAsDataURL(file); 
                 }else{
                     e.target.value = '';
-                    this.nama_file = 'Choose File Image';
+                    this.nama_file = 'Pilih file gambar';
                     swal.fire({
                     type: 'error',
                     title: 'Oops...',

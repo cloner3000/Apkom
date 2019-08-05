@@ -1880,12 +1880,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       user: {},
-      nama_file: 'Choose File Image',
+      nama_file: 'Pilih file gambar',
       form: new Form({
         id: '',
         name: '',
@@ -1924,7 +1923,7 @@ __webpack_require__.r(__webpack_exports__);
         cusEvent.$emit('ReloadData');
         toast.fire({
           type: 'success',
-          title: 'Account updated successfully'
+          title: 'Profil akun berhasil diubah'
         });
 
         _this2.$Progress.finish();
@@ -1956,7 +1955,7 @@ __webpack_require__.r(__webpack_exports__);
         reader.readAsDataURL(file);
       } else {
         e.target.value = '';
-        this.nama_file = 'Choose File Image';
+        this.nama_file = 'Pilih file gambar';
         swal.fire({
           type: 'error',
           title: 'Oops...',
@@ -1989,6 +1988,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
 //
 //
 //
@@ -2205,7 +2205,7 @@ __webpack_require__.r(__webpack_exports__);
           _this4.form["delete"]('api/user/' + id).then(function () {
             _this4.$Progress.start();
 
-            swal.fire('Deleted!', 'Berhasil menghapus akun.', 'success');
+            swal.fire('Terhapus!', 'Berhasil menghapus akun.', 'success');
             cusEvent.$emit('ReloadData');
 
             _this4.$Progress.finish();
@@ -2408,7 +2408,7 @@ __webpack_require__.r(__webpack_exports__);
 
       swal.fire({
         title: 'Anda yakin?',
-        text: "Database anda akan dikembalikan",
+        text: "Basis Data anda akan dikembalikan",
         type: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#38C172',
@@ -2419,7 +2419,7 @@ __webpack_require__.r(__webpack_exports__);
 
         if (result.value) {
           axios.get('api/backup/restore/' + name).then(function () {
-            swal.fire('Restored!', 'Database has been Restored', 'success');
+            swal.fire('Berhasil', 'Basis data telah dikembalikan', 'success');
             cusEvent.$emit('ReloadData');
 
             _this3.$Progress.finish();
@@ -2478,7 +2478,7 @@ __webpack_require__.r(__webpack_exports__);
           _this5.form["delete"]('api/backup/' + name).then(function () {
             _this5.$Progress.start();
 
-            swal.fire('Deleted!', 'Pencadangan telah dihapus.', 'success');
+            swal.fire('Terhapus!', 'Pencadangan telah dihapus.', 'success');
             cusEvent.$emit('ReloadData');
 
             _this5.$Progress.finish();
@@ -3232,7 +3232,7 @@ __webpack_require__.r(__webpack_exports__);
           _this5.form["delete"]('api/jurusan/' + id).then(function () {
             _this5.$Progress.start();
 
-            swal.fire('Deleted!', 'Jurusan berhasil dihapus.', 'success');
+            swal.fire('Terhapus!', 'Jurusan berhasil dihapus.', 'success');
             cusEvent.$emit('ReloadData');
 
             _this5.$Progress.finish();
@@ -3850,6 +3850,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3907,6 +3909,9 @@ __webpack_require__.r(__webpack_exports__);
       $('#modalDetail').modal('show');
       this.form.fill(mahasiswa);
     },
+    openFile: function openFile() {
+      $("#openFile").click();
+    },
     getJurusan: function getJurusan() {
       var _this = this;
 
@@ -3959,7 +3964,7 @@ __webpack_require__.r(__webpack_exports__);
           $('#modalForm').modal('hide');
           toast.fire({
             type: 'success',
-            title: 'Mahasiswa created successfully'
+            title: 'Berhasil menambahkan data mahasiswa'
           });
 
           _this3.$Progress.finish();
@@ -3968,7 +3973,7 @@ __webpack_require__.r(__webpack_exports__);
 
           toast.fire({
             type: 'error',
-            title: 'Mahasiswa create failed'
+            title: 'Gagal menambahkan data mahasiswa'
           });
         });
       })["catch"](function () {
@@ -3976,7 +3981,7 @@ __webpack_require__.r(__webpack_exports__);
 
         toast.fire({
           type: 'error',
-          title: 'Mahasiswa create failed'
+          title: 'Gagal menambah data mahasiswa'
         });
       });
     },
@@ -4006,19 +4011,19 @@ __webpack_require__.r(__webpack_exports__);
       var _this5 = this;
 
       swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
+        title: 'Anda yakin ?',
+        text: "Anda tidak akan dapat mengembalikan ini!",
         type: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonText: 'Ya, hapus!'
       }).then(function (result) {
         if (result.value) {
           _this5.form["delete"]('api/mahasiswa/' + id).then(function () {
             _this5.$Progress.start();
 
-            swal.fire('Deleted!', 'Mahasiswa has been deleted.', 'success');
+            swal.fire('Terhapus!', 'Mahasiswa telah dihapus', 'success');
             cusEvent.$emit('ReloadData');
 
             _this5.$Progress.finish();
@@ -4028,14 +4033,51 @@ __webpack_require__.r(__webpack_exports__);
             swal.fire({
               type: 'error',
               title: 'Oops...',
-              text: 'Mahasiswa delete failed'
+              text: 'Gagal menghapus mahasiswa'
             });
           });
         }
       });
     },
-    exportMahasiswa: function exportMahasiswa(fileType) {
+    importMahasiswa: function importMahasiswa(e) {
       var _this6 = this;
+
+      var file = e.target.files[0];
+      var nama = file['name'];
+      var validFileTypes = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'];
+
+      if (validFileTypes.includes(file['type'])) {
+        this.$Progress.start();
+        var data = new FormData();
+        data.append('file', file);
+        data.append('name', nama);
+        axios.post('api/mahasiswa/import', data).then(function (response) {
+          cusEvent.$emit('ReloadData');
+          toast.fire({
+            type: 'success',
+            title: 'Berhasil mengimpor data mahasiswa'
+          });
+
+          _this6.$Progress.finish();
+        })["catch"](function () {
+          toast.fire({
+            type: 'error',
+            title: 'Gagal mengimpor data mahasiswa'
+          });
+
+          _this6.$Progress.fail();
+        });
+      } else {
+        e.target.value = '';
+        swal.fire({
+          type: 'error',
+          title: 'Oops...',
+          text: 'File yang diunggah harus excel'
+        });
+      }
+    },
+    exportMahasiswa: function exportMahasiswa(fileType) {
+      var _this7 = this;
 
       this.$Progress.start();
       axios({
@@ -4054,9 +4096,9 @@ __webpack_require__.r(__webpack_exports__);
         link.click();
         document.body.removeChild(link);
 
-        _this6.$Progress.finish();
+        _this7.$Progress.finish();
       })["catch"](function () {
-        _this6.$Progress.fail();
+        _this7.$Progress.fail();
 
         toast.fire({
           type: 'error',
@@ -4065,7 +4107,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     searchMahasiswa: function searchMahasiswa() {
-      var _this7 = this;
+      var _this8 = this;
 
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
       var query = this.$parent.search;
@@ -4074,11 +4116,11 @@ __webpack_require__.r(__webpack_exports__);
         this.$Progress.start();
         this.searching = true;
         axios.get('api/mahasiswa/find?q=' + query + '&page=' + page).then(function (response) {
-          _this7.mahasiswa = response.data;
+          _this8.mahasiswa = response.data;
 
-          _this7.$Progress.finish();
+          _this8.$Progress.finish();
         })["catch"](function () {
-          _this7.$Progress.fail();
+          _this8.$Progress.fail();
         });
       } else {
         this.searching = false;
@@ -5043,7 +5085,7 @@ __webpack_require__.r(__webpack_exports__);
           swal.fire({
             type: 'error',
             title: 'Oops...',
-            text: 'You are uploading file must be pdf or image'
+            text: 'File yang diunggah harus berupa gambar atau pdf'
           });
         }
       } else {
@@ -5051,7 +5093,7 @@ __webpack_require__.r(__webpack_exports__);
         swal.fire({
           type: 'error',
           title: 'Oops...',
-          text: 'You are uploading a large file! maximum is 2 MB'
+          text: 'Ukuran file terlalu besar, maksimal 2mb'
         });
       }
     },
@@ -5063,7 +5105,7 @@ __webpack_require__.r(__webpack_exports__);
         cusEvent.$emit('ReloadData');
         toast.fire({
           type: 'success',
-          title: 'Upload bukti kompetensi wajib successfully'
+          title: 'Berhasil mengunggah bukti kompetensi'
         });
 
         _this3.$Progress.finish();
@@ -5072,7 +5114,7 @@ __webpack_require__.r(__webpack_exports__);
 
         toast.fire({
           type: 'error',
-          title: 'Upload bukti kompetensi wajib failed'
+          title: 'Berhasil mengunggah bukti kompetensi'
         });
       });
     },
@@ -5424,7 +5466,7 @@ __webpack_require__.r(__webpack_exports__);
         $('#modalForm').modal('hide');
         toast.fire({
           type: 'success',
-          title: 'Kompetensi created successfully'
+          title: 'Berhasil menambahkan data kompetensi'
         });
 
         _this3.$Progress.finish();
@@ -5446,7 +5488,7 @@ __webpack_require__.r(__webpack_exports__);
         $('#modalForm').modal('hide');
         toast.fire({
           type: 'success',
-          title: 'Kompetensi updated successfully'
+          title: 'Kompetensi berhasil diubah'
         });
 
         _this4.$Progress.finish();
@@ -5455,7 +5497,7 @@ __webpack_require__.r(__webpack_exports__);
 
         toast.fire({
           type: 'error',
-          title: 'Kompetensi update failed'
+          title: 'Kompetensi gagal diubah'
         });
       });
     },
@@ -5463,19 +5505,19 @@ __webpack_require__.r(__webpack_exports__);
       var _this5 = this;
 
       swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
+        title: 'Anda yakin?',
+        text: "Anda tidak akan dapat mengembalikan ini!",
         type: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonText: 'Ya, hapus!'
       }).then(function (result) {
         if (result.value) {
           _this5.form["delete"]('api/kompetensi/' + id).then(function () {
             _this5.$Progress.start();
 
-            swal.fire('Deleted!', 'Kompetensi has been deleted.', 'success');
+            swal.fire('Terhapus!', 'Kompetensi berhasil dihapus.', 'success');
             cusEvent.$emit('ReloadData');
 
             _this5.$Progress.finish();
@@ -5485,7 +5527,7 @@ __webpack_require__.r(__webpack_exports__);
             swal.fire({
               type: 'error',
               title: 'Oops...',
-              text: 'Kompetensi delete failed'
+              text: 'Hapus kompetensi gagal'
             });
           });
         }
@@ -5564,7 +5606,7 @@ __webpack_require__.r(__webpack_exports__);
           swal.fire({
             type: 'error',
             title: 'Oops...',
-            text: 'You are uploading file must be pdf or image'
+            text: 'File yang diunggah harus berupa gambar atau pdf'
           });
         }
       } else {
@@ -5573,7 +5615,7 @@ __webpack_require__.r(__webpack_exports__);
         swal.fire({
           type: 'error',
           title: 'Oops...',
-          text: 'You are uploading a large file! maximum is 2 MB'
+          text: 'Ukuran file terlalu besar, maksimal 2mb'
         });
       }
     },
@@ -6221,14 +6263,14 @@ __webpack_require__.r(__webpack_exports__);
         cusEvent.$emit('ReloadData');
         toast.fire({
           type: 'success',
-          title: 'Submit skpi successfully'
+          title: 'Pengajuan SKPI berhasil'
         });
 
         _this7.$Progress.finish();
       })["catch"](function () {
         toast.fire({
           type: 'error',
-          title: 'Submit skpi failed'
+          title: 'Pengajuan SKPI gagal'
         });
 
         _this7.$Progress.fail();
@@ -66449,7 +66491,7 @@ var render = function() {
                       { staticClass: "list-group list-group-unbordered mb-3" },
                       [
                         _c("li", { staticClass: "list-group-item" }, [
-                          _c("b", [_vm._v("Created")]),
+                          _c("b", [_vm._v("Dibuat pada")]),
                           _vm._v(" "),
                           _c("br"),
                           _c("a", [
@@ -66458,7 +66500,7 @@ var render = function() {
                         ]),
                         _vm._v(" "),
                         _c("li", { staticClass: "list-group-item" }, [
-                          _c("b", [_vm._v("Last Updated")]),
+                          _c("b", [_vm._v("Terakhir diubah")]),
                           _vm._v(" "),
                           _c("br"),
                           _c("a", [
@@ -66480,7 +66522,7 @@ var render = function() {
                           }
                         }
                       },
-                      [_c("b", [_vm._v("Update")])]
+                      [_c("b", [_vm._v("Simpan")])]
                     )
                   ])
                 ])
@@ -66496,7 +66538,7 @@ var render = function() {
                       { staticClass: "form-group" },
                       [
                         _c("label", { attrs: { for: "inputName" } }, [
-                          _vm._v("Name")
+                          _vm._v("Nama")
                         ]),
                         _vm._v(" "),
                         _c("input", {
@@ -66628,7 +66670,7 @@ var render = function() {
                     _vm._v(" "),
                     _c("div", { staticClass: "form-group" }, [
                       _c("label", { attrs: { for: "inputPhoto" } }, [
-                        _vm._v("Photo")
+                        _vm._v("Foto")
                       ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "input-group" }, [
@@ -67123,6 +67165,12 @@ var render = function() {
                                     "option",
                                     { attrs: { value: "Wakil Rektor" } },
                                     [_vm._v("Wakil Rektor")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "option",
+                                    { attrs: { value: "Mahasiswa" } },
+                                    [_vm._v("Mahasiswa")]
                                   )
                                 ]
                               ),
@@ -67150,7 +67198,7 @@ var render = function() {
                               staticClass: "btn btn-primary",
                               attrs: { type: "submit" }
                             },
-                            [_vm._v("Add")]
+                            [_vm._v("Tambah")]
                           ),
                           _vm._v(" "),
                           _c(
@@ -67167,7 +67215,7 @@ var render = function() {
                               staticClass: "btn btn-success",
                               attrs: { type: "submit" }
                             },
-                            [_vm._v("Save")]
+                            [_vm._v("Simpan")]
                           ),
                           _vm._v(" "),
                           _c(
@@ -67176,7 +67224,7 @@ var render = function() {
                               staticClass: "btn btn-danger",
                               attrs: { type: "button", "data-dismiss": "modal" }
                             },
-                            [_vm._v("Close")]
+                            [_vm._v("Tutup")]
                           )
                         ])
                       ]
@@ -71718,10 +71766,33 @@ var render = function() {
               _c("div", { staticClass: "card" }, [
                 _c("div", { staticClass: "card-header" }, [
                   _c("h3", { staticClass: "card-title" }, [
-                    _vm._v("Manage Mahasiswa")
+                    _vm._v("Pengelolaan Mahasiswa")
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "card-tools" }, [
+                    _c("input", {
+                      staticStyle: { display: "none" },
+                      attrs: {
+                        id: "openFile",
+                        type: "file",
+                        accept:
+                          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                      },
+                      on: { input: _vm.importMahasiswa }
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-success",
+                        on: { click: _vm.openFile }
+                      },
+                      [
+                        _c("i", { staticClass: "fas fa-table" }),
+                        _vm._v(" Impor Excel")
+                      ]
+                    ),
+                    _vm._v(" "),
                     _c(
                       "button",
                       {
@@ -71730,7 +71801,7 @@ var render = function() {
                       },
                       [
                         _c("i", { staticClass: "fas fa-plus-square" }),
-                        _vm._v(" Add New")
+                        _vm._v(" Tambah Baru")
                       ]
                     ),
                     _vm._v(" "),
@@ -71881,7 +71952,7 @@ var render = function() {
                           ],
                           staticClass: "modal-title"
                         },
-                        [_vm._v("Add New Mahasiswa")]
+                        [_vm._v("Tambah Mahasiswa Baru")]
                       ),
                       _vm._v(" "),
                       _c(
@@ -72467,7 +72538,7 @@ var render = function() {
                               staticClass: "btn btn-primary",
                               attrs: { type: "submit" }
                             },
-                            [_vm._v("Add")]
+                            [_vm._v("Tambah")]
                           ),
                           _vm._v(" "),
                           _c(
@@ -72484,7 +72555,7 @@ var render = function() {
                               staticClass: "btn btn-success",
                               attrs: { type: "submit" }
                             },
-                            [_vm._v("Save")]
+                            [_vm._v("Simpan")]
                           ),
                           _vm._v(" "),
                           _c(
@@ -72493,7 +72564,7 @@ var render = function() {
                               staticClass: "btn btn-danger",
                               attrs: { type: "button", "data-dismiss": "modal" }
                             },
-                            [_vm._v("Close")]
+                            [_vm._v("Tutup")]
                           )
                         ])
                       ]
@@ -72656,11 +72727,11 @@ var staticRenderFns = [
       _c("th", [_vm._v("Ipk")]),
       _vm._v(" "),
       _c("th", { staticClass: "text-center", attrs: { width: "10%" } }, [
-        _vm._v("Total Point")
+        _vm._v("Total Poin")
       ]),
       _vm._v(" "),
       _c("th", { staticClass: "text-center", attrs: { width: "15%" } }, [
-        _vm._v("Action")
+        _vm._v("Aksi")
       ])
     ])
   },
@@ -72689,7 +72760,7 @@ var staticRenderFns = [
       _c("h5", { staticClass: "modal-title" }, [
         _c("i", { staticClass: "fas fa-user-graduate mr-1" }),
         _vm._v(
-          "\n                         Mahasiswa Detail\n                    "
+          "\n                         Detail Mahasiswa\n                    "
         )
       ]),
       _vm._v(" "),
@@ -74253,9 +74324,7 @@ var render = function() {
                                     staticClass: "btn btn-link",
                                     on: {
                                       click: function($event) {
-                                        return _vm.previewKemampuan(
-                                          data.kemampuan
-                                        )
+                                        return _vm.previewKemampuan(data)
                                       }
                                     }
                                   },
@@ -74368,26 +74437,31 @@ var render = function() {
                     _vm._m(2),
                     _vm._v(" "),
                     _c("div", { staticClass: "modal-body" }, [
-                      _c("div", { staticClass: "card" }, [
-                        _c("div", { staticClass: "card-body p-0" }, [
-                          _c(
-                            "ul",
-                            { staticClass: "nav nav-pills flex-column" },
-                            _vm._l(_vm.kompetensiSelect, function(data, index) {
-                              return _c(
-                                "li",
-                                { key: index, staticClass: "nav-item" },
-                                [
-                                  _c("span", { staticClass: "nav-link" }, [
-                                    _vm._v(_vm._s(data.nama_kemampuan))
-                                  ])
-                                ]
+                      _vm.kompetensiSelect.kemampuan != null
+                        ? _c("div", { staticClass: "card" }, [
+                            _c("div", { staticClass: "card-body p-0" }, [
+                              _c(
+                                "ul",
+                                { staticClass: "nav nav-pills flex-column" },
+                                _vm._l(_vm.kompetensiSelect.kemampuan, function(
+                                  data,
+                                  index
+                                ) {
+                                  return _c(
+                                    "li",
+                                    { key: index, staticClass: "nav-item" },
+                                    [
+                                      _c("span", { staticClass: "nav-link" }, [
+                                        _vm._v(_vm._s(data.nama_kemampuan))
+                                      ])
+                                    ]
+                                  )
+                                }),
+                                0
                               )
-                            }),
-                            0
-                          )
-                        ])
-                      ])
+                            ])
+                          ])
+                        : _vm._e()
                     ]),
                     _vm._v(" "),
                     _vm._m(3)
@@ -75142,7 +75216,7 @@ var staticRenderFns = [
       _vm._v(" "),
       _c("th", [_vm._v("Nama Kompetensi")]),
       _vm._v(" "),
-      _c("th", [_vm._v("Upload")]),
+      _c("th", [_vm._v("Unggah")]),
       _vm._v(" "),
       _c("th", [_vm._v("Lihat")])
     ])
@@ -76676,7 +76750,9 @@ var render = function() {
                           "hide-buttons": _vm.status != "null" ? true : false,
                           title: "PENGAJUAN SKPI",
                           subtitle: "Silakan pratinjau pengiriman data Anda",
-                          finishButtonText: "Submit",
+                          finishButtonText: "Selesai",
+                          nextButtonText: "Selanjutnya",
+                          backButtonText: "Kembali",
                           color: "#3490DC"
                         },
                         on: { "on-complete": _vm.onComplete }
@@ -77078,24 +77154,26 @@ var render = function() {
                         _vm._v(" "),
                         _c(
                           "tab-content",
-                          { attrs: { title: "Submit", icon: "fas fa-check" } },
+                          {
+                            attrs: { title: "Mengajukan", icon: "fas fa-check" }
+                          },
                           [
                             _vm.status == "null"
                               ? _c("div", [
                                   _c(
                                     "h3",
                                     { staticClass: "text-center text-grey" },
-                                    [_vm._v("Submit your submission")]
+                                    [
+                                      _vm._v(
+                                        "Selesaikan pengajuan dokumen SKPI"
+                                      )
+                                    ]
                                   ),
                                   _vm._v(" "),
                                   _c(
                                     "h3",
                                     { staticClass: "text-center text-grey" },
-                                    [
-                                      _vm._v(
-                                        "Your submission will be sent to kaprodi"
-                                      )
-                                    ]
+                                    [_vm._v("agar dapat diproses oleh kaprodi")]
                                   )
                                 ])
                               : _vm._e(),
@@ -77103,7 +77181,7 @@ var render = function() {
                             _vm.status == "progress"
                               ? _c("div", [
                                   _vm.kompetensiReject.data != "" ||
-                                  _vm.kompetensiWajibReject != ""
+                                  _vm.kompetensiWajibReject.data != ""
                                     ? _c(
                                         "div",
                                         [
@@ -77363,7 +77441,7 @@ var render = function() {
                                           {
                                             staticClass: "text-center text-grey"
                                           },
-                                          [_vm._v("Your submission success")]
+                                          [_vm._v("Pengajuan SKPI berhasil")]
                                         ),
                                         _vm._v(" "),
                                         _c(
@@ -77373,7 +77451,7 @@ var render = function() {
                                           },
                                           [
                                             _vm._v(
-                                              "it will be validation by kaprodi"
+                                              "tunggu proses validasi oleh kaprodi"
                                             )
                                           ]
                                         )

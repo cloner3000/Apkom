@@ -84,14 +84,15 @@
                             <option value="Kaprodi">Kepala Program Studi</option>
                             <option value="Bagian Akademik">Bagian Akademik</option>
                             <option value="Wakil Rektor">Wakil Rektor</option>
+                            <option value="Mahasiswa">Mahasiswa</option>
                           </select>
                           <has-error :form="form" field="role"></has-error>
                         </div>
                     </div>
                     <div class="modal-footer">
-                      <button v-show="!editMode" type="submit" class="btn btn-primary">Add</button>
-                      <button v-show="editMode" type="submit" class="btn btn-success">Save</button>
-                      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                      <button v-show="!editMode" type="submit" class="btn btn-primary">Tambah</button>
+                      <button v-show="editMode" type="submit" class="btn btn-success">Simpan</button>
+                      <button type="button" class="btn btn-danger" data-dismiss="modal">Tutup</button>
                     </div>
                     </form>
                 </div>
@@ -205,7 +206,7 @@
                 .then(() => {
                   this.$Progress.start();
                   swal.fire(
-                    'Deleted!',
+                    'Terhapus!',
                     'Berhasil menghapus akun.',
                     'success'
                   );
